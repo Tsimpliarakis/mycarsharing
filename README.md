@@ -1,5 +1,10 @@
 # Quasar App (quasar)
 
+Run after cloning:
+1. npm install
+2. npm install @supabase/supabase-js
+3. quasar dev --history (or quasar build --history)
+
 A Quasar Project
 
 ## Install the dependencies
@@ -8,7 +13,9 @@ yarn
 # or
 npm install
 ```
-Open Street Maps
+```
+// will need Open Street Maps in the future 
+```
 
 ```
 Supabase
