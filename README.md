@@ -5,6 +5,11 @@ Run after cloning:
 2. npm install @supabase/supabase-js
 3. quasar dev --history (or quasar build --history)
 
+Build after cloning:
+(npx) quasar build --history
+cd /dist/spa
+(npx) quasar serve --history
+
 A Quasar Project
 
 ## Install the dependencies
