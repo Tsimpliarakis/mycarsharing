@@ -5,7 +5,7 @@
       color="blue"
       @click="$router.push('/login')"
       label="Login"
-    ></q-btn>
+    />
   </q-page>
 </template>
 
