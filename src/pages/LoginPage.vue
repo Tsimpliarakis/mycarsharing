@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from "vue";
 import { supabase } from "src/lib/supabaseClient.js";
+import { useQuasar } from "quasar";
 
 const loading = ref(false);
 const email = ref("");
+
+const $q = useQuasar();
 
 const handleLogin = async () => {
   try {
@@ -12,10 +15,18 @@ const handleLogin = async () => {
       email: email.value,
     });
     if (error) throw error;
-    alert("Check your email for the login link!");
+    $q.notify({
+      color: "positive",
+      position: "top",
+      message: "Good job!",
+    });
   } catch (error) {
     if (error instanceof Error) {
-      alert(error.message);
+      $q.notify({
+        color: "negative",
+        position: "top",
+        message: error.message,
+      });
     }
   } finally {
     loading.value = false;
