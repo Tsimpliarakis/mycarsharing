@@ -1,13 +1,17 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title class="text-center">
           <router-link to="/" class="no-decoration"> mycarsharing </router-link>
         </q-toolbar-title>
-        <q-btn flat dense round icon="menu" aria-label="Menu" />
+        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
       </q-toolbar>
     </q-header>
+
+    <q-drawer v-model="rightDrawerOpen" side="right" overlay elevated>
+      <!-- drawer content -->
+    </q-drawer>
 
     <q-page-container>
       <router-view />
@@ -16,11 +20,20 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 
-export default defineComponent({
-  name: "MainLayout",
-});
+export default {
+  setup() {
+    const rightDrawerOpen = ref(false);
+
+    return {
+      rightDrawerOpen,
+      toggleRightDrawer() {
+        rightDrawerOpen.value = !rightDrawerOpen.value;
+      },
+    };
+  },
+};
 </script>
 
 <style scoped>

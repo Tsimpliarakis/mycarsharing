@@ -18,7 +18,7 @@ const handleLogin = async () => {
     $q.notify({
       color: "positive",
       position: "top",
-      message: "Good job!",
+      message: "Email sent. Check your inbox for the login link!",
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -37,7 +37,7 @@ const handleLogin = async () => {
 <template>
   <q-page class="flex flex-center">
     <q-form class="row flex-center flex" @submit.prevent="handleLogin">
-      <div>
+      <div class="signin">
         <div class="text-blue">
           <h2 class="header">Sign in</h2>
         </div>
@@ -59,3 +59,9 @@ const handleLogin = async () => {
     </q-form>
   </q-page>
 </template>
+
+<style>
+.signin {
+  margin-top: -100px;
+}
+</style>
