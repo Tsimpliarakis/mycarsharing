@@ -1,18 +1,17 @@
 <template>
   <q-page class="flex flex-center">
-    <q-btn
-      icon="person"
-      color="blue"
-      @click="$router.push('/login')"
-      label="Login"
-    />
+    <SearchBar />
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
+import SearchBar from "components/SearchBar.vue";
 
 export default defineComponent({
-  name: "IndexPage",
+  name: "HomePage",
+  components: {
+    SearchBar,
+  },
 });
 </script>

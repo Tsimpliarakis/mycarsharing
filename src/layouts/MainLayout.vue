@@ -10,7 +10,17 @@
     </q-header>
 
     <q-drawer v-model="rightDrawerOpen" side="right" overlay elevated>
-      <!-- drawer content -->
+      <q-list>
+        <div class="text-center">
+          <q-item-label header> Essential Links </q-item-label>
+        </div>
+        <EssentialLink
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-bind="link"
+          class="no-decoration"
+        />
+      </q-list>
     </q-drawer>
 
     <q-page-container>
@@ -20,20 +30,37 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
+import EssentialLink from "components/EssentialLink.vue";
 
-export default {
+const linksList = [
+  {
+    title: "Login",
+    caption: "Get a magic link to sign in",
+    icon: "person",
+    link: "/login",
+  },
+];
+
+export default defineComponent({
+  name: "MainLayout",
+
+  components: {
+    EssentialLink,
+  },
+
   setup() {
     const rightDrawerOpen = ref(false);
 
     return {
+      essentialLinks: linksList,
       rightDrawerOpen,
       toggleRightDrawer() {
         rightDrawerOpen.value = !rightDrawerOpen.value;
       },
     };
   },
-};
+});
 </script>
 
 <style scoped>
