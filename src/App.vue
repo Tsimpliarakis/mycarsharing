@@ -1,30 +1,27 @@
 <template>
-  <router-view :session="session" />
-
-  <p v-if="session">User is connected!</p>
+  <router-view />
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { supabase } from "./lib/supabaseClient";
+import { authStore } from "./stores/auth-store";
 
 export default defineComponent({
   name: "App",
   setup() {
-    const session = ref();
-
     onMounted(() => {
       supabase.auth.getSession().then(({ data }) => {
-        session.value = data.session;
+        authStore.state.session = data.session;
       });
 
-      supabase.auth.onAuthStateChange((_, _session) => {
-        session.value = _session;
+      supabase.auth.onAuthStateChange((_, session) => {
+        authStore.state.session = session;
       });
     });
 
     return {
-      session,
+      authStore,
     };
   },
 });

@@ -1,64 +1,41 @@
 <template>
-  <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+  <q-layout view="hHh lpR fff">
+    <q-header elevated class="blue text-white">
+      <!-- ^^ change the color to almost transparent ^^ -->
       <q-toolbar>
-        <q-toolbar-title class="text-center">
+        <q-toolbar-title class="text-green-10">
+          <q-avatar>
+            <img src="../../public/icons/favicon.png" />
+          </q-avatar>
           <router-link to="/" class="no-decoration"> mycarsharing </router-link>
         </q-toolbar-title>
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-btn dense flat icon="person" @click="redirectToLogin">Login</q-btn>
+        <!-- change the login to logout buttons if the user is logged in -->
+        <q-btn dense>Share your car</q-btn>
+        <q-btn dense flat icon="logout">Logout</q-btn>
       </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="rightDrawerOpen" side="right" overlay elevated>
-      <q-list>
-        <div class="text-center">
-          <q-item-label header> Essential Links </q-item-label>
-        </div>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-          class="no-decoration"
-        />
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer elevated class="bg-blue-grey-4 text-white">
+      <q-toolbar> blabla </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
-import { ref, defineComponent } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
-
-const linksList = [
-  {
-    title: "Login",
-    caption: "Get a magic link to sign in",
-    icon: "person",
-    link: "/login",
-  },
-];
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "MainLayout",
-
-  components: {
-    EssentialLink,
-  },
-
-  setup() {
-    const rightDrawerOpen = ref(false);
-
-    return {
-      essentialLinks: linksList,
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value;
-      },
-    };
+  methods: {
+    redirectToLogin() {
+      // Use the router to navigate to the /login route
+      this.$router.push("/login");
+    },
   },
 });
 </script>
