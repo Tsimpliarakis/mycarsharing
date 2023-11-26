@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh lpR fff">
-    <q-header elevated class="blue text-white">
+  <q-layout view="hHh lpr fff">
+    <q-header elevated class="bg-green-5 text-white">
       <!-- ^^ change the color to almost transparent ^^ -->
       <q-toolbar>
         <q-toolbar-title class="text-green-10">
@@ -12,7 +12,6 @@
           </router-link>
         </q-toolbar-title>
         <q-btn
-          dense
           flat
           icon="person"
           @click="redirectToLogin"
@@ -35,8 +34,15 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-blue-grey-4 text-white">
-      <q-toolbar> blabla </q-toolbar>
+    <q-footer elevated class="bg-green-3 text-white">
+      <q-toolbar>
+        <ul>
+          <router-link to="/about">
+            <li>About</li>
+            <li>Linkedin</li>
+          </router-link>
+        </ul>
+      </q-toolbar>
     </q-footer>
   </q-layout>
 </template>

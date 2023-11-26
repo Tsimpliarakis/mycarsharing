@@ -1,9 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center search background">
     <SearchBar />
-    <!-- <p v-if="authStore.state.session">
-      Welcome, {{ authStore.state.session.user.email }}!
-    </p> -->
   </q-page>
 </template>
 
