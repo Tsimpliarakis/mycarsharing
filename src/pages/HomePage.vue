@@ -1,7 +1,9 @@
 <template>
   <q-page class="flex flex-center">
     <SearchBar />
-    <p v-if="authStore">Welcome, {{ authStore.state.session.user.email }}!</p>
+    <!-- <p v-if="authStore.state.session">
+      Welcome, {{ authStore.state.session.user.email }}!
+    </p> -->
   </q-page>
 </template>
 
