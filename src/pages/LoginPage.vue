@@ -1,22 +1,7 @@
 <!-- Your parent component -->
 <template>
   <q-page class="flex flex-center justify-center">
-    <MagicLinkForm
-      class="form"
-      v-show="showMagicLinkForm"
-      :toggleMagicLink="toggleMagicLinks"
-    />
-    <LoginForm
-      class="form"
-      v-show="showLoginForm"
-      :toggleForm="toggleForms"
-      :toggleMagicLink="toggleMagicLinks"
-    />
-    <RegisterForm
-      class="form"
-      v-show="showRegisterForm"
-      :toggleForm="toggleForms"
-    />
+    <component :is="activeForm" class="form" :toggleForm="toggleForms"/>
   </q-page>
 </template>
 
@@ -33,19 +18,12 @@ export default {
   },
   data() {
     return {
-      showLoginForm: true,
-      showRegisterForm: false,
-      showMagicLinkForm: false,
+      activeForm: "LoginForm"
     };
   },
   methods: {
-    toggleForms(isRegisterForm) {
-      this.showLoginForm = !isRegisterForm;
-      this.showRegisterForm = isRegisterForm;
-    },
-    toggleMagicLinks(isMagicLinkForm) {
-      this.showLoginForm = !isMagicLinkForm;
-      this.showMagicLinkForm = isMagicLinkForm;
+    toggleForms(newForm) {
+      this.activeForm = newForm;
     },
   },
 };

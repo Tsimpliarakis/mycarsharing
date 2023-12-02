@@ -34,7 +34,7 @@
       />
       <div>
         <div>Already have an account?</div>
-        <span class="clickable-text" @click="toggleForm">Login here.</span>
+        <span class="clickable-text" @click="toggleForm('LoginForm')">Login here.</span>
       </div>
     </div>
   </q-form>
@@ -46,16 +46,14 @@ import { useQuasar } from "quasar";
 import { supabase } from "src/lib/supabaseClient.js";
 
 const { toggleForm: parentToggleForm } = defineProps(["toggleForm"]);
-const formText = ref("Register");
 const username = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const loading = ref(false);
 const $q = useQuasar();
 
-const toggleForm = () => {
-  formText.value = formText.value === "Login" ? "Register" : "Login";
-  parentToggleForm(formText.value === "Register");
+const toggleForm = (formName) => {
+  parentToggleForm(formName);
 };
 
 const handleRegister = async () => {

@@ -27,11 +27,11 @@
       />
       <div>
         <div>Don't have an account?</div>
-        <span class="clickable-text" @click="toggleForm">Register here.</span>
+        <span class="clickable-text" @click="toggleForm('RegisterForm')">Register here.</span>
         <div class="divide">------------ OR ------------</div>
         <div>
           Simply sign in with
-          <span class="clickable-text" @click="toggleMagicLink"
+          <span class="clickable-text" @click="toggleForm('MagicLinkForm')"
             >magic link.</span
           >
         </div>
@@ -45,23 +45,14 @@ import { ref, defineProps } from "vue";
 import { useQuasar } from "quasar";
 import { supabase } from "src/lib/supabaseClient.js";
 
-const { toggleForm: parentToggleForm, toggleMagicLink: parentToggleMagicLink } =
-  defineProps(["toggleForm", "toggleMagicLink"]);
-const formText = ref("Login");
-const magicLinkText = ref("Login");
+const { toggleForm: parentToggleForm} = defineProps(["toggleForm"]);
 const username = ref("");
 const password = ref("");
 const loading = ref(false);
 const $q = useQuasar();
 
-const toggleForm = () => {
-  formText.value = formText.value === "Login" ? "Register" : "Login";
-  parentToggleForm(formText.value === "Register");
-};
-
-const toggleMagicLink = () => {
-  magicLinkText.value = magicLinkText.value === "Login" ? "Magic" : "Login";
-  parentToggleMagicLink(magicLinkText.value === "Magic");
+const toggleForm = (formName) => {
+  parentToggleForm(formName);
 };
 
 const handleLogin = async () => {

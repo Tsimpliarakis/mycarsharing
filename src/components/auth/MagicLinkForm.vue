@@ -21,7 +21,7 @@
       />
       <div>
         Login with
-        <span class="clickable-text" @click="toggleMagicLink"
+        <span class="clickable-text" @click="toggleForm('LoginForm')"
           >email & password.</span
         >
       </div>
@@ -34,18 +34,14 @@ import { ref } from "vue";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 
-const { toggleMagicLink: parentToggleMagicLink } = defineProps([
-  "toggleMagicLink",
-]);
-const magicLinkText = ref("Magic");
+const { toggleForm: parentToggleForm } = defineProps(["toggleForm"]);
 const loading = ref(false);
 const email = ref("");
 
 const $q = useQuasar();
 
-const toggleMagicLink = () => {
-  magicLinkText.value = magicLinkText.value === "Login" ? "Magic" : "Login";
-  parentToggleMagicLink(magicLinkText.value === "Magic");
+const toggleForm = (formName) => {
+  parentToggleForm(formName);
 };
 
 const handleLogin = async () => {
