@@ -1,8 +1,22 @@
+<!-- Your parent component -->
 <template>
   <q-page class="flex flex-center justify-center">
-    <MagicLinkForm />
-    <LoginForm class="form" />
-    <RegisterForm class="form" />
+    <MagicLinkForm
+      class="form"
+      v-show="showMagicLinkForm"
+      :toggleMagicLink="toggleMagicLinks"
+    />
+    <LoginForm
+      class="form"
+      v-show="showLoginForm"
+      :toggleForm="toggleForms"
+      :toggleMagicLink="toggleMagicLinks"
+    />
+    <RegisterForm
+      class="form"
+      v-show="showRegisterForm"
+      :toggleForm="toggleForms"
+    />
   </q-page>
 </template>
 
@@ -17,11 +31,28 @@ export default {
     LoginForm,
     RegisterForm,
   },
+  data() {
+    return {
+      showLoginForm: true,
+      showRegisterForm: false,
+      showMagicLinkForm: false,
+    };
+  },
+  methods: {
+    toggleForms(isRegisterForm) {
+      this.showLoginForm = !isRegisterForm;
+      this.showRegisterForm = isRegisterForm;
+    },
+    toggleMagicLinks(isMagicLinkForm) {
+      this.showLoginForm = !isMagicLinkForm;
+      this.showMagicLinkForm = isMagicLinkForm;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .form {
-  margin-left: 50px;
+  margin-bottom: 100px;
 }
 </style>

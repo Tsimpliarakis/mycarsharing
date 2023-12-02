@@ -8,7 +8,7 @@
         required
         color="green-5"
         type="text"
-        placeholder="Your username"
+        placeholder="Your email"
         v-model="username"
       />
       <q-input
@@ -18,30 +18,50 @@
         placeholder="Your password"
         v-model="password"
       />
+      <q-input
+        required
+        color="green-5"
+        type="password"
+        placeholder="Confirm password"
+        v-model="confirmPassword"
+      />
       <q-btn
         icon="person_add"
         color="green-5"
         label="Register"
         type="submit"
-        style="margin-top: 10px"
+        class="btn"
       />
+      <div>
+        <div>Already have an account?</div>
+        <span class="clickable-text" @click="toggleForm">Login here.</span>
+      </div>
     </div>
   </q-form>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { supabase } from "src/lib/supabaseClient.js";
+import { ref, defineProps } from "vue";
 import { useQuasar } from "quasar";
 
-const loading = ref(false);
+const { toggleForm: parentToggleForm } = defineProps(["toggleForm"]);
+const formText = ref("Register");
 const username = ref("");
 const password = ref("");
-
+const confirmPassword = ref("");
 const $q = useQuasar();
+
+const toggleForm = () => {
+  formText.value = formText.value === "Login" ? "Register" : "Login";
+  parentToggleForm(formText.value === "Register");
+};
 
 const handleRegister = async () => {
   try {
+    if (password.value !== confirmPassword.value) {
+      throw new Error("Passwords do not match");
+    }
+
     loading.value = true;
     const { error } = await supabase.auth.signUp({
       email: username.value,
@@ -68,7 +88,14 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
-.signin {
-  margin-top: -100px;
+.btn {
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.clickable-text {
+  color: #38663a;
+  cursor: pointer;
 }
 </style>

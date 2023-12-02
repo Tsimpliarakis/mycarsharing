@@ -4,7 +4,7 @@
       <div class="text-green-10">
         <h2 class="header">Sign in</h2>
       </div>
-      <div>Sign in via magic link with your email below</div>
+      <div>Sign in via magic link</div>
       <q-input
         required
         color="green-5"
@@ -17,8 +17,14 @@
         color="green-5"
         label="Send email"
         type="submit"
-        style="margin-top: 10px"
+        class="btn"
       />
+      <div>
+        Login with
+        <span class="clickable-text" @click="toggleMagicLink"
+          >email & password.</span
+        >
+      </div>
     </div>
   </q-form>
 </template>
@@ -28,10 +34,19 @@ import { ref } from "vue";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 
+const { toggleMagicLink: parentToggleMagicLink } = defineProps([
+  "toggleMagicLink",
+]);
+const magicLinkText = ref("Magic");
 const loading = ref(false);
 const email = ref("");
 
 const $q = useQuasar();
+
+const toggleMagicLink = () => {
+  magicLinkText.value = magicLinkText.value === "Login" ? "Magic" : "Login";
+  parentToggleMagicLink(magicLinkText.value === "Magic");
+};
 
 const handleLogin = async () => {
   try {
@@ -60,7 +75,14 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-.signin {
-  margin-top: -100px;
+.btn {
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.clickable-text {
+  color: #38663a;
+  cursor: pointer;
 }
 </style>

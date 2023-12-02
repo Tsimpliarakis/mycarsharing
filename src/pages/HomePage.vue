@@ -1,6 +1,11 @@
 <template>
-  <q-page class="flex flex-center search background">
-    <SearchBar />
+  <q-page>
+    <q-parallax src="../../public/carbg.jpeg">
+      <SearchBar />
+    </q-parallax>
+    <div class="flex flex-center">
+      ---------------- Rest of the site ----------------
+    </div>
   </q-page>
 </template>
 
