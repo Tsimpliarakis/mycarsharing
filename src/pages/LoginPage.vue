@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import MagicLinkForm from "../components/MagicLinkForm.vue";
-import LoginForm from "../components/LoginForm.vue";
-import RegisterForm from "../components/RegisterForm.vue";
+import MagicLinkForm from "../components/auth/MagicLinkForm.vue";
+import LoginForm from "../components/auth/LoginForm.vue";
+import RegisterForm from "../components/auth/RegisterForm.vue";
 
 export default {
   components: {

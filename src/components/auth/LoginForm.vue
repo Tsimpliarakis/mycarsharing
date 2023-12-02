@@ -1,8 +1,8 @@
 <template>
-  <q-form class="row flex-center flex" @submit.prevent="handleRegister">
+  <q-form class="row flex-center flex" @submit.prevent="handleLogin">
     <div class="signin">
       <div class="text-green-10">
-        <h2 class="header">Register</h2>
+        <h2 class="header">Login</h2>
       </div>
       <q-input
         required
@@ -18,23 +18,23 @@
         placeholder="Your password"
         v-model="password"
       />
-      <q-input
-        required
-        color="green-5"
-        type="password"
-        placeholder="Confirm password"
-        v-model="confirmPassword"
-      />
       <q-btn
-        icon="person_add"
+        icon="login"
         color="green-5"
-        label="Register"
+        label="Login"
         type="submit"
         class="btn"
       />
       <div>
-        <div>Already have an account?</div>
-        <span class="clickable-text" @click="toggleForm">Login here.</span>
+        <div>Don't have an account?</div>
+        <span class="clickable-text" @click="toggleForm">Register here.</span>
+        <div class="divide">------------ OR ------------</div>
+        <div>
+          Simply sign in with
+          <span class="clickable-text" @click="toggleMagicLink"
+            >magic link.</span
+          >
+        </div>
       </div>
     </div>
   </q-form>
@@ -43,12 +43,15 @@
 <script setup>
 import { ref, defineProps } from "vue";
 import { useQuasar } from "quasar";
+import { supabase } from "src/lib/supabaseClient.js";
 
-const { toggleForm: parentToggleForm } = defineProps(["toggleForm"]);
-const formText = ref("Register");
+const { toggleForm: parentToggleForm, toggleMagicLink: parentToggleMagicLink } =
+  defineProps(["toggleForm", "toggleMagicLink"]);
+const formText = ref("Login");
+const magicLinkText = ref("Login");
 const username = ref("");
 const password = ref("");
-const confirmPassword = ref("");
+const loading = ref(false);
 const $q = useQuasar();
 
 const toggleForm = () => {
@@ -56,14 +59,15 @@ const toggleForm = () => {
   parentToggleForm(formText.value === "Register");
 };
 
-const handleRegister = async () => {
-  try {
-    if (password.value !== confirmPassword.value) {
-      throw new Error("Passwords do not match");
-    }
+const toggleMagicLink = () => {
+  magicLinkText.value = magicLinkText.value === "Login" ? "Magic" : "Login";
+  parentToggleMagicLink(magicLinkText.value === "Magic");
+};
 
+const handleLogin = async () => {
+  try {
     loading.value = true;
-    const { error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signInWithPassword({
       email: username.value,
       password: password.value,
     });
@@ -71,7 +75,7 @@ const handleRegister = async () => {
     $q.notify({
       color: "positive",
       position: "top",
-      message: "Registered successfully!",
+      message: "Logged in successfully!",
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -93,9 +97,12 @@ const handleRegister = async () => {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-
 .clickable-text {
   color: #38663a;
   cursor: pointer;
+}
+.divide {
+  text-align: center;
+  margin: 30px;
 }
 </style>
