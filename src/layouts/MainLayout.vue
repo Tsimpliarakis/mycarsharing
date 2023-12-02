@@ -15,7 +15,7 @@
           flat
           icon="person"
           @click="redirectToLogin"
-          v-if="!authStore.state.session"
+          v-if="!authStore.state.session && $route.path !== '/login'"
           >Login</q-btn
         >
         <!-- change the login to logout buttons if the user is logged in -->
