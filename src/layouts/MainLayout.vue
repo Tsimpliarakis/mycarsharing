@@ -18,15 +18,8 @@
           v-if="!authStore.state.session && $route.path !== '/login'"
           >Login</q-btn
         >
-        <!-- change the login to logout buttons if the user is logged in -->
-        <q-btn
-          v-if="authStore.state.session"
-          dense
-          flat
-          icon="logout"
-          @click="logoutSession"
-          >Logout</q-btn
-        >
+        <!-- change the login to Account buttons if the user is logged in -->
+        <profilebutton v-if="authStore.state.session" />
       </q-toolbar>
     </q-header>
 
@@ -39,7 +32,6 @@
         <ul>
           <router-link to="/about">
             <li>About</li>
-            <li>Linkedin</li>
           </router-link>
         </ul>
       </q-toolbar>
@@ -50,10 +42,13 @@
 <script>
 import { defineComponent } from "vue";
 import { authStore } from "../stores/auth-store";
-import { supabase } from "../lib/supabaseClient";
+import profilebutton from "../components/ProfileButton.vue";
 
 export default defineComponent({
   name: "MainLayout",
+  components: {
+    profilebutton,
+  },
   methods: {
     redirectToLogin() {
       // Use the router to navigate to the /login route
@@ -61,21 +56,8 @@ export default defineComponent({
     },
   },
   setup() {
-    const logoutSession = async () => {
-      try {
-        await supabase.auth.signOut();
-        authStore.state.session = null; // Clear the session in the Pinia store
-      } catch (error) {
-        $q.notify({
-          color: "negative",
-          position: "top",
-          message: error.message,
-        });
-      }
-    };
     return {
       authStore,
-      logoutSession,
     };
   },
 });

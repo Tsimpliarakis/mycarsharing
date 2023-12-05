@@ -27,7 +27,9 @@
       />
       <div>
         <div>Don't have an account?</div>
-        <span class="clickable-text" @click="toggleForm('RegisterForm')">Register here.</span>
+        <span class="clickable-text" @click="toggleForm('RegisterForm')"
+          >Register here.</span
+        >
         <div class="divide">------------ OR ------------</div>
         <div>
           Simply sign in with
@@ -44,12 +46,14 @@
 import { ref, defineProps } from "vue";
 import { useQuasar } from "quasar";
 import { supabase } from "src/lib/supabaseClient.js";
+import { useRouter } from "vue-router";
 
-const { toggleForm: parentToggleForm} = defineProps(["toggleForm"]);
+const { toggleForm: parentToggleForm } = defineProps(["toggleForm"]);
 const username = ref("");
 const password = ref("");
 const loading = ref(false);
 const $q = useQuasar();
+const router = useRouter();
 
 const toggleForm = (formName) => {
   parentToggleForm(formName);
@@ -68,6 +72,7 @@ const handleLogin = async () => {
       position: "top",
       message: "Logged in successfully!",
     });
+    router.push("/"); // Redirect to homepage
   } catch (error) {
     if (error instanceof Error) {
       $q.notify({
