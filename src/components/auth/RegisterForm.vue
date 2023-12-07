@@ -34,14 +34,16 @@
       />
       <div>
         <div>Already have an account?</div>
-        <span class="clickable-text" @click="toggleForm('LoginForm')">Login here.</span>
+        <span class="clickable-text" @click="toggleForm('LoginForm')"
+          >Login here.</span
+        >
       </div>
     </div>
   </q-form>
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import { useQuasar } from "quasar";
 import { supabase } from "src/lib/supabaseClient.js";
 

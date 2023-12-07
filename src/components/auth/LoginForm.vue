@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 import { useQuasar } from "quasar";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useRouter } from "vue-router";

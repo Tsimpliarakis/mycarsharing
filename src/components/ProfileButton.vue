@@ -16,10 +16,10 @@
 
         <div class="column items-center">
           <q-avatar size="72px">
-            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+            <img :src="userAvatar" />
           </q-avatar>
 
-          <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
+          <div class="text-subtitle1 q-mt-md q-mb-xs">{{ userName }}</div>
 
           <q-btn
             color="green-5"
@@ -36,12 +36,17 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { authStore } from "../stores/auth-store";
 import { supabase } from "../lib/supabaseClient";
 
 export default {
   setup() {
+    const mobileData = ref(false);
+    const bluetooth = ref(false);
+    const userAvatar = ref(null);
+    const userName = ref(null);
+
     const logoutSession = async () => {
       try {
         await supabase.auth.signOut();
@@ -54,11 +59,42 @@ export default {
         });
       }
     };
+
+    const fetchUserData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("avatar_url, username")
+          .eq("id", authStore.state.session.user.id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          userAvatar.value = data.avatar_url;
+          userName.value = data.username;
+        }
+      } catch (error) {
+        $q.notify({
+          color: "negative",
+          position: "top",
+          message: error.message,
+        });
+      }
+    };
+
+    onMounted(() => {
+      fetchUserData();
+    });
+
     return {
-      mobileData: ref(false),
-      bluetooth: ref(false),
+      mobileData,
+      bluetooth,
+      userAvatar,
+      userName,
       logoutSession,
-      authStore,
     };
   },
 };
