@@ -8,8 +8,24 @@
       <div class="row no-wrap q-pa-md">
         <div class="column">
           <div class="text-h6 q-mb-md">Settings</div>
-          <q-toggle v-model="mobileData" label="Use Mobile Data" />
-          <q-toggle v-model="bluetooth" label="Bluetooth" />
+          <q-btn
+            class="q-mb-md"
+            color="green-5"
+            label="Profile"
+            push
+            size="sm"
+            v-close-popup
+            @click="$router.push('/profile')"
+          />
+          <q-btn
+            class="q-mb-md"
+            color="green-5"
+            label="Cars"
+            push
+            size="sm"
+            v-close-popup
+            @click="$router.push('/cars')"
+          />
         </div>
 
         <q-separator vertical inset class="q-mx-lg" />
