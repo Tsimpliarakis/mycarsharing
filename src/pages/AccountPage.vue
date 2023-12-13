@@ -1,39 +1,88 @@
 <template>
-  <div class="account-page">
-    <h1>Account Page</h1>
-    <div class="avatar-section">
-      <h2>Change Avatar</h2>
-      <input type="file" @change="handleAvatarUpload" accept="image/*" />
-      <img :src="avatarUrl" />
+  <q-page>
+    <div class="flex-container">
+      <div class="left-panel">
+        <div class="q-pa-md">
+          <q-avatar size="72px">
+            <img :src="userAvatar" />
+          </q-avatar>
+          <div class="text-subtitle2 q-mt-md q-mb-xs">{{ userName }}</div>
+          <div class="text-subtitle1 q-mt-md q-mb-xs">{{ fullName }}</div>
+
+          <!-- Add options for the user -->
+          <div class="q-mt-md">
+            <q-item @click="showComponent('changeAvatar')">
+              <q-item-section>Change Avatar</q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>Upload documents</q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section style="color: crimson"
+                >Delete Account</q-item-section
+              >
+            </q-item>
+            <!-- Add more options as needed -->
+          </div>
+        </div>
+      </div>
+
+      <div class="right-panel flex flex-center justify-center">
+        <div class="q-pa-md">
+          <!-- Use dynamic component to show the selected component -->
+          <component :is="selectedComponent"></component>
+        </div>
+      </div>
     </div>
-  </div>
+  </q-page>
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import { authStore } from "../stores/auth-store";
+import { supabase } from "../lib/supabaseClient";
+
 export default {
-  data() {
-    return {
-      avatarUrl: null,
+  setup() {
+    const userAvatar = ref(null);
+    const userName = ref(null);
+    const fullName = ref(null);
+
+    const fetchUserData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("avatar_url, username, full_name")
+          .eq("id", authStore.state.session.user.id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          userAvatar.value = data.avatar_url;
+          userName.value = data.username;
+          fullName.value = data.full_name;
+        }
+      } catch (error) {
+        $q.notify({
+          color: "negative",
+          position: "top",
+          message: error.message,
+        });
+      }
     };
-  },
-  methods: {
-    handleAvatarUpload(event) {
-      const file = event.target.files[0];
-      // Perform avatar upload logic here
-      // For example, you can use a library like Axios to send the file to the server
-      // Once the upload is successful, update the avatarUrl with the new URL
-      // this.avatarUrl = response.data.avatarUrl;
-    },
+
+    onMounted(() => {
+      fetchUserData();
+    });
+
+    return {
+      userAvatar,
+      userName,
+      fullName,
+    };
   },
 };
 </script>
-
-<style scoped>
-.account-page {
-  /* Add your styles here */
-}
-
-.avatar-section {
-  /* Add your styles here */
-}
-</style>

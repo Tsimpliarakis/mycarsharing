@@ -58,8 +58,6 @@ import { supabase } from "../lib/supabaseClient";
 
 export default {
   setup() {
-    const mobileData = ref(false);
-    const bluetooth = ref(false);
     const userAvatar = ref(null);
     const userName = ref(null);
 
@@ -106,8 +104,6 @@ export default {
     });
 
     return {
-      mobileData,
-      bluetooth,
       userAvatar,
       userName,
       logoutSession,
