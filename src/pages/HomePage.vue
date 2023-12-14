@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-parallax src="../../public/carbg.jpeg">
+    <q-parallax src="../assets/carbg.jpeg">
       <SearchBar />
     </q-parallax>
     <div class="flex flex-center">

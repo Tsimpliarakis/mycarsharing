@@ -6,7 +6,7 @@
         <q-toolbar-title class="text-green-10">
           <router-link to="/" class="no-decoration">
             <q-avatar>
-              <img src="../../public/icons/favicon.png" />
+              <img src="../assets/favicon.png" />
             </q-avatar>
             mycarsharing
           </router-link>
