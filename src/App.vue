@@ -44,7 +44,7 @@ export default defineComponent({
         authStore.mutations.setSession(authStore.state, session);
 
         // Fetch and update user profile when the authentication state changes
-        if (session.user) {
+        if (session) {
           fetchUserProfile();
         } else {
           // Clear user profile when the user is logged out

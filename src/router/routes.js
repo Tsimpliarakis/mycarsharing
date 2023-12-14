@@ -1,3 +1,5 @@
+import { authStore } from "src/stores/auth-store";
+
 const routes = [
   {
     path: "/",
@@ -7,11 +9,27 @@ const routes = [
   {
     path: "/login",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: (to, from, next) => {
+      // Redirect to home if the user is already logged in
+      if (authStore.state.session) {
+        next("/");
+      } else {
+        next();
+      }
+    },
     children: [{ path: "", component: () => import("pages/LoginPage.vue") }],
   },
   {
     path: "/profile",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: (to, from, next) => {
+      // Redirect to login if the user is not logged in
+      if (!authStore.state.session) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
     children: [{ path: "", component: () => import("pages/AccountPage.vue") }],
   },
   // Always leave this as last one,

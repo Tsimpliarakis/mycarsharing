@@ -56,13 +56,16 @@
 <script>
 import { authStore } from "../stores/auth-store";
 import { supabase } from "../lib/supabaseClient";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
+    const router = useRouter();
     const logoutSession = async () => {
       try {
         await supabase.auth.signOut();
         authStore.state.session = null; // Clear the session in the Pinia store
+        router.push("/login");
       } catch (error) {
         $q.notify({
           color: "negative",
