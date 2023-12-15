@@ -1,9 +1,9 @@
 <template>
   <q-page>
-    <div class="flex-container">
-      <div class="left-panel">
+    <div class="flex">
+      <div class="left-panel text-center">
         <div class="q-pa-md">
-          <q-avatar size="72px">
+          <q-avatar size="80px">
             <img :src="authStore.state.profile.avatar" />
           </q-avatar>
           <div class="text-subtitle2 q-mt-md q-mb-xs">
@@ -15,27 +15,27 @@
 
           <!-- Add options for the user -->
           <div class="q-mt-md">
+            <q-separator />
             <q-item>
               <q-item-section>Change Avatar</q-item-section>
             </q-item>
             <q-item>
               <q-item-section>Upload documents</q-item-section>
             </q-item>
+            <q-separator />
             <q-item>
               <q-item-section style="color: crimson"
                 >Delete Account</q-item-section
               >
             </q-item>
-            <!-- Add more options as needed -->
           </div>
         </div>
       </div>
 
-      <div class="right-panel flex flex-center justify-center">
-        <div class="q-pa-md">
-          <!-- Use dynamic component to show the selected component -->
-          <!-- <component :is="selectedComponent"></component> -->
-        </div>
+      <q-separator vertical inset />
+
+      <div class="right-panel">
+        <div class="q-pa-md flex flex-center">sdadsadsadsahdgsd</div>
       </div>
     </div>
   </q-page>
@@ -52,3 +52,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.right-panel {
+  flex: 1;
+}
+</style>
