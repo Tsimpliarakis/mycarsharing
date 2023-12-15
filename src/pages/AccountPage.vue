@@ -35,7 +35,9 @@
       <q-separator vertical inset />
 
       <div class="right-panel">
-        <div class="q-pa-md flex flex-center">sdadsadsadsahdgsd</div>
+        <div class="q-pa-md flex flex-center">
+          <LoginForm />
+        </div>
       </div>
     </div>
   </q-page>
@@ -43,8 +45,12 @@
 
 <script>
 import { authStore } from "../stores/auth-store";
+import LoginForm from "../components/auth/LoginForm.vue";
 
 export default {
+  components: {
+    LoginForm,
+  },
   setup() {
     return {
       authStore,
