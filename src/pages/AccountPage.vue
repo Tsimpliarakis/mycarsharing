@@ -46,7 +46,7 @@
                       flat
                       label="Delete my account"
                       color="red-7"
-                      @click="deleteAccount"
+                      @click="deleteUserAccount"
                       v-close-popup
                     />
                   </q-card-actions>
@@ -66,43 +66,50 @@
       </div>
     </div>
   </q-page>
-  {{ authStore.state.session.user.id }}
 </template>
 
 <script>
 import { ref } from "vue";
 import { authStore } from "../stores/auth-store";
 import LoginForm from "../components/auth/LoginForm.vue";
+import axios from 'axios';
 import { supabase } from "../lib/supabaseClient";
 
 export default {
   components: {
     LoginForm,
   },
+  methods: {
+    deleteUserAccount() {
+      const url = 'https://igohglatbbhgyelsipze.supabase.co/functions/v1/delete-user-account';
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlnb2hnbGF0YmJoZ3llbHNpcHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTI5NzMsImV4cCI6MjAxNDkyODk3M30.0kAm5Z0owBVjy1kzzbbFsAgeGdQVIH7oUHobIi4lQag';
+
+      const requestData = {
+        name: 'kalhspera',
+      };
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      };
+
+      axios.post(url, requestData, config)
+        .then(response => {
+          console.log('Response:', response.data);
+          // Handle the response as needed
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Handle errors
+        });
+    },
+  },
   setup() {
-    const deleteAccount = async () => {
-      try {
-        // Perform deletion from Supabase database
-        const user = authStore.state.session.user; // Assuming you have user data in your authStore
-        const { error } = await supabase.auth.admin.deleteUser(user.id); // Replace "id" with the actual primary key field of your user table
-
-        if (error) {
-          console.error("Error deleting account:", error);
-          // Handle error appropriately (show a message to the user, etc.)
-        } else {
-          // Successfully deleted account
-          console.log("Account deleted successfully");
-          // Optionally, perform any additional cleanup or redirection after deletion
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
     return {
       authStore,
       confirmDialog: ref(false),
-      deleteAccount,
     };
   },
 };
