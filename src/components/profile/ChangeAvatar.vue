@@ -48,7 +48,6 @@ async function uploadAvatar() {
   const fileName = `${randomString}.${fileExtension}`;
   const avatar_url = `https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/${fileName}`;
   const oldAvatar = authStore.state.profile.avatar.split("/").pop();
-  console.log(oldAvatar);
 
   try {
     // Upload the avatar to Supabase Storage
@@ -75,7 +74,6 @@ async function uploadAvatar() {
         // Update the user's avatar in the auth store
         authStore.state.profile.avatar = avatar_url;
       }
-
       $q.notify({
         position: "top",
         color: "positive",
