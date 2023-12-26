@@ -42,4 +42,10 @@ export default {
 .right-panel {
   flex: 1;
 }
+
+@media (orientation: portrait) and (max-width: 500px) {
+  .flex {
+    display: block;
+  }
+}
 </style>
