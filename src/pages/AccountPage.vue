@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="flex">
+    <div class="flex xefl">
       <LeftPanelMenu :togglePanel="togglePanels" />
       <q-separator vertical inset />
       <div class="right-panel">
@@ -44,7 +44,7 @@ export default {
 }
 
 @media (orientation: portrait) and (max-width: 500px) {
-  .flex {
+  .xefl {
     display: block;
   }
 }
