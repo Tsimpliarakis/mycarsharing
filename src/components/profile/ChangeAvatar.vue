@@ -1,20 +1,16 @@
 <template>
   <div class="avatarform">
-    <!-- Input for selecting a file -->
-    <q-input
-      @update:model-value="
-        (val) => {
-          selectedFile = val[0];
-        }
-      "
-      filled
-      type="file"
-      hint="New Avatar"
-    />
-    <!-- Display the uploaded avatar if available -->
+    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator color="green" style="width: 120%; margin-left: -10%" />
     <br />
-
-    <!-- Button to upload the avatar -->
+    <p style="text-align: left; font-weight: bold">Upload your Avatar:</p>
+    <q-file v-model="selectedFile" color="green-7" />
+    <p style="font-size: 12px">Browse files</p>
+    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <br />
     <q-btn
       @click="uploadAvatar"
       color="green-7"
@@ -30,7 +26,6 @@ import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
 import { useQuasar } from "quasar";
 
-const avatarUrl = ref(null);
 const selectedFile = ref(null);
 const uploading = ref(false); // Loading state
 const $q = useQuasar();
@@ -47,7 +42,6 @@ async function uploadAvatar() {
   const fileExtension = getFileExtension(selectedFile.value.name);
   const fileName = `${randomString}.${fileExtension}`;
   const avatar_url = `https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/${fileName}`;
-  const oldAvatar = authStore.state.profile.avatar.split("/").pop();
 
   try {
     // Upload the avatar to Supabase Storage
@@ -102,5 +96,11 @@ function getFileExtension(fileName) {
 <style scoped>
 .avatarform {
   text-align: center;
+}
+.input_field {
+  background-color: #e2ffe0;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #558155;
 }
 </style>
