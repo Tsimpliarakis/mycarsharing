@@ -7,6 +7,7 @@ export const authStore = {
       userName: "",
       fullName: "",
       avatar: "",
+      isVerified: false,
     },
   }),
 
@@ -14,10 +15,11 @@ export const authStore = {
     setSession(state, session) {
       state.session = session;
     },
-    setProfile(state, { userName, fullName, avatar }) {
+    setProfile(state, { userName, fullName, avatar, isVerified }) {
       state.profile.userName = userName;
       state.profile.fullName = fullName;
       state.profile.avatar = avatar;
+      state.profile.isVerified = isVerified;
     },
   },
 };

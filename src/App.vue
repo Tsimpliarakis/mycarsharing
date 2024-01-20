@@ -12,46 +12,62 @@ export default defineComponent({
   name: "App",
   setup() {
     const fetchUserProfile = async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", authStore.state.session.user.id)
-        .single();
+      try {
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", authStore.state.session.user.id)
+          .single();
 
-      if (error) {
-        console.error("Error fetching user profile:", error.message);
-        return;
-      }
+        if (profileError)
+          throw new Error(
+            `Error fetching user profile: ${profileError.message}`
+          );
 
-      if (data) {
-        const { username, avatar_url, full_name } = data;
-        authStore.mutations.setProfile(authStore.state, {
-          userName: username,
-          fullName: full_name,
-          avatar: avatar_url,
-        });
+        const { data: verificationData, error: verificationError } =
+          await supabase
+            .from("verification")
+            .select("is_verified")
+            .eq("id", authStore.state.session.user.id)
+            .single();
+
+        if (verificationError)
+          throw new Error(
+            `Error fetching verification data: ${verificationError.message}`
+          );
+
+        if (profileData && verificationData) {
+          const { username, avatar_url, full_name } = profileData;
+          const { is_verified } = verificationData;
+
+          authStore.mutations.setProfile(authStore.state, {
+            userName: username,
+            fullName: full_name,
+            avatar: avatar_url,
+            isVerified: is_verified,
+          });
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 
-    onMounted(async () => {
-      // Fetch the user's profile information when the component is mounted
+    onMounted(() => {
       if (authStore.state.session.user) {
-        await fetchUserProfile();
+        fetchUserProfile();
       }
 
-      // Subscribe to changes in authentication state
       supabase.auth.onAuthStateChange((_, session) => {
         authStore.mutations.setSession(authStore.state, session);
 
-        // Fetch and update user profile when the authentication state changes
         if (session) {
           fetchUserProfile();
         } else {
-          // Clear user profile when the user is logged out
           authStore.mutations.setProfile(authStore.state, {
             userName: "",
             fullName: "",
             avatar: "",
+            isVerified: false,
           });
         }
       });

@@ -23,6 +23,13 @@
         </q-item>
         <q-item>
           <q-item-section
+            ><q-btn flat @click="togglePanel('ProfileInfo')"
+              >Profile Information</q-btn
+            ></q-item-section
+          >
+        </q-item>
+        <q-item>
+          <q-item-section
             ><q-btn flat @click="togglePanel('UploadDocuments')"
               >Upload documents</q-btn
             ></q-item-section
