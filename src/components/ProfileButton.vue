@@ -1,13 +1,11 @@
 <template>
   <div class="q-pa-md">
-    <q-btn-dropdown
-      color="green-8"
-      label="My Account"
-      dropdown-icon="change_history"
-    >
+    <q-btn-dropdown color="green-7" label="Menu" dropdown-icon="change_history">
       <div class="row no-wrap q-pa-md">
         <div class="column">
-          <div class="text-h6 q-mb-md">Settings</div>
+          <div class="q-mb-md" style="font-size: 18px; font-weight: 500">
+            Dashboard
+          </div>
           <q-btn
             class="q-mb-md"
             color="green-5"
@@ -20,11 +18,20 @@
           <q-btn
             class="q-mb-md"
             color="green-5"
-            label="Cars"
+            label="My Cars"
             push
             size="sm"
             v-close-popup
             @click="$router.push('/cars')"
+          />
+          <q-btn
+            class="q-mb-md"
+            color="green-5"
+            label="Orders"
+            push
+            size="sm"
+            v-close-popup
+            @click="$router.push('/orders')"
           />
         </div>
 

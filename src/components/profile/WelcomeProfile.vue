@@ -9,7 +9,7 @@
     <br />
     <br />
     <br />
-    <q-img src="src/assets/favicon.png" style="opacity: 50%" />
+    <q-img src="../../assets/favicon.png" style="opacity: 50%" />
     <br />
     <br />
     <br />

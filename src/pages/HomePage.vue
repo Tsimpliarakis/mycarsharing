@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-parallax src="../assets/carbg.jpeg">
-      <SearchBar />
+      <SearchBar class="search" />
     </q-parallax>
     <div class="flex flex-center">
       ---------------- Rest of the site ----------------
@@ -20,3 +20,13 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+@media (orientation: landscape) and (min-width: 500px) {
+  .search {
+    position: absolute;
+    left: 0;
+    margin-left: 10vw;
+  }
+}
+</style>
