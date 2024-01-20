@@ -28,7 +28,7 @@
             ></q-item-section
           >
         </q-item>
-        <q-item>
+        <q-item v-if="!authStore.state.profile.isVerified">
           <q-item-section
             ><q-btn flat @click="togglePanel('UploadDocuments')"
               >Upload documents</q-btn
