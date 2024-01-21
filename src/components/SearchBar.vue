@@ -32,9 +32,6 @@
         label="Find a car"
         @click="searchData"
       />
-
-      <!-- Error message -->
-      <div v-if="errorMessage">{{ errorMessage }}</div>
     </div>
   </div>
 </template>
@@ -43,6 +40,9 @@
 import { ref, computed } from "vue";
 import { supabase } from "src/lib/supabaseClient.js";
 import { QDate } from "quasar";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
 
 const selectedCity = ref("");
 const date = ref("");
@@ -54,6 +54,16 @@ const searchParams = computed(() => ({
 }));
 
 const searchData = async () => {
+  // Check if either selectedCity or date is empty
+  if (!selectedCity.value || !date.value) {
+    $q.notify({
+      position: "top",
+      type: "negative",
+      message: "Both fields are required.",
+    });
+    return;
+  }
+
   try {
     const { data, error } = await supabase
       .from("cars")
@@ -96,6 +106,7 @@ const searchData = async () => {
   }
 
   .search {
+    margin-top: 20px;
     margin-left: 0px;
   }
 }
