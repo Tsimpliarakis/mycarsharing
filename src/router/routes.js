@@ -45,6 +45,19 @@ const routes = [
     },
     children: [{ path: "", component: () => import("pages/CarsPage.vue") }],
   },
+  {
+    path: "/cars/new",
+    component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: (to, from, next) => {
+      // Redirect to login if the user is not logged in
+      if (!authStore.state.session) {
+        next("/login");
+      } else {
+        next();
+      }
+    },
+    children: [{ path: "", component: () => import("pages/AddCarPage.vue") }],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
