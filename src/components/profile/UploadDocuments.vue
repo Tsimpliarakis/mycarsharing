@@ -44,7 +44,7 @@
       <p style="text-align: left; font-weight: bold">
         Driver's license Expiration Date:
       </p>
-      <q-date v-model="expirationDate" color="green" />
+      <q-date v-model="expirationDate" color="green-5" />
     </div>
     <br />
     <br />

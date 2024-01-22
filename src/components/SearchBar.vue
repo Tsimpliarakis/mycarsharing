@@ -1,66 +1,56 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md row flex-container">
     <!-- Select dropdown and button -->
-    <div class="row flex-container">
-      <div class="flex-item">
-        <q-select
-          class="dropdown"
-          outlined
-          v-model="selectedCity"
-          :options="['Athens', 'Corfu', 'Polykastro', 'Thessaloniki']"
-          label="Select City"
-          color="green"
-          bg-color="white"
-          :rules="[(val) => !!val || 'Field is required']"
-        />
-
-        <q-date
-          class="date-picker"
-          v-model="date"
-          mask="YYYY-MM-DD"
-          today-btn
-          @input="searchData"
-          color="green"
-          range
-          :rules="[(val) => !!val || 'Field is required']"
-        />
-      </div>
-
-      <q-btn
-        class="flex-item search"
+    <div class="flex-item">
+      <q-select
+        class="dropdown"
+        outlined
+        v-model="formData.selectedCity"
+        :options="['Athens', 'Corfu', 'Polykastro', 'Thessaloniki']"
+        label="Select City"
         color="green"
-        label="Find a car"
-        @click="searchData"
+        bg-color="white"
+        :rules="[(val) => !!val || 'Field is required']"
+      />
+
+      <q-date
+        class="date-picker"
+        v-model="formData.date"
+        mask="YYYY-MM-DD"
+        today-btn
+        @input="searchData"
+        color="green-5"
+        range
+        :rules="[(val) => !!val || 'Field is required']"
       />
     </div>
+
+    <q-btn
+      class="flex-item search-btn"
+      color="green-5"
+      label="Find a car"
+      @click="searchData"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { reactive, computed } from "vue";
 import { supabase } from "src/lib/supabaseClient.js";
-import { QDate } from "quasar";
-import { useQuasar } from "quasar";
 
-const $q = useQuasar();
-
-const selectedCity = ref("");
-const date = ref("");
-const errorMessage = ref("");
+const formData = reactive({
+  selectedCity: "",
+  date: "",
+});
 
 const searchParams = computed(() => ({
-  location: `%${selectedCity.value}%`,
-  start_date: date.value,
+  location: `%${formData.selectedCity}%`,
+  start_date: formData.date,
 }));
 
 const searchData = async () => {
-  // Check if either selectedCity or date is empty
-  if (!selectedCity.value || !date.value) {
-    $q.notify({
-      position: "top",
-      type: "negative",
-      message: "Both fields are required.",
-    });
+  if (!formData.selectedCity || !formData.date) {
+    notifyUser("Both fields are required.");
     return;
   }
 
@@ -74,9 +64,14 @@ const searchData = async () => {
     if (error) throw error;
     console.log(data);
   } catch (error) {
-    errorMessage.value = "An error occurred while searching.";
+    console.error(error);
+    notifyUser("An error occurred while searching.");
   }
 };
+
+function notifyUser(message) {
+  // Code to show notification goes here...
+}
 </script>
 
 <style scoped>
@@ -93,7 +88,7 @@ const searchData = async () => {
 }
 
 /* Search button */
-.search {
+.search-btn {
   margin-top: 10px;
   margin-left: 20px;
 }
@@ -105,7 +100,7 @@ const searchData = async () => {
     align-items: center; /* Align items vertically in the middle */
   }
 
-  .search {
+  .search-btn {
     margin-top: 20px;
     margin-left: 0px;
   }
