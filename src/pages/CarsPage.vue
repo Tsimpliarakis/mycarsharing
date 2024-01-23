@@ -7,7 +7,7 @@
       </div>
       <div v-else class="text-h6">You don't have any cars yet :(</div>
     </div>
-    <div class="flex flex-center row">
+    <div class="flex flex-center row mycars">
       <car-thumbnail v-for="car in cars" :key="car.id" :car="car" />
     </div>
     <q-btn
@@ -49,5 +49,10 @@ onMounted(async () => {
 
 .havecars {
   margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.mycars {
+  max-width: 800px;
 }
 </style>
