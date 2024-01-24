@@ -82,7 +82,7 @@ onMounted(async () => {
   }
 }
 
-.q-scrollarea::v-deep .q-scrollarea__thumb {
+.q-scrollarea:deep(.q-scrollarea__thumb) {
   display: none;
 }
 </style>

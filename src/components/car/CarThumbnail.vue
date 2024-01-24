@@ -1,14 +1,14 @@
 <template>
   <div class="car-thumbnail">
     <q-card class="bg-green-2" style="width: 180px; height: 260px">
-      <q-img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19bw6H_G2nE5bknciM6xgMHeql35XWnR5K1ZTEMKTXw&s"
-      />
+      <q-img :ratio="16 / 9" :src="car.image_url[1]" />
       <q-card-section>
         <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
-        <p>Year: {{ car.year }}</p>
-        <p>Color: {{ car.color }}</p>
-        <p>Fuel Type: {{ car.fuel_type }}</p>
+        <div class="attribute">Year: {{ car.year }}</div>
+        <div class="attribute">Mileage: {{ car.mileage }} km</div>
+        <div class="attribute">Gear Box: {{ car.transmission_type }}</div>
+        <div class="attribute">Fuel Type: {{ car.fuel_type }}</div>
+        <div class="text-center price">{{ car.price }}€ / day</div>
       </q-card-section>
     </q-card>
   </div>
@@ -30,5 +30,20 @@ const props = defineProps({
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-top: -12px;
+  margin-bottom: 3px;
+}
+
+p {
+  margin: 0;
+}
+
+.price {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.attribute {
+  font-weight: 500;
 }
 </style>
