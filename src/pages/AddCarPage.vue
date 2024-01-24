@@ -27,91 +27,89 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
 import { useQuasar } from "quasar";
 
-export default {
-  setup() {
-    const manufacturer = ref("");
-    const model = ref("");
-    const year = ref("");
-    const color = ref("");
-    const gasType = ref("");
-    const files = ref([]);
-    const isLoading = ref(false);
-    const $q = useQuasar();
+const manufacturer = ref("");
+const model = ref("");
+const year = ref("");
+const color = ref("");
+const gasType = ref("");
+const files = ref([]);
+const isLoading = ref(false);
+const $q = useQuasar();
 
-    const handleFiles = (event) => {
-      files.value = event.target.files;
-    };
+function handleFiles(event) {
+  files.value = event.target.files;
+}
 
-    const addCar = async () => {
-      isLoading.value = true;
-      try {
-        // Upload images to Supabase storage
-        for (const file of files.value) {
-          const path = `${Date.now()}-${file.name}`;
-          const { data, error } = await supabase.storage
-            .from("cars")
-            .upload(path, file);
-          if (error) throw error;
-        }
+async function addCar() {
+  isLoading.value = true;
+  const imageURLs = [];
+  const baseURL =
+    "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/";
 
-        // Insert car details into database
-        const { data, error } = await supabase
-          .from("cars")
-          .insert([
-            {
-              user_id: authStore.state.session.user.id,
-              manufacturer: manufacturer.value,
-              model: model.value,
-              year: year.value,
-              color: color.value,
-              fuel_type: gasType.value,
-            },
-          ])
-          .single();
-        if (error) throw error;
+  try {
+    for (const file of files.value) {
+      const randomId = Math.random().toString(36).substring(2, 15);
+      const fileExtension = file.name.split(".").pop();
+      const newName = `${randomId}.${fileExtension}`;
+      const { data, error } = await supabase.storage
+        .from("cars")
+        .upload(newName, file);
 
-        // Clear form
-        manufacturer.value = "";
-        model.value = "";
-        year.value = "";
-        color.value = "";
-        gasType.value = "";
-        files.value = [];
-        $q.notify({
-          position: "top",
-          color: "positive",
-          message: "Car added successfully",
-        });
-      } catch (error) {
-        // Set error notification
-        $q.notify({
-          position: "top",
-          color: "negative",
-          message: "Error adding car",
-        });
-      } finally {
-        isLoading.value = false;
-      }
-    };
+      if (error) throw error;
 
-    return {
-      manufacturer,
-      model,
-      year,
-      color,
-      gasType,
-      handleFiles,
-      addCar,
-      isLoading,
-    };
-  },
-};
+      imageURLs.push(baseURL + newName);
+    }
+
+    if (files.value.length === 0) {
+      imageURLs.push(
+        "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg"
+      );
+    }
+
+    const { data, error } = await supabase
+      .from("cars")
+      .insert([
+        {
+          user_id: authStore.state.session.user.id,
+          manufacturer: manufacturer.value,
+          model: model.value,
+          year: year.value,
+          color: color.value,
+          fuel_type: gasType.value,
+          image_url: imageURLs,
+        },
+      ])
+      .single();
+
+    if (error) throw error;
+
+    manufacturer.value = "";
+    model.value = "";
+    year.value = "";
+    color.value = "";
+    gasType.value = "";
+    files.value = [];
+    $q.notify({
+      position: "top",
+      color: "positive",
+      message: "Car added successfully",
+    });
+  } catch (error) {
+    $q.notify({
+      position: "top",
+      color: "negative",
+      message: "Error adding car",
+    });
+  } finally {
+    isLoading.value = false;
+  }
+}
 </script>
 
 <style scoped>

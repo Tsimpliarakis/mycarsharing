@@ -1,13 +1,15 @@
 <template>
   <div class="car-thumbnail">
     <q-card class="bg-green-2" style="width: 180px; height: 260px">
-      <q-img :ratio="16 / 9" :src="car.image_url[1]" />
+      <q-img :ratio="16 / 9" :src="car.image_url[0]" />
       <q-card-section>
         <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
-        <div class="attribute">Year: {{ car.year }}</div>
-        <div class="attribute">Mileage: {{ car.mileage }} km</div>
-        <div class="attribute">Gear Box: {{ car.transmission_type }}</div>
-        <div class="attribute">Fuel Type: {{ car.fuel_type }}</div>
+        <div><span class="label">Year:</span> {{ car.year }}</div>
+        <div><span class="label">Mileage:</span> {{ car.mileage }} km</div>
+        <div>
+          <span class="label">Gear Box:</span> {{ car.transmission_type }}
+        </div>
+        <div><span class="label">Fuel Type:</span> {{ car.fuel_type }}</div>
         <div class="text-center price">{{ car.price }}€ / day</div>
       </q-card-section>
     </q-card>
@@ -43,7 +45,7 @@ p {
   font-weight: bold;
 }
 
-.attribute {
+.label {
   font-weight: 500;
 }
 </style>
