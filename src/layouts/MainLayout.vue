@@ -19,7 +19,7 @@
           >Login</q-btn
         >
         <!-- change the login to Account buttons if the user is logged in -->
-        <profilebutton v-if="authStore.state.session" />
+        <profile-button v-if="authStore.state.session" />
       </q-toolbar>
     </q-header>
 
@@ -39,28 +39,16 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
+import { useRouter } from "vue-router";
 import { authStore } from "../stores/auth-store";
-import profilebutton from "../components/ProfileButton.vue";
+import ProfileButton from "../components/ProfileButton.vue";
 
-export default defineComponent({
-  name: "MainLayout",
-  components: {
-    profilebutton,
-  },
-  methods: {
-    redirectToLogin() {
-      // Use the router to navigate to the /login route
-      this.$router.push("/login");
-    },
-  },
-  setup() {
-    return {
-      authStore,
-    };
-  },
-});
+const router = useRouter();
+
+const redirectToLogin = () => {
+  router.push("/login");
+};
 </script>
 
 <style scoped>
@@ -68,5 +56,9 @@ export default defineComponent({
 .no-decoration {
   color: inherit;
   text-decoration: none;
+}
+
+.q-page-container {
+  background-color: #f1f1f1;
 }
 </style>
