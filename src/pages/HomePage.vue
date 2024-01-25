@@ -61,7 +61,7 @@ onMounted(async () => {
   }
 }
 
-@media screen and (min-width: 800px) {
+@media (min-width: 1000px) {
   .suggestions {
     margin-left: calc((100% - 800px) / 2);
   }
