@@ -35,43 +35,35 @@
 </template>
 
 <script setup>
-import { reactive, computed } from "vue";
-import { supabase } from "src/lib/supabaseClient.js";
+import { reactive } from "vue";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
+
+const $q = useQuasar();
+const router = useRouter();
 
 const formData = reactive({
   selectedCity: "",
   date: "",
 });
 
-const searchParams = computed(() => ({
-  location: `%${formData.selectedCity}%`,
-  start_date: formData.date,
-}));
-
-const searchData = async () => {
+const searchData = () => {
   if (!formData.selectedCity || !formData.date) {
-    notifyUser("Both fields are required.");
+    $q.notify({
+      color: "red-5",
+      textColor: "white",
+      icon: "warning",
+      message: "Both fields are required!",
+      position: "top",
+    });
     return;
   }
 
-  try {
-    const { data, error } = await supabase
-      .from("cars")
-      .select("*")
-      .ilike("location", searchParams.value.location)
-      .eq("start_date", searchParams.value.start_date);
-
-    if (error) throw error;
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-    notifyUser("An error occurred while searching.");
-  }
+  const searchUrl = `/search?city=${encodeURIComponent(
+    formData.selectedCity
+  )}&date=${encodeURIComponent(formData.date)}`;
+  router.push(searchUrl);
 };
-
-function notifyUser(message) {
-  // Code to show notification goes here...
-}
 </script>
 
 <style scoped>

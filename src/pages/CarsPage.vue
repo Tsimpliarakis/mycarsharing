@@ -8,7 +8,7 @@
       <div v-else class="text-h6">You don't have any cars yet :(</div>
     </div>
     <div class="flex flex-center row mycars">
-      <car-thumbnail v-for="car in cars" :key="car.id" :car="car" />
+      <car-thumbnail-horizontal v-for="car in cars" :key="car.id" :car="car" />
     </div>
     <q-btn
       class="addcarbtn"
@@ -23,7 +23,7 @@
 import { ref, onMounted } from "vue";
 import { authStore } from "../stores/auth-store";
 import { supabase } from "../lib/supabaseClient";
-import CarThumbnail from "src/components/car/CarThumbnail.vue";
+import CarThumbnailHorizontal from "src/components/car/CarThumbnailHorizontal.vue";
 
 const cars = ref([]);
 const isLoading = ref(false);

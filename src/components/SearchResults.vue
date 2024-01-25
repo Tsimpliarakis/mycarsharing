@@ -1,18 +1,41 @@
 <template>
-  <div class="q-pa-md">
-    <div v-for="item in results" :key="item.id">
-      <!-- Display your data here. Replace 'item.property' with your actual data properties -->
-      <p>{{ item.property }}</p>
+  <q-page class="flex flex-center column">
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="results && results.length > 0" class="text-h6">
+      Found {{ results.length }} result(s)
     </div>
-  </div>
+    <div v-else class="text-h6">No results found :(</div>
+    <!-- Display the results here -->
+    <car-thumbnail-horizontal
+      v-for="result in results"
+      :key="result.id"
+      :car="result"
+    />
+  </q-page>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { supabase } from "../lib/supabaseClient";
+import CarThumbnailHorizontal from "./car/CarThumbnailHorizontal.vue";
 
+const route = useRoute();
 const results = ref([]);
+const isLoading = ref(false);
 
-const setResults = (newResults) => {
-  results.value = newResults;
-};
+onMounted(async () => {
+  isLoading.value = true;
+  const { city, date } = route.query;
+  const { data, error } = await supabase
+    .from("cars")
+    .select("*")
+    .eq("location", city)
+    .eq("start_date", date);
+  isLoading.value = false;
+  if (error) console.log("Error: ", error);
+  else {
+    results.value = data || [];
+  }
+});
 </script>
