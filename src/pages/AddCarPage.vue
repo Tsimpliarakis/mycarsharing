@@ -10,12 +10,46 @@
           required
         />
         <q-input color="green" v-model="model" placeholder="Model" required />
-        <q-input color="green" v-model="year" placeholder="Year" required />
+        <q-input
+          @keypress="onlyNumber"
+          color="green"
+          v-model="year"
+          placeholder="Year"
+          required
+        />
         <q-input color="green" v-model="color" placeholder="Color" required />
         <q-input
           color="green"
           v-model="gasType"
           placeholder="Gas Type"
+          required
+        />
+        <q-input
+          @keypress="onlyNumber"
+          color="green"
+          v-model="mileage"
+          placeholder="Mileage"
+          required
+        />
+        <q-select
+          v-model="transmission_type"
+          :options="['Automatic', 'Manual']"
+          label="Transmission Type"
+          required
+          color="green"
+        />
+        <q-select
+          v-model="location"
+          :options="['Athens', 'Corfu', 'Polykastro', 'Thessaloniki']"
+          label="Location"
+          required
+          color="green"
+        />
+        <q-input
+          @keypress="onlyNumber"
+          color="green"
+          v-model="price"
+          placeholder="Price"
           required
         />
         <div class="text-left text-grey-8">Photos</div>
@@ -38,9 +72,21 @@ const model = ref("");
 const year = ref("");
 const color = ref("");
 const gasType = ref("");
+const price = ref("");
+const location = ref("");
+const mileage = ref("");
+const transmission_type = ref("");
 const files = ref([]);
 const isLoading = ref(false);
 const $q = useQuasar();
+
+function onlyNumber($event) {
+  let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+  if (keyCode < 48 || keyCode > 57) {
+    // Prevent default action (typing non-number character)
+    $event.preventDefault();
+  }
+}
 
 function handleFiles(event) {
   files.value = event.target.files;
@@ -83,6 +129,10 @@ async function addCar() {
           color: color.value,
           fuel_type: gasType.value,
           image_url: imageURLs,
+          price: price.value,
+          location: location.value,
+          mileage: mileage.value,
+          transmission_type: transmission_type.value,
         },
       ])
       .single();
@@ -94,6 +144,10 @@ async function addCar() {
     year.value = "";
     color.value = "";
     gasType.value = "";
+    price.value = "";
+    location.value = "";
+    mileage.value = "";
+    transmission_type.value = "";
     files.value = [];
     $q.notify({
       position: "top",
@@ -113,7 +167,8 @@ async function addCar() {
 </script>
 
 <style scoped>
-.q-input {
+.q-input,
+.q-select {
   margin: 10px;
 }
 
