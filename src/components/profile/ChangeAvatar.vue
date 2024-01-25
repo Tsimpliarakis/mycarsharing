@@ -38,8 +38,8 @@ async function uploadAvatar() {
 
   uploading.value = true; // Set loading state to true
 
-  const randomString = generateRandomString();
-  const fileExtension = getFileExtension(selectedFile.value.name);
+  const randomString = Math.random().toString(36).substring(2, 15);
+  const fileExtension = selectedFile.value.name.split(".").pop();
   const fileName = `${randomString}.${fileExtension}`;
   const avatar_url = `https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/${fileName}`;
 
@@ -79,17 +79,6 @@ async function uploadAvatar() {
   } finally {
     uploading.value = false; // Set loading state to false regardless of success or failure
   }
-}
-
-function generateRandomString() {
-  return Math.random().toString(36).substring(2, 15);
-}
-
-function getFileExtension(fileName) {
-  if (!fileName) {
-    return ""; // or handle it in a way that makes sense for your application
-  }
-  return fileName.split(".").pop();
 }
 </script>
 
