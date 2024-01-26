@@ -1,5 +1,15 @@
 import { authStore } from "src/stores/auth-store";
 
+// Create a function for the beforeEnter guard
+function requireAuth(to, from, next) {
+  // Check if the user is logged in
+  if (!localStorage.getItem("sb-igohglatbbhgyelsipze-auth-token")) {
+    next("/login");
+  } else {
+    next();
+  }
+}
+
 const routes = [
   {
     path: "/",
@@ -11,7 +21,7 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: (to, from, next) => {
       // Redirect to home if the user is already logged in
-      if (authStore.state.session) {
+      if (localStorage.getItem("sb-igohglatbbhgyelsipze-auth-token")) {
         next("/");
       } else {
         next();
@@ -22,40 +32,19 @@ const routes = [
   {
     path: "/profile",
     component: () => import("layouts/MainLayout.vue"),
-    beforeEnter: (to, from, next) => {
-      // Redirect to login if the user is not logged in
-      if (!authStore.state.session) {
-        next("/login");
-      } else {
-        next();
-      }
-    },
+    beforeEnter: requireAuth,
     children: [{ path: "", component: () => import("pages/AccountPage.vue") }],
   },
   {
     path: "/cars",
     component: () => import("layouts/MainLayout.vue"),
-    beforeEnter: (to, from, next) => {
-      // Redirect to login if the user is not logged in
-      if (!authStore.state.session) {
-        next("/login");
-      } else {
-        next();
-      }
-    },
+    beforeEnter: requireAuth,
     children: [{ path: "", component: () => import("pages/CarsPage.vue") }],
   },
   {
     path: "/cars/new",
     component: () => import("layouts/MainLayout.vue"),
-    beforeEnter: (to, from, next) => {
-      // Redirect to login if the user is not logged in
-      if (!authStore.state.session) {
-        next("/login");
-      } else {
-        next();
-      }
-    },
+    beforeEnter: requireAuth,
     children: [{ path: "", component: () => import("pages/AddCarPage.vue") }],
   },
   {

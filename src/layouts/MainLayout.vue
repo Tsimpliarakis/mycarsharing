@@ -27,7 +27,7 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-green-3 text-white">
+    <q-footer elevated class="bg-green-5 text-white">
       <q-toolbar>
         <ul>
           <router-link to="/about">

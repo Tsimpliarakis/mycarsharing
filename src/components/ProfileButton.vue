@@ -60,32 +60,37 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { authStore } from "../stores/auth-store";
 import { supabase } from "../lib/supabaseClient";
 import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
 
-export default {
-  setup() {
-    const router = useRouter();
-    const logoutSession = async () => {
-      try {
-        await supabase.auth.signOut();
-        authStore.state.session = null; // Clear the session in the Pinia store
-        router.push("/login");
-      } catch (error) {
-        $q.notify({
-          color: "negative",
-          position: "top",
-          message: error.message,
-        });
-      }
-    };
+const $q = useQuasar();
 
-    return {
-      authStore,
-      logoutSession,
-    };
-  },
+const router = useRouter();
+
+const logoutSession = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    $q.notify({
+      color: "red-5",
+      textColor: "white",
+      icon: "report_problem",
+      message: error.message,
+      position: "top",
+    });
+  } else {
+    $q.notify({
+      color: "orange-5",
+      textColor: "white",
+      icon: "exit_to_app",
+      message: "Logged out successfully",
+      position: "top",
+    });
+
+    router.push("/");
+  }
 };
 </script>

@@ -71,6 +71,7 @@ const handleLogin = async () => {
       color: "positive",
       position: "top",
       message: "Logged in successfully!",
+      icon: "login",
     });
     router.push("/"); // Redirect to homepage
   } catch (error) {

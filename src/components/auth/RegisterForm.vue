@@ -74,6 +74,7 @@ const handleRegister = async () => {
       color: "positive",
       position: "top",
       message: "Registered successfully!",
+      icon: "check",
     });
   } catch (error) {
     if (error instanceof Error) {
