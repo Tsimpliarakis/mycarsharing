@@ -7,7 +7,12 @@
         </div>
         <div class="details">
           <q-card-section>
-            <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
+            <router-link
+              :to="`/car?id=${encodeURIComponent(car.car_id)}`"
+              class="tittle"
+            >
+              <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
+            </router-link>
             <div><span class="label">Year:</span> {{ car.year }}</div>
             <div><span class="label">Mileage:</span> {{ car.mileage }} km</div>
             <div>
@@ -104,5 +109,10 @@ p {
   .pricevalue {
     font-size: 16px;
   }
+}
+
+.tittle {
+  text-decoration: none;
+  color: black;
 }
 </style>

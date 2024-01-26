@@ -14,7 +14,7 @@
       class="addcarbtn"
       color="green"
       label="Add car"
-      @click="$router.push('/cars/new')"
+      @click="$router.push('/mycars/new')"
     />
   </q-page>
 </template>

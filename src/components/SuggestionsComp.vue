@@ -25,7 +25,9 @@ const cars = ref({ Polykastro: [], Corfu: [] });
 const fetchCarsByLocation = async (location) => {
   const { data, error } = await supabase
     .from("cars")
-    .select("*")
+    .select(
+      "car_id, year, manufacturer, model, mileage, price, image_url, fuel_type, transmission_type"
+    )
     .ilike("location", location);
   if (error) console.log(`Error fetching ${location}: `, error);
   return data || [];

@@ -22,7 +22,7 @@
             push
             size="sm"
             v-close-popup
-            @click="$router.push('/cars')"
+            @click="$router.push('/mycars')"
           />
           <q-btn
             class="q-mb-md"

@@ -3,7 +3,12 @@
     <q-card class="bg-green-2" style="width: 180px; height: 260px">
       <q-img :ratio="16 / 9" :src="car.image_url[0]" />
       <q-card-section>
-        <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
+        <router-link
+          :to="`/car?id=${encodeURIComponent(car.car_id)}`"
+          class="tittle"
+        >
+          <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
+        </router-link>
         <div><span class="label">Year:</span> {{ car.year }}</div>
         <div><span class="label">Mileage:</span> {{ car.mileage }} km</div>
         <div>
@@ -47,5 +52,10 @@ p {
 
 .label {
   font-weight: 500;
+}
+
+.tittle {
+  text-decoration: none;
+  color: black;
 }
 </style>

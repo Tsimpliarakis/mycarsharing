@@ -36,13 +36,13 @@ const routes = [
     children: [{ path: "", component: () => import("pages/AccountPage.vue") }],
   },
   {
-    path: "/cars",
+    path: "/mycars",
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: requireAuth,
-    children: [{ path: "", component: () => import("pages/CarsPage.vue") }],
+    children: [{ path: "", component: () => import("pages/MyCarsPage.vue") }],
   },
   {
-    path: "/cars/new",
+    path: "/mycars/new",
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: requireAuth,
     children: [{ path: "", component: () => import("pages/AddCarPage.vue") }],
@@ -54,6 +54,16 @@ const routes = [
       {
         path: "",
         component: () => import("src/pages/SearchPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/car",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/CarPage.vue"),
       },
     ],
   },
