@@ -14,6 +14,7 @@
           transition-prev="jump-right"
           transition-next="jump-left"
           height="200px"
+          color="green"
         >
           <q-carousel-slide
             v-for="(url, index) in car.image_url"
