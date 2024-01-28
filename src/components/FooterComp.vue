@@ -5,7 +5,7 @@
         <div class="coloumn list">
           <li><router-link to="/about" class="links">About</router-link></li>
           <li>
-            <router-link to="/contact" class="links">Contact Us</router-link>
+            <router-link to="/contact-us" class="links">Contact Us</router-link>
           </li>
           <li>
             <router-link to="/terms" class="links"
@@ -13,7 +13,7 @@
             >
           </li>
           <li>
-            <router-link to="/privacy" class="links"
+            <router-link to="/privacy-policy" class="links"
               >Privacy Policy</router-link
             >
           </li>

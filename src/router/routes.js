@@ -30,7 +30,7 @@ const routes = [
     children: [{ path: "", component: () => import("pages/LoginPage.vue") }],
   },
   {
-    path: "/profile",
+    path: "/account",
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: requireAuth,
     children: [{ path: "", component: () => import("pages/AccountPage.vue") }],
@@ -64,6 +64,26 @@ const routes = [
       {
         path: "",
         component: () => import("src/pages/CarPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/privacy-policy",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/PrivacyPolicyPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/contact-us",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/ContactUsPage.vue"),
       },
     ],
   },

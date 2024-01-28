@@ -1,6 +1,6 @@
 <template>
   <div class="car-thumbnail">
-    <q-card class="bg-green-2">
+    <q-card class="bg-green-1">
       <div class="row no-wrap">
         <div>
           <q-img :src="car.image_url[0]" />

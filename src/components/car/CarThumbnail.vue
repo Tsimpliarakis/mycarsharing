@@ -1,6 +1,6 @@
 <template>
   <div class="car-thumbnail">
-    <q-card class="bg-green-2" style="width: 180px; height: 260px">
+    <q-card class="bg-green-1" style="width: 180px; height: 260px">
       <q-img :ratio="16 / 9" :src="car.image_url[0]" />
       <q-card-section>
         <router-link

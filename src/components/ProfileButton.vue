@@ -9,20 +9,20 @@
           <q-btn
             class="q-mb-md"
             color="green-5"
-            label="Profile"
-            push
-            size="sm"
-            v-close-popup
-            @click="$router.push('/profile')"
-          />
-          <q-btn
-            class="q-mb-md"
-            color="green-5"
             label="My Cars"
             push
             size="sm"
             v-close-popup
             @click="$router.push('/mycars')"
+          />
+          <q-btn
+            class="q-mb-md"
+            color="green-5"
+            label="Favorites"
+            push
+            size="sm"
+            v-close-popup
+            @click="$router.push('/favorites')"
           />
           <q-btn
             class="q-mb-md"
@@ -38,16 +38,29 @@
         <q-separator vertical inset class="q-mx-lg" />
 
         <div class="column items-center">
-          <q-avatar size="72px">
-            <img :src="authStore.state.profile.avatar" />
-          </q-avatar>
+          <router-link
+            style="text-decoration: none; color: inherit"
+            to="/account"
+            class="text-center"
+          >
+            <q-avatar size="72px">
+              <img :src="authStore.state.profile.avatar" />
+            </q-avatar>
 
-          <div class="text-subtitle1 q-mt-md q-mb-xs">
-            {{ authStore.state.profile.userName }}
-          </div>
-
+            <div
+              class="text-subtitle1 q-mt-md q-mb-xs"
+              style="
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              "
+            >
+              {{ authStore.state.profile.userName }}
+            </div>
+          </router-link>
           <q-btn
-            color="green-5"
+            class="logout"
+            color="red-6"
             label="Logout"
             push
             size="sm"
@@ -94,3 +107,9 @@ const logoutSession = async () => {
   }
 };
 </script>
+
+<style scoped>
+.logout {
+  margin-top: 7px;
+}
+</style>

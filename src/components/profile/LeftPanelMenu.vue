@@ -1,7 +1,7 @@
 <template>
   <div class="left-panel text-center">
     <div class="q-pa-md">
-      <q-avatar size="80px">
+      <q-avatar size="100px">
         <img :src="authStore.state.profile.avatar" />
       </q-avatar>
       <div class="text-subtitle2 q-mt-md q-mb-xs">

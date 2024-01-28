@@ -10,10 +10,10 @@
           autoplay
           arrows
           navigation
-          control-color="green"
+          control-color="green-5"
           transition-prev="jump-right"
           transition-next="jump-left"
-          height="200px"
+          height="300px"
         >
           <q-carousel-slide
             v-for="(url, index) in car.image_url"
