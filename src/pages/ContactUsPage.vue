@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center q-pa-md">
     <div class="page">
       <h3>Contact Us</h3>
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">

@@ -3,7 +3,7 @@
     class="fullscreen bg-green-5 text-white text-center q-pa-md flex flex-center"
   >
     <div>
-      <div style="font-size: 30vh">404</div>
+      <div style="font-size: 25vh">404</div>
 
       <div class="text-h2" style="opacity: 0.4">Oops. Nothing here...</div>
 

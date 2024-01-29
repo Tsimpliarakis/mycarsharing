@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-md">
     <div class="flex xefl">
       <LeftPanelMenu :togglePanel="togglePanels" />
       <q-separator vertical inset />

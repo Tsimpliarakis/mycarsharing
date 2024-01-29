@@ -2,7 +2,7 @@
   <q-page class="flex flex-center column">
     <div class="text-center">
       <div v-if="isLoading">Loading...</div>
-      <div v-else-if="cars && cars.length > 0" class="text-h6 havecars">
+      <div v-else-if="cars && cars.length > 0" class="text-h5 havecars">
         You have {{ cars.length }} car(s)
       </div>
       <div v-else class="text-h6">You don't have any cars yet :(</div>

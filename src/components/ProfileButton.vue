@@ -27,11 +27,11 @@
           <q-btn
             class="q-mb-md"
             color="green-5"
-            label="Orders"
+            label="Bookings"
             push
             size="sm"
             v-close-popup
-            @click="$router.push('/orders')"
+            @click="$router.push('/bookings')"
           />
         </div>
 

@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center column">
+  <q-page class="flex flex-center column q-pa-md">
     <div v-if="isLoading" class="text-h6">Vroom vroom...</div>
     <div v-else class="card">
       <q-card flat bordered>
@@ -38,8 +38,23 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="around">
-          <q-btn flat round color="primary" icon="favorite_border" />
-          <q-btn flat round color="accent" icon="share" />
+          <q-btn
+            flat
+            round
+            color="red"
+            icon="favorite_border"
+            @click="addToFavorites"
+          />
+
+          <q-btn
+            flat
+            round
+            color="accent"
+            icon="share"
+            @click="copyUrlToClipboard"
+          />
+
+          <q-btn flat round color="green" icon="car_rental" />
         </q-card-actions>
       </q-card>
       <q-list flat bordered class="bg-white">
@@ -49,7 +64,7 @@
         </q-item>
         <q-item>
           <q-item-section>Price</q-item-section>
-          <q-item-section side>${{ car.price }}</q-item-section>
+          <q-item-section side>{{ car.price }}€ / day</q-item-section>
         </q-item>
         <q-item>
           <q-item-section>Color</q-item-section>
@@ -71,7 +86,6 @@
           <q-item-section>Additional Features</q-item-section>
           <q-item-section side>{{ car.additional_features }}</q-item-section>
         </q-item>
-        <!-- Add more items as needed -->
       </q-list>
     </div>
   </q-page>
@@ -82,6 +96,7 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
+import { authStore } from "src/stores/auth-store.js";
 
 const route = useRoute();
 const car = ref(null);
@@ -109,13 +124,50 @@ onMounted(async () => {
     });
   }
 });
+
+function copyUrlToClipboard() {
+  navigator.clipboard
+    .writeText(window.location.href)
+    .then(() => {
+      q.notify({
+        color: "green-5",
+        message: "URL copied to clipboard",
+        position: "bottom-right",
+      });
+    })
+    .catch((err) => {
+      console.log("Could not copy text: ", err);
+    });
+}
+
+async function addToFavorites() {
+  try {
+    const { data, error } = await supabase
+      .from("favorites")
+      .insert([
+        { car_id: car.value.car_id, user_id: authStore.state.session.user.id },
+      ]);
+
+    if (error) throw error;
+
+    q.notify({
+      color: "green-5",
+      message: "Car added to favorites",
+      position: "bottom-right",
+    });
+  } catch (error) {
+    q.notify({
+      color: "negative",
+      message: "An error occurred while adding the car to favorites",
+      position: "bottom-right",
+    });
+  }
+}
 </script>
 
 <style scoped>
 .card {
   width: 80%;
   max-width: 450px;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 </style>

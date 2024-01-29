@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center q-pa-md">
     <div class="text-center">
       <div class="text-h6">Add New Car</div>
       <form @submit.prevent="addCar">

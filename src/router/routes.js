@@ -36,6 +36,12 @@ const routes = [
     children: [{ path: "", component: () => import("pages/AccountPage.vue") }],
   },
   {
+    path: "/bookings",
+    component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: requireAuth,
+    children: [{ path: "", component: () => import("pages/BookingsPage.vue") }],
+  },
+  {
     path: "/mycars",
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: requireAuth,
