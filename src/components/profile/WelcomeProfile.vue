@@ -8,7 +8,7 @@
     <br />
     <br />
     <br />
-    <q-img src="../../assets/favicon.png" style="opacity: 50%" />
+    <q-img src="../../assets/carsharemedia.png" />
     <br />
     <br />
     <br />

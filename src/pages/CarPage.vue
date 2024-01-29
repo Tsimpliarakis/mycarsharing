@@ -42,8 +42,8 @@
             flat
             round
             color="red"
-            icon="favorite_border"
-            @click="addToFavorites"
+            :icon="isFavorite ? 'favorite' : 'favorite_border'"
+            @click="toggleFavorite"
           />
 
           <q-btn
@@ -103,6 +103,7 @@ const car = ref(null);
 const isLoading = ref(true);
 const q = useQuasar();
 let slide = ref(0); // Add this line to keep track of the current slide
+const isFavorite = ref(false);
 
 onMounted(async () => {
   try {
@@ -123,7 +124,30 @@ onMounted(async () => {
       icon: "report_problem",
     });
   }
+  await checkIfFavorite();
 });
+
+async function checkIfFavorite() {
+  try {
+    const { data, error } = await supabase
+      .from("favorites")
+      .select("id")
+      .eq("car_id", route.query.id)
+      .eq("user_id", authStore.state.session.user.id);
+
+    if (data.length > 0) {
+      isFavorite.value = true;
+    } else {
+      isFavorite.value = false;
+    }
+  } catch (error) {
+    q.notify({
+      color: "negative",
+      message: "An error occurred while checking if the car is in favorites",
+      position: "bottom-right",
+    });
+  }
+}
 
 function copyUrlToClipboard() {
   navigator.clipboard
@@ -140,28 +164,55 @@ function copyUrlToClipboard() {
     });
 }
 
-async function addToFavorites() {
-  try {
-    const { data, error } = await supabase
-      .from("favorites")
-      .insert([
-        { car_id: car.value.car_id, user_id: authStore.state.session.user.id },
+async function toggleFavorite() {
+  if (isFavorite.value) {
+    // Remove from favorites
+    try {
+      const { data, error } = await supabase.from("favorites").delete().match({
+        car_id: car.value.car_id,
+        user_id: authStore.state.session.user.id,
+      });
+
+      if (error) throw error;
+
+      q.notify({
+        color: "green-5",
+        message: "Car removed from favorites",
+        position: "bottom-right",
+      });
+    } catch (error) {
+      q.notify({
+        color: "negative",
+        message: "An error occurred while removing the car from favorites",
+        position: "bottom-right",
+      });
+    }
+  } else {
+    // Add to favorites
+    try {
+      const { data, error } = await supabase.from("favorites").insert([
+        {
+          car_id: car.value.car_id,
+          user_id: authStore.state.session.user.id,
+        },
       ]);
 
-    if (error) throw error;
+      if (error) throw error;
 
-    q.notify({
-      color: "green-5",
-      message: "Car added to favorites",
-      position: "bottom-right",
-    });
-  } catch (error) {
-    q.notify({
-      color: "negative",
-      message: "An error occurred while adding the car to favorites",
-      position: "bottom-right",
-    });
+      q.notify({
+        color: "green-5",
+        message: "Car added to favorites",
+        position: "bottom-right",
+      });
+    } catch (error) {
+      q.notify({
+        color: "negative",
+        message: "An error occurred while adding the car to favorites",
+        position: "bottom-right",
+      });
+    }
   }
+  await checkIfFavorite();
 }
 </script>
 

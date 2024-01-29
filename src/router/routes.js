@@ -54,6 +54,14 @@ const routes = [
     children: [{ path: "", component: () => import("pages/AddCarPage.vue") }],
   },
   {
+    path: "/favorites",
+    component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: requireAuth,
+    children: [
+      { path: "", component: () => import("pages/FavoritesPage.vue") },
+    ],
+  },
+  {
     path: "/search",
     component: () => import("layouts/MainLayout.vue"),
     children: [
