@@ -4,8 +4,13 @@
       <q-avatar size="100px">
         <img :src="authStore.state.profile.avatar" />
       </q-avatar>
-      <div class="text-subtitle2 q-mt-md q-mb-xs">
-        {{ authStore.state.profile.userName }}
+      <div style="margin-top: 5px; margin-bottom: -10px">
+        <ProfileButton
+          :user="{
+            username: authStore.state.profile.userName,
+            avatar_url: null,
+          }"
+        />
       </div>
       <div class="text-subtitle1 q-mt-md q-mb-xs">
         {{ authStore.state.profile.fullName }}
@@ -16,14 +21,14 @@
         <q-separator />
         <q-item>
           <q-item-section
-            ><q-btn flat @click="togglePanel('ChangeAvatar')"
+            ><q-btn flat rounded @click="togglePanel('ChangeAvatar')"
               >Change Avatar</q-btn
             ></q-item-section
           >
         </q-item>
         <q-item>
           <q-item-section
-            ><q-btn flat @click="togglePanel('ProfileInfo')"
+            ><q-btn flat rounded @click="togglePanel('ProfileInfo')"
               >Profile Information</q-btn
             ></q-item-section
           >
@@ -37,24 +42,36 @@
         </q-item>
         <q-separator />
         <q-item>
-          <q-item-section style="color: #dc143c"
-            ><q-btn label="Delete Account" @click="confirmDialog = true"
+          <q-item-section
+            ><q-btn
+              flat
+              rounded
+              color="red-7"
+              label="Delete Account"
+              @click="confirmDialog = true"
           /></q-item-section>
           <q-dialog v-model="confirmDialog" persistent>
             <q-card>
               <q-card-section class="row items-center">
                 <q-avatar icon="warning" color="red-7" text-color="white" />
-                <span class="q-ml-sm"
-                  >Are you sure you want to permanently delete your account?
-                  <br />
-                  This action cannot be undone.</span
-                >
+                <div class="column q-ml-sm">
+                  <span
+                    >Are you sure you want to permanently delete your account? </span
+                  ><span> This action cannot be undone.</span>
+                </div>
               </q-card-section>
 
               <q-card-actions align="right">
-                <q-btn flat label="Cancel" color="green-8" v-close-popup />
                 <q-btn
                   flat
+                  label="Cancel"
+                  rounded
+                  color="green-8"
+                  v-close-popup
+                />
+                <q-btn
+                  flat
+                  rounded
                   label="Delete my account"
                   color="red-7"
                   @click="deleteUserAccount"
@@ -71,6 +88,7 @@
 
 <script setup>
 import { authStore } from "../../stores/auth-store";
+import ProfileButton from "./ProfileButton.vue";
 import { ref } from "vue";
 import axios from "axios";
 

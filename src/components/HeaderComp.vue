@@ -16,7 +16,7 @@
         v-if="!authStore.state.session && $route.path !== '/login'"
         >Login</q-btn
       >
-      <profile-button v-if="authStore.state.session" />
+      <menu-button v-if="authStore.state.session" />
     </q-toolbar>
   </q-header>
 </template>
@@ -24,7 +24,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { authStore } from "../stores/auth-store";
-import ProfileButton from "../components/ProfileButton.vue";
+import MenuButton from "src/components/MenuButton.vue";
 
 const router = useRouter();
 

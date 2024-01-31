@@ -53,8 +53,15 @@
             icon="share"
             @click="copyUrlToClipboard"
           />
-
           <q-btn flat round color="green" icon="car_rental" />
+        </q-card-actions>
+        <q-card-actions align="center">
+          <ProfileButton
+            :user="{
+              username: user.username,
+              avatar_url: user.avatar_url,
+            }"
+          />
         </q-card-actions>
       </q-card>
       <q-list flat bordered class="bg-white">
@@ -97,13 +104,15 @@ import { useRoute } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 import { authStore } from "src/stores/auth-store.js";
+import ProfileButton from "src/components/profile/ProfileButton.vue";
 
 const route = useRoute();
 const car = ref(null);
 const isLoading = ref(true);
 const q = useQuasar();
-let slide = ref(0); // Add this line to keep track of the current slide
+const slide = ref(0);
 const isFavorite = ref(false);
+const user = ref("");
 
 onMounted(async () => {
   try {
@@ -124,28 +133,38 @@ onMounted(async () => {
       icon: "report_problem",
     });
   }
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("username,avatar_url")
+    .eq("id", car.value.user_id)
+    .single();
+  if (error) throw error;
+  user.value = data;
+
   await checkIfFavorite();
 });
 
 async function checkIfFavorite() {
-  try {
-    const { data, error } = await supabase
-      .from("favorites")
-      .select("id")
-      .eq("car_id", route.query.id)
-      .eq("user_id", authStore.state.session.user.id);
+  if (authStore.state.session) {
+    try {
+      const { data, error } = await supabase
+        .from("favorites")
+        .select("id")
+        .eq("car_id", route.query.id)
+        .eq("user_id", authStore.state.session.user.id);
 
-    if (data.length > 0) {
-      isFavorite.value = true;
-    } else {
-      isFavorite.value = false;
+      if (data.length > 0) {
+        isFavorite.value = true;
+      } else {
+        isFavorite.value = false;
+      }
+    } catch (error) {
+      q.notify({
+        color: "negative",
+        message: "An error occurred while checking if the car is in favorites",
+        position: "bottom-right",
+      });
     }
-  } catch (error) {
-    q.notify({
-      color: "negative",
-      message: "An error occurred while checking if the car is in favorites",
-      position: "bottom-right",
-    });
   }
 }
 
@@ -165,6 +184,11 @@ function copyUrlToClipboard() {
 }
 
 async function toggleFavorite() {
+  if (!authStore.state.session) {
+    // Redirect the user to the login page
+    router.push("/login");
+    return;
+  }
   if (isFavorite.value) {
     // Remove from favorites
     try {
