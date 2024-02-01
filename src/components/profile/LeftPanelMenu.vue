@@ -2,7 +2,7 @@
   <div class="left-panel text-center">
     <div class="q-pa-md">
       <q-avatar size="100px">
-        <img :src="authStore.state.profile.avatar" />
+        <q-img :src="authStore.state.profile.avatar" />
       </q-avatar>
       <div style="margin-top: 5px; margin-bottom: -10px">
         <ProfileButton

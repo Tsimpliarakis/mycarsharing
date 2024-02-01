@@ -1,8 +1,17 @@
 <template>
-  <div class="q-pa-md">
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
     <q-card class="bg-green-2">
       <q-card-section horizontal>
-        <q-img src="your_image_url" class="col-5" />
+        <q-img :src="carImg" no-native-menu>
+          <q-icon
+            class="absolute all-pointer-events"
+            size="25px"
+            name="info"
+            color="green-1"
+          >
+            <q-tooltip> {{ carMan }} {{ carMod }} </q-tooltip>
+          </q-icon>
+        </q-img>
         <div class="col-7 q-ml-md">
           <div class="text-caption">Date: {{ review.date }}</div>
           <div class="text-caption">
@@ -21,7 +30,13 @@
       </q-card-section>
       <q-separator />
       <q-card-actions>
-        <div class="text-caption">Comment: {{ review.comment }}</div>
+        <ProfileButton
+          :user="{
+            username: username,
+            avatar_url: avatarUrl,
+          }"
+        />
+        <div class="text-caption">: {{ review.comment }}</div>
       </q-card-actions>
     </q-card>
   </div>
@@ -29,9 +44,15 @@
 
 <script setup>
 import { defineProps } from "vue";
+import ProfileButton from "./profile/ProfileButton.vue";
 
 const props = defineProps({
   review: Object,
+  carImg: String,
+  carMan: String,
+  carMod: String,
+  username: String,
+  avatarUrl: String,
 });
 
 const displayStars = (rating) => {
