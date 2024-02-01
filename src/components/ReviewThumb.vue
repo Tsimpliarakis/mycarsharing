@@ -43,7 +43,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
 import ProfileButton from "./profile/ProfileButton.vue";
 
 const props = defineProps({
