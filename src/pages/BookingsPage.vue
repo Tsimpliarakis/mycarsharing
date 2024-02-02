@@ -67,13 +67,18 @@ onMounted(async () => {
         const { data: carData, error: carError } = await supabase
           .from("cars")
           .select("image_url, user_id, manufacturer, model")
-          .eq("car_id", booking.car_id);
+          .eq("car_id", booking.car_id)
+          .single();
 
         if (carError) {
-          console.error(
-            `Error fetching car details for booking ${booking.id}:`,
-            carError
-          );
+          console.error(`Error fetching car / Car was deleted:`, carError);
+          booking.car = {
+            image_url: [
+              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
+            ],
+            manufacturer: "Unknown",
+            model: "Unknown",
+          };
         } else {
           // Add car details to booking object
           booking.car = carData[0];

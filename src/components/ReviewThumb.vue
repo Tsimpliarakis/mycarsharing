@@ -2,7 +2,7 @@
   <div class="col-12 col-sm-6 col-md-4 col-lg-3 review-thumbnail">
     <q-card class="bg-green-2">
       <q-card-section horizontal>
-        <q-img :src="carImg" no-native-menu>
+        <q-img :src="carImg" no-native-menu :style="{ height: '100px' }">
           <q-icon
             class="absolute all-pointer-events"
             size="25px"
@@ -36,7 +36,30 @@
             avatar_url: avatarUrl,
           }"
         />
-        <div class="text-caption">: {{ review.comment }}</div>
+        <div
+          class="text-caption"
+          v-if="showReadMore && review.comment.length > maxLength"
+        >
+          {{ truncatedComment }}
+          <q-btn
+            @click="toggleReadMore"
+            color="green"
+            label="Read More"
+            flat
+            dense
+          />
+        </div>
+        <div class="text-caption" v-else>
+          {{ review.comment }}
+          <q-btn
+            v-if="review.comment.length > maxLength"
+            @click="toggleReadMore"
+            color="green"
+            label="Read Less"
+            flat
+            dense
+          />
+        </div>
       </q-card-actions>
     </q-card>
   </div>
@@ -44,6 +67,7 @@
 
 <script setup>
 import ProfileButton from "./profile/ProfileButton.vue";
+import { ref, defineProps } from "vue";
 
 const props = defineProps({
   review: Object,
@@ -54,10 +78,27 @@ const props = defineProps({
   avatarUrl: String,
 });
 
+const showReadMore = ref(true); // Set to true for "Read More" as default state
+const truncatedComment = ref("");
+
+const toggleReadMore = () => {
+  showReadMore.value = !showReadMore.value;
+};
+
 const displayStars = (rating) => {
   const numberOfStars = Math.round(rating);
   return "⭐".repeat(numberOfStars);
 };
+
+const maxLength = 20;
+const updateTruncatedComment = (review) => {
+  truncatedComment.value =
+    review.comment.length > maxLength
+      ? review.comment.slice(0, maxLength) + "..."
+      : review.comment;
+};
+
+updateTruncatedComment(props.review); // Initial call to set truncated comment
 </script>
 
 <style scoped>

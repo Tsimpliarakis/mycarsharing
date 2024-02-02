@@ -10,12 +10,6 @@
     <div class="flex flex-center row mycars">
       <car-thumbnail-horizontal v-for="car in cars" :key="car.id" :car="car" />
     </div>
-    <q-btn
-      class="addcarbtn"
-      color="green"
-      label="Add car"
-      @click="$router.push('/mycars/new')"
-    />
   </q-page>
 </template>
 
@@ -54,10 +48,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.addcarbtn {
-  margin: 20px;
-}
-
 .havecars {
   margin-bottom: 20px;
   margin-top: 20px;

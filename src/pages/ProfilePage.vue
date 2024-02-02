@@ -26,11 +26,11 @@
               v-for="review in reviews"
               :key="review.booking_id"
               :review="review"
-              :carImg="bookingCarMap[review.booking_id].image_url[0]"
-              :carMan="bookingCarMap[review.booking_id].manufacturer"
-              :carMod="bookingCarMap[review.booking_id].model"
-              :username="bookingUserMap[review.booking_id].username"
-              :avatarUrl="bookingUserMap[review.booking_id].avatar_url"
+              :carImg="review.image_url[0]"
+              :carMan="review.manufacturer"
+              :carMod="review.model"
+              :username="review.username"
+              :avatarUrl="review.avatar_url"
             />
           </div>
         </div>
@@ -46,8 +46,6 @@ import CarThumbnail from "src/components/car/CarThumbnail.vue";
 import { ref, watchEffect } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 
-const bookingCarMap = {};
-const bookingUserMap = {};
 const route = useRoute();
 const userError = ref("");
 const loading = ref(false);
@@ -56,58 +54,93 @@ const cars = ref([]);
 const userId = ref("");
 
 async function getReviews(userId) {
-  try {
-    const { data: cars, error: carsError } = await supabase
-      .from("cars")
-      .select("car_id, image_url, manufacturer, model")
-      .eq("user_id", userId);
+  const { data: reviews_data, error: review_error } = await supabase
+    .from("reviews")
+    .select("*")
+    .eq("rated_user", userId);
 
-    if (carsError || !cars) throw new Error("Failed to fetch cars");
+  if (review_error || !reviews_data) {
+    console.error("Failed to fetch reviews:", review_error);
+    return [];
+  } else {
+    let processedReviews = [];
 
-    const bookingIds = [];
+    for (let review of reviews_data) {
+      const { data: booking_data, error: booking_error } = await supabase
+        .from("bookings")
+        .select("car_id, user_id")
+        .eq("booking_id", review.booking_id)
+        .single();
 
-    await Promise.all(
-      cars.map(async (car) => {
-        const { data: bookings, error: bookingsError } = await supabase
-          .from("bookings")
-          .select("booking_id, user_id")
-          .eq("car_id", car.car_id);
+      if (booking_error || !booking_data) {
+        console.error("Failed to fetch booking:", booking_error);
+      } else {
+        // Fetch the profile of the user who left the review
+        const { data: profile_data, error: profile_error } = await supabase
+          .from("profiles")
+          .select("username, avatar_url")
+          .eq("id", booking_data.user_id)
+          .single();
 
-        if (bookingsError || !bookings)
-          throw new Error(`Failed to fetch bookings for car ${car.car_id}`);
+        if (profile_error || !profile_data) {
+          console.error("Failed to fetch profile:", profile_error);
 
-        for (let booking of bookings) {
-          bookingCarMap[booking.booking_id] = car;
-          bookingIds.push(booking.booking_id);
+          // Provide default values if the profile cannot be fetched
+          const defaultProfile = {
+            username: "Deleted User",
+            avatar_url:
+              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/favicon.png",
+          };
 
-          const { data: bookingUser, error: bookingUserError } = await supabase
-            .from("profiles")
-            .select("username, avatar_url")
-            .eq("id", booking.user_id)
+          const reviewObj = {
+            ...review,
+            ...defaultProfile,
+            image_url: [
+              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
+            ],
+            manufacturer: "Unknown",
+            model: "Unknown",
+          };
+
+          processedReviews.push(reviewObj);
+        } else {
+          const { data: car_data, error: car_error } = await supabase
+            .from("cars")
+            .select("image_url, manufacturer, model")
+            .eq("car_id", booking_data.car_id)
             .single();
 
-          if (bookingUserError || !bookingUser)
-            throw new Error(
-              `Failed to fetch user for booking ${booking.booking_id}`
+          if (car_error || !car_data) {
+            console.error(
+              "Failed to fetch car / Car has been deleted:",
+              car_error
             );
-
-          bookingUserMap[booking.booking_id] = bookingUser;
+            const reviewObj = {
+              ...review,
+              username: profile_data.username,
+              avatar_url: profile_data.avatar_url,
+              image_url: [
+                "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
+              ],
+              manufacturer: "Unknown",
+              model: "Unknown",
+            };
+            processedReviews.push(reviewObj);
+          } else {
+            const reviewObj = {
+              ...review,
+              username: profile_data.username,
+              avatar_url: profile_data.avatar_url,
+              image_url: car_data.image_url,
+              manufacturer: car_data.manufacturer,
+              model: car_data.model,
+            };
+            processedReviews.push(reviewObj);
+          }
         }
-      })
-    );
-
-    const { data: reviews, error: reviewsError } = await supabase
-      .from("reviews")
-      .select("*")
-      .in("booking_id", bookingIds);
-
-    if (reviewsError || !reviews) throw new Error("Failed to fetch reviews");
-
-    return reviews;
-  } catch (error) {
-    console.error("Failed to fetch reviews:", error);
-    userError.value = "User does not exist";
-    return [];
+      }
+    }
+    return processedReviews;
   }
 }
 
