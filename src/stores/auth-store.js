@@ -4,12 +4,7 @@ import { reactive } from "vue";
 export const authStore = {
   state: reactive({
     session: {},
-    profile: {
-      userName: "",
-      fullName: "",
-      avatar: "",
-      isVerified: false,
-    },
+    profile: {},
   }),
 
   mutations: {
@@ -21,6 +16,9 @@ export const authStore = {
       state.profile.fullName = fullName;
       state.profile.avatar = avatar;
       state.profile.isVerified = isVerified;
+    },
+    resetProfile: (state) => {
+      state.profile = {};
     },
   },
 

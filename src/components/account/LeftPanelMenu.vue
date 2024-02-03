@@ -87,10 +87,16 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { authStore } from "../../stores/auth-store";
 import ProfileButton from "./ProfileButton.vue";
-import { ref } from "vue";
-import axios from "axios";
+import { supabase } from "src/lib/supabaseClient";
+import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
+
+const router = useRouter();
 
 const { togglePanel: parentTogglePanel } = defineProps(["togglePanel"]);
 
@@ -99,30 +105,33 @@ const togglePanel = (panelName) => {
 };
 
 // Define deleteUserAccount as a ref
-const deleteUserAccount = async () => {
-  const url =
-    "https://igohglatbbhgyelsipze.supabase.co/functions/v1/delete-user-account";
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlnb2hnbGF0YmJoZ3llbHNpcHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkzNTI5NzMsImV4cCI6MjAxNDkyODk3M30.0kAm5Z0owBVjy1kzzbbFsAgeGdQVIH7oUHobIi4lQag";
+async function deleteUserAccount() {
+  await supabase.rpc("delete_user");
+  await logoutSession();
+}
 
-  const requestData = {
-    name: "kalhspera",
-  };
+const logoutSession = async () => {
+  const { error } = await supabase.auth.signOut();
+  authStore.mutations.resetProfile(authStore.state);
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  if (error) {
+    $q.notify({
+      color: "red-5",
+      textColor: "white",
+      icon: "report_problem",
+      message: error.message,
+      position: "top",
+    });
+  } else {
+    $q.notify({
+      color: "orange-5",
+      textColor: "white",
+      icon: "exit_to_app",
+      message: "Logged out successfully",
+      position: "top",
+    });
 
-  try {
-    const response = await axios.post(url, requestData, config);
-    console.log("Response:", response.data);
-    // Handle the response as needed
-  } catch (error) {
-    console.error("Error:", error);
-    // Handle errors
+    router.push("/");
   }
 };
 

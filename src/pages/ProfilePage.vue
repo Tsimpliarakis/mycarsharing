@@ -63,9 +63,9 @@ async function getReviews(userId) {
     console.error("Failed to fetch reviews:", review_error);
     return [];
   } else {
-    let processedReviews = [];
+    const processedReviews = [];
 
-    for (let review of reviews_data) {
+    for (const review of reviews_data) {
       const { data: booking_data, error: booking_error } = await supabase
         .from("bookings")
         .select("car_id, user_id")

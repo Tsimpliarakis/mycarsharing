@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import LeftPanelMenu from "src/components/profile/LeftPanelMenu.vue";
-import ChangeAvatar from "src/components/profile/ChangeAvatar.vue";
-import UploadDocuments from "src/components/profile/UploadDocuments.vue";
-import WelcomeProfile from "src/components/profile/WelcomeProfile.vue";
+import LeftPanelMenu from "src/components/account/LeftPanelMenu.vue";
+import ChangeAvatar from "src/components/account/ChangeAvatar.vue";
+import UploadDocuments from "src/components/account/UploadDocuments.vue";
+import WelcomeProfile from "src/components/account/WelcomeProfile.vue";
 
 export default {
   components: {

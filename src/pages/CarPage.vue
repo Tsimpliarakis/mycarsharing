@@ -104,7 +104,7 @@ import { useRoute } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 import { authStore } from "src/stores/auth-store.js";
-import ProfileButton from "src/components/profile/ProfileButton.vue";
+import ProfileButton from "src/components/account/ProfileButton.vue";
 
 const route = useRoute();
 const car = ref(null);
