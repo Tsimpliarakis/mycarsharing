@@ -100,13 +100,14 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 import { authStore } from "src/stores/auth-store.js";
 import ProfileButton from "src/components/account/ProfileButton.vue";
 
 const route = useRoute();
+const router = useRouter();
 const car = ref(null);
 const isLoading = ref(true);
 const q = useQuasar();
