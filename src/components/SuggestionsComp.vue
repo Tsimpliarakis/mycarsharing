@@ -28,7 +28,9 @@ const fetchCarsByLocation = async (location) => {
     .select(
       "car_id, year, manufacturer, model, mileage, price, image_url, fuel_type, transmission_type"
     )
-    .ilike("location", location);
+    .ilike("location", location)
+    .order("added_date", { ascending: false })
+    .limit(10);
   if (error) console.log(`Error fetching ${location}: `, error);
   return data || [];
 };

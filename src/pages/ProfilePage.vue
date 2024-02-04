@@ -9,8 +9,14 @@
         <div>¯\_(ツ)_/¯</div>
       </div>
       <div v-else>
-        <!-- User's name -->
-        <div class="text-h4 text-center">{{ route.params.username }}</div>
+        <!-- User's info -->
+        <div class="q-mb-md flex flex-center column">
+          <q-avatar size="100px">
+            <q-img :src="user.avatar_url" />
+          </q-avatar>
+          <div class="text-subtitle2">{{ user.full_name }}</div>
+          <div class="text-caption">{{ user.description }}</div>
+        </div>
 
         <div v-if="cars">
           <div class="text-h5">Cars</div>
@@ -55,13 +61,13 @@ const userError = ref("");
 const loading = ref(false);
 const reviews = ref([]);
 const cars = ref([]);
-const userId = ref("");
+const user = ref([]);
 
-async function getReviews(userId) {
+async function getReviews(user_id) {
   const { data: reviews_data, error: review_error } = await supabase
     .from("reviews")
     .select("*")
-    .eq("rated_user", userId);
+    .eq("rated_user", user_id);
 
   if (review_error || !reviews_data) {
     console.error("Failed to fetch reviews:", review_error);
@@ -87,7 +93,7 @@ async function getReviews(userId) {
           .single();
 
         if (profile_error || !profile_data) {
-          console.error("Failed to fetch profile:", profile_error);
+          console.error("Failed to fetch profile. User may have been deleted.");
 
           // Provide default values if the profile cannot be fetched
           const defaultProfile = {
@@ -148,11 +154,11 @@ async function getReviews(userId) {
   }
 }
 
-async function getCars(userId) {
+async function getCars(user_id) {
   const { data: cars, error } = await supabase
     .from("cars")
     .select("car_id, image_url, manufacturer, model")
-    .eq("user_id", userId);
+    .eq("user_id", user_id);
 
   if (error || !cars) {
     console.error("Failed to fetch cars:", error);
@@ -166,13 +172,13 @@ async function getUserId(username) {
   try {
     const { data: user, error: userError } = await supabase
       .from("profiles")
-      .select("id")
+      .select("*")
       .eq("username", username)
       .single();
 
     if (userError || !user) throw new Error("Failed to fetch user");
 
-    return user.id;
+    return user;
   } catch (error) {
     userError.value = "User does not exist";
     return "";
@@ -182,14 +188,14 @@ async function getUserId(username) {
 watchEffect(() => {
   loading.value = true;
   const { username } = route.params;
-  getUserId(username).then((newUserId) => {
+  getUserId(username).then((newuser) => {
     // Check if userId has changed before updating
-    if (userId.value !== newUserId) {
-      userId.value = newUserId;
-      getReviews(userId.value).then((newReviews) => {
+    if (user.value !== newuser) {
+      user.value = newuser;
+      getReviews(user.value.id).then((newReviews) => {
         reviews.value = newReviews;
       });
-      getCars(userId.value).then((newCars) => {
+      getCars(user.value.id).then((newCars) => {
         cars.value = newCars;
       });
     }

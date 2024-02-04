@@ -18,7 +18,6 @@
         v-model="formData.date"
         mask="YYYY-MM-DD"
         today-btn
-        @input="searchData"
         color="green-5"
         range
         :rules="[(val) => !!val || 'Field is required']"
@@ -44,7 +43,7 @@ const router = useRouter();
 
 const formData = reactive({
   selectedCity: "",
-  date: "",
+  date: {},
 });
 
 const searchData = () => {
@@ -61,7 +60,9 @@ const searchData = () => {
 
   const searchUrl = `/search?city=${encodeURIComponent(
     formData.selectedCity
-  )}&date=${encodeURIComponent(formData.date)}`;
+  )}&dateFrom=${encodeURIComponent(
+    formData.date.from
+  )}&dateTo=${encodeURIComponent(formData.date.to)}`;
   router.push(searchUrl);
 };
 </script>

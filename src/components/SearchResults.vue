@@ -24,18 +24,59 @@ const route = useRoute();
 const results = ref([]);
 const isLoading = ref(false);
 
-onMounted(async () => {
+const fetchData = async () => {
   isLoading.value = true;
-  const { city, date } = route.query;
+
+  try {
+    const { city, dateFrom, dateTo } = route.query;
+    const availableCars = await getAvailableCars({ city, dateFrom, dateTo });
+    const bookedCarIds = await getBookedCarIds(availableCars, {
+      dateFrom,
+      dateTo,
+    });
+
+    const filteredResults = availableCars.filter(
+      (car) => !bookedCarIds.includes(car.car_id)
+    );
+
+    results.value = filteredResults;
+  } catch (error) {
+    console.error("Error fetching data: ", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const getAvailableCars = async ({ city, dateFrom, dateTo }) => {
   const { data, error } = await supabase
     .from("cars")
     .select("*")
     .eq("location", city)
-    .eq("start_date", date);
-  isLoading.value = false;
-  if (error) console.log("Error: ", error);
-  else {
-    results.value = data || [];
+    .lte("start_date", dateFrom)
+    .gte("end_date", dateTo);
+
+  if (error) {
+    console.error("Available Cars Error: ", error);
+    throw error;
   }
-});
+  return data || [];
+};
+
+const getBookedCarIds = async (availableCars, { dateFrom, dateTo }) => {
+  const availableCarIds = availableCars.map((car) => car.car_id);
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("car_id")
+    .in("car_id", availableCarIds)
+    .gte("end_date", dateFrom)
+    .lte("start_date", dateTo);
+
+  if (error) {
+    console.error("Booked Cars Error: ", error);
+    throw error;
+  }
+  return data.map((booking) => booking.car_id);
+};
+
+onMounted(fetchData);
 </script>
