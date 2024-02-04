@@ -67,7 +67,7 @@
 
 <script setup>
 import ProfileButton from "./account/ProfileButton.vue";
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
   review: Object,
@@ -90,7 +90,8 @@ const displayStars = (rating) => {
   return "⭐".repeat(numberOfStars);
 };
 
-const maxLength = 20;
+const maxLength = 15;
+
 const updateTruncatedComment = (review) => {
   truncatedComment.value =
     review.comment.length > maxLength
@@ -104,5 +105,12 @@ updateTruncatedComment(props.review); // Initial call to set truncated comment
 <style scoped>
 .review-thumbnail {
   margin: 10px;
+  width: 350px;
+}
+
+@media screen and (max-width: 500px) {
+  .review-thumbnail {
+    width: 300px;
+  }
 }
 </style>

@@ -44,7 +44,7 @@
             class="text-center"
           >
             <q-avatar size="72px">
-              <img :src="authStore.state.profile.avatar" />
+              <img :src="authStore.state.profile.avatar_url" />
             </q-avatar>
 
             <div
@@ -55,7 +55,7 @@
                 white-space: nowrap;
               "
             >
-              {{ authStore.state.profile.userName }}
+              {{ authStore.state.profile.username }}
             </div>
           </router-link>
           <q-btn

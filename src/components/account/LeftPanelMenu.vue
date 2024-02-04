@@ -2,18 +2,18 @@
   <div class="left-panel text-center">
     <div class="q-pa-md">
       <q-avatar size="100px">
-        <q-img :src="authStore.state.profile.avatar" />
+        <q-img :src="authStore.state.profile.avatar_url" />
       </q-avatar>
       <div style="margin-top: 5px; margin-bottom: -10px">
         <ProfileButton
           :user="{
-            username: authStore.state.profile.userName,
+            username: authStore.state.profile.username,
             avatar_url: null,
           }"
         />
       </div>
       <div class="text-subtitle1 q-mt-md q-mb-xs">
-        {{ authStore.state.profile.fullName }}
+        {{ authStore.state.profile.full_Name }}
       </div>
 
       <!-- Add options for the user -->
@@ -33,7 +33,7 @@
             ></q-item-section
           >
         </q-item>
-        <q-item v-if="!authStore.state.profile.isVerified">
+        <q-item v-if="!authStore.state.profile.is_verified">
           <q-item-section
             ><q-btn flat @click="togglePanel('UploadDocuments')"
               >Upload documents</q-btn

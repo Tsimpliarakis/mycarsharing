@@ -1,7 +1,7 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-md flex flex-center column">
     <div v-if="loading" class="text-h4 text-center">Loading...</div>
-    <div v-else>
+    <div v-else class="profilepage">
       <div class="text-h4 text-center" v-if="userError">
         <div>
           {{ userError }}
@@ -14,25 +14,29 @@
 
         <div v-if="cars">
           <div class="text-h5">Cars</div>
-          <div class="row">
-            <CarThumbnail v-for="car in cars" :key="car.car_id" :car="car" />
-          </div>
+          <q-scroll-area style="height: 286px">
+            <div class="row no-wrap">
+              <CarThumbnail v-for="car in cars" :key="car.car_id" :car="car" />
+            </div>
+          </q-scroll-area>
         </div>
 
         <div v-if="reviews.length > 0">
           <div class="text-h5">Reviews</div>
-          <div class="row">
-            <ReviewThumb
-              v-for="review in reviews"
-              :key="review.booking_id"
-              :review="review"
-              :carImg="review.image_url[0]"
-              :carMan="review.manufacturer"
-              :carMod="review.model"
-              :username="review.username"
-              :avatarUrl="review.avatar_url"
-            />
-          </div>
+          <q-scroll-area style="height: 173px">
+            <div class="row no-wrap">
+              <ReviewThumb
+                v-for="review in reviews"
+                :key="review.booking_id"
+                :review="review"
+                :carImg="review.image_url[0]"
+                :carMan="review.manufacturer"
+                :carMod="review.model"
+                :username="review.username"
+                :avatarUrl="review.avatar_url"
+              />
+            </div>
+          </q-scroll-area>
         </div>
       </div>
     </div>
@@ -193,3 +197,14 @@ watchEffect(() => {
   });
 });
 </script>
+
+<style scoped>
+.profilepage {
+  max-width: 1000px;
+  width: 100%;
+}
+
+.q-scrollarea:deep(.q-scrollarea__thumb) {
+  display: none;
+}
+</style>

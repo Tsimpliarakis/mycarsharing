@@ -66,7 +66,7 @@ async function uploadAvatar() {
         console.error("Error updating profile:", error.message);
       } else {
         // Update the user's avatar in the auth store
-        authStore.state.profile.avatar = avatar_url;
+        authStore.state.profile.avatar_url = avatar_url;
       }
       $q.notify({
         position: "top",

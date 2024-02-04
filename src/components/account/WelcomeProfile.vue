@@ -12,16 +12,16 @@
     <br />
     <br />
     <br />
-    <div v-if="!authStore.state.profile.isVerified">
+    <div v-if="!authStore.state.profile.is_erified">
       Your account is not verified.
     </div>
-    <div v-if="!authStore.state.profile.isVerified">
+    <div v-if="!authStore.state.profile.is_verified">
       Upload the neccessary documents to get verified.
     </div>
-    <div v-if="authStore.state.profile.isVerified">
+    <div v-if="authStore.state.profile.is_verified">
       Your account is verified.
     </div>
-    <div v-if="authStore.state.profile.isVerified">
+    <div v-if="authStore.state.profile.is_verified">
       Now you can share your car or order someone else's.
     </div>
     <br />

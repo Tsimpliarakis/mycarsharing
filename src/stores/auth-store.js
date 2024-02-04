@@ -11,11 +11,8 @@ export const authStore = {
     setSession: (state, session) => {
       state.session = session;
     },
-    setProfile: (state, { userName, fullName, avatar, isVerified }) => {
-      state.profile.userName = userName;
-      state.profile.fullName = fullName;
-      state.profile.avatar = avatar;
-      state.profile.isVerified = isVerified;
+    setProfile: (state, profile) => {
+      state.profile = profile;
     },
     resetProfile: (state) => {
       state.profile = {};
@@ -35,15 +32,9 @@ export const authStore = {
         ]);
 
         if (profileData?.data && verificationData?.data) {
-          const { username, avatar_url, full_name } = profileData.data;
-          const { is_verified } = verificationData.data;
-
-          authStore.mutations.setProfile(authStore.state, {
-            userName: username,
-            fullName: full_name,
-            avatar: avatar_url,
-            isVerified: is_verified,
-          });
+          const profile = profileData.data;
+          profile.is_verified = verificationData.data.is_verified;
+          authStore.mutations.setProfile(authStore.state, profile);
         }
       } catch (error) {
         console.error(error);
