@@ -5,6 +5,9 @@ export const authStore = {
   state: reactive({
     session: {},
     profile: {},
+    bookings: {},
+    cars: {},
+    reviews: {},
   }),
 
   mutations: {
@@ -14,27 +17,60 @@ export const authStore = {
     setProfile: (state, profile) => {
       state.profile = profile;
     },
-    resetProfile: (state) => {
+    setBookings: (state, bookings) => {
+      state.bookings = bookings;
+    },
+    setCars: (state, cars) => {
+      state.cars = cars;
+    },
+    setReviews: (state, reviews) => {
+      state.reviews = reviews;
+    },
+    resetStates: (state) => {
       state.profile = {};
+      state.bookings = {};
+      state.cars = {};
+      state.reviews = {};
     },
   },
 
   actions: {
     fetchUserProfile: async (supabaseClient, userId) => {
       try {
-        const [profileData, verificationData] = await Promise.all([
+        const [
+          profileData,
+          verificationData,
+          bookingsData,
+          carsData,
+          reviewsData,
+        ] = await Promise.all([
           supabaseClient.from("profiles").select("*").eq("id", userId).single(),
           supabaseClient
             .from("verification")
             .select("is_verified")
             .eq("id", userId)
             .single(),
+          supabaseClient.from("bookings").select("*").eq("user_id", userId),
+          supabaseClient.from("cars").select("*").eq("user_id", userId),
+          supabaseClient.from("reviews").select("*").eq("rated_user", userId),
         ]);
 
         if (profileData?.data && verificationData?.data) {
           const profile = profileData.data;
           profile.is_verified = verificationData.data.is_verified;
           authStore.mutations.setProfile(authStore.state, profile);
+        }
+
+        if (bookingsData?.data) {
+          authStore.mutations.setBookings(authStore.state, bookingsData.data);
+        }
+
+        if (carsData?.data) {
+          authStore.mutations.setCars(authStore.state, carsData.data);
+        }
+
+        if (reviewsData?.data) {
+          authStore.mutations.setReviews(authStore.state, reviewsData.data);
         }
       } catch (error) {
         console.error(error);

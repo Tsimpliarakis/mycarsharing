@@ -85,7 +85,7 @@ const router = useRouter();
 
 const logoutSession = async () => {
   const { error } = await supabase.auth.signOut();
-  authStore.mutations.resetProfile(authStore.state);
+  authStore.mutations.resetStates(authStore.state);
 
   if (error) {
     $q.notify({
