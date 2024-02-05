@@ -1,7 +1,7 @@
 <template>
   <q-footer elevated class="bg-green-5 text-white">
     <q-toolbar>
-      <div class="coloumn">
+      <div class="coloumn" style="width: 100%">
         <div class="coloumn list">
           <li><router-link to="/about" class="links">About</router-link></li>
           <li>
@@ -18,7 +18,9 @@
             >
           </li>
         </div>
-        <div class="rights">&copy; 2024 MyCarSharing. All rights reserved.</div>
+        <div class="rights text-center">
+          &copy; 2024 MyCarSharing. All rights reserved.
+        </div>
       </div>
     </q-toolbar>
   </q-footer>
@@ -47,8 +49,5 @@
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 12px;
-  width: 100vw;
-  text-align: center;
-  margin-left: -12px;
 }
 </style>
