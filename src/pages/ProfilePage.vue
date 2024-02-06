@@ -18,7 +18,7 @@
           <div class="text-caption">{{ user.description }}</div>
         </div>
 
-        <div v-if="cars">
+        <div v-if="cars.length">
           <div class="text-h5">Cars</div>
           <q-scroll-area style="height: 286px">
             <div class="row no-wrap">
@@ -27,7 +27,7 @@
           </q-scroll-area>
         </div>
 
-        <div v-if="reviews.length > 0">
+        <div v-if="reviews.length">
           <div class="text-h5">Reviews</div>
           <q-scroll-area style="height: 173px">
             <div class="row no-wrap">
@@ -63,144 +63,96 @@ const reviews = ref([]);
 const cars = ref([]);
 const user = ref([]);
 
-async function getReviews(user_id) {
-  const { data: reviews_data, error: review_error } = await supabase
-    .from("reviews")
-    .select("*")
-    .eq("rated_user", user_id);
-
-  if (review_error || !reviews_data) {
-    console.error("Failed to fetch reviews:", review_error);
-    return [];
-  } else {
-    const processedReviews = [];
-
-    for (const review of reviews_data) {
-      const { data: booking_data, error: booking_error } = await supabase
-        .from("bookings")
-        .select("car_id, user_id")
-        .eq("booking_id", review.booking_id)
-        .single();
-
-      if (booking_error || !booking_data) {
-        console.error("Failed to fetch booking:", booking_error);
-      } else {
-        // Fetch the profile of the user who left the review
-        const { data: profile_data, error: profile_error } = await supabase
-          .from("profiles")
-          .select("username, avatar_url")
-          .eq("id", booking_data.user_id)
-          .single();
-
-        if (profile_error || !profile_data) {
-          console.error("Failed to fetch profile. User may have been deleted.");
-
-          // Provide default values if the profile cannot be fetched
-          const defaultProfile = {
-            username: "Deleted User",
-            avatar_url:
-              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/favicon.png",
-          };
-
-          const reviewObj = {
-            ...review,
-            ...defaultProfile,
-            image_url: [
-              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
-            ],
-            manufacturer: "Unknown",
-            model: "Unknown",
-          };
-
-          processedReviews.push(reviewObj);
-        } else {
-          const { data: car_data, error: car_error } = await supabase
-            .from("cars")
-            .select("image_url, manufacturer, model")
-            .eq("car_id", booking_data.car_id)
-            .single();
-
-          if (car_error || !car_data) {
-            console.error(
-              "Failed to fetch car / Car has been deleted:",
-              car_error
-            );
-            const reviewObj = {
-              ...review,
-              username: profile_data.username,
-              avatar_url: profile_data.avatar_url,
-              image_url: [
-                "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
-              ],
-              manufacturer: "Unknown",
-              model: "Unknown",
-            };
-            processedReviews.push(reviewObj);
-          } else {
-            const reviewObj = {
-              ...review,
-              username: profile_data.username,
-              avatar_url: profile_data.avatar_url,
-              image_url: car_data.image_url,
-              manufacturer: car_data.manufacturer,
-              model: car_data.model,
-            };
-            processedReviews.push(reviewObj);
-          }
-        }
-      }
-    }
-    return processedReviews;
-  }
-}
-
-async function getCars(user_id) {
-  const { data: cars, error } = await supabase
-    .from("cars")
-    .select("car_id, image_url, manufacturer, model")
-    .eq("user_id", user_id);
-
-  if (error || !cars) {
-    console.error("Failed to fetch cars:", error);
-    return [];
-  } else {
-    return cars;
-  }
-}
-
-async function getUserId(username) {
+async function fetchData(username) {
   try {
-    const { data: user, error: userError } = await supabase
+    loading.value = true;
+    userError.value = "";
+    const { data: userData, error: usrError } = await supabase
       .from("profiles")
       .select("*")
       .eq("username", username)
       .single();
 
-    if (userError || !user) throw new Error("Failed to fetch user");
+    user.value = userData;
+    const userId = userData.id;
 
-    return user;
+    const { data: carData, error: carError } = await supabase
+      .from("cars")
+      .select("car_id, image_url, manufacturer, model")
+      .eq("user_id", userId);
+
+    if (carError || !carData) {
+      throw new Error("Failed to fetch car data");
+    }
+
+    cars.value = carData;
+
+    const { data: reviewData, error: reviewError } = await supabase
+      .from("reviews")
+      .select("*")
+      .eq("rated_user", userId);
+
+    if (reviewError || !reviewData) {
+      throw new Error("Failed to fetch review data");
+    }
+
+    const processedReviews = [];
+
+    for (const review of reviewData) {
+      const { data: bookingData, error: bookingError } = await supabase
+        .from("bookings")
+        .select("car_id, user_id")
+        .eq("booking_id", review.booking_id)
+        .single();
+
+      if (bookingError || !bookingData) {
+        console.error("Failed to fetch booking:", bookingError);
+        continue;
+      }
+
+      const [profileData, carData] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("username, avatar_url")
+          .eq("id", bookingData.user_id)
+          .single(),
+        supabase
+          .from("cars")
+          .select("image_url, manufacturer, model")
+          .eq("car_id", bookingData.car_id)
+          .single(),
+      ]);
+
+      const defaultProfile = {
+        username: "Deleted User",
+        avatar_url:
+          "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/favicon.png",
+      };
+
+      const reviewObj = {
+        ...review,
+        username: profileData?.data?.username || defaultProfile.username,
+        avatar_url: profileData?.data?.avatar_url || defaultProfile.avatar_url,
+        image_url: carData?.data?.image_url || [
+          "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
+        ],
+        manufacturer: carData?.data?.manufacturer || "Unknown",
+        model: carData?.data?.model || "Unknown",
+      };
+
+      processedReviews.push(reviewObj);
+    }
+
+    reviews.value = processedReviews;
   } catch (error) {
     userError.value = "User does not exist";
-    return "";
+  } finally {
+    loading.value = false;
   }
 }
 
 watchEffect(() => {
-  loading.value = true;
-  const { username } = route.params;
-  getUserId(username).then((newuser) => {
-    // Check if userId has changed before updating
-    if (user.value !== newuser) {
-      user.value = newuser;
-      getReviews(user.value.id).then((newReviews) => {
-        reviews.value = newReviews;
-      });
-      getCars(user.value.id).then((newCars) => {
-        cars.value = newCars;
-      });
-    }
-    loading.value = false;
-  });
+  fetchData(route.params.username);
 });
 </script>
 
