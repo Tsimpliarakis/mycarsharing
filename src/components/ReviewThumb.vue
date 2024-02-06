@@ -67,7 +67,7 @@
 
 <script setup>
 import ProfileButton from "./account/ProfileButton.vue";
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 
 const props = defineProps({
   review: Object,
@@ -90,7 +90,8 @@ const displayStars = (rating) => {
   return "⭐".repeat(numberOfStars);
 };
 
-const maxLength = 15;
+// Set different maxLength for different screen sizes
+const maxLength = window.innerWidth <= 500 ? 7 : 15;
 
 const updateTruncatedComment = (review) => {
   truncatedComment.value =
