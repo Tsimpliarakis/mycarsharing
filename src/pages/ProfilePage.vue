@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md flex flex-center column">
-    <div v-if="loading" class="text-h4 text-center">Loading...</div>
+    <div v-if="loadingProfile" class="text-h4 text-center">Loading...</div>
     <div v-else class="profilepage">
       <div class="text-h4 text-center" v-if="userError">
         <div>
@@ -10,7 +10,7 @@
       </div>
       <div v-else>
         <!-- User's info -->
-        <div class="q-mb-md flex flex-center column">
+        <div class="q-mb-md flex flex-center column" v-if="user">
           <q-avatar size="100px">
             <q-img :src="user.avatar_url" />
           </q-avatar>
@@ -58,14 +58,14 @@ import { supabase } from "src/lib/supabaseClient";
 
 const route = useRoute();
 const userError = ref("");
-const loading = ref(false);
+const loadingProfile = ref(false);
 const reviews = ref([]);
 const cars = ref([]);
-const user = ref([]);
+const user = ref(null);
 
 async function fetchData(username) {
   try {
-    loading.value = true;
+    loadingProfile.value = true;
     userError.value = "";
     const { data: userData, error: usrError } = await supabase
       .from("profiles")
@@ -75,6 +75,8 @@ async function fetchData(username) {
 
     user.value = userData;
     const userId = userData.id;
+
+    loadingProfile.value = false;
 
     const { data: carData, error: carError } = await supabase
       .from("cars")
@@ -146,8 +148,6 @@ async function fetchData(username) {
     reviews.value = processedReviews;
   } catch (error) {
     userError.value = "User does not exist";
-  } finally {
-    loading.value = false;
   }
 }
 
