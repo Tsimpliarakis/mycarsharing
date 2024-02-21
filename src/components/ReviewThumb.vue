@@ -67,7 +67,7 @@
 
 <script setup>
 import ProfileButton from "./account/ProfileButton.vue";
-import { ref, defineProps } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
   review: Object,
