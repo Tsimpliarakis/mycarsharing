@@ -2,7 +2,7 @@
   "name": "mycarsharing",
   "version": "0.0.1",
   "description": "My thesis project",
-  "productName": "mycarsharing ",
+  "productName": "mycarsharing",
   "author": "Michail Tsimpliarakis",
   "private": true,
   "scripts": {

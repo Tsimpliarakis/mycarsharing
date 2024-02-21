@@ -8,6 +8,7 @@ export const authStore = {
     bookings: {},
     cars: {},
     reviews: {},
+    favorites: {},
   }),
 
   mutations: {
@@ -26,11 +27,16 @@ export const authStore = {
     setReviews: (state, reviews) => {
       state.reviews = reviews;
     },
+    setFavorites: (state, favorites) => {
+      // Mutation for setting favorites
+      state.favorites = favorites;
+    },
     resetStates: (state) => {
       state.profile = {};
       state.bookings = {};
       state.cars = {};
       state.reviews = {};
+      state.favorites = {};
     },
   },
 
@@ -43,6 +49,7 @@ export const authStore = {
           bookingsData,
           carsData,
           reviewsData,
+          favoritesData,
         ] = await Promise.all([
           supabaseClient.from("profiles").select("*").eq("id", userId).single(),
           supabaseClient
@@ -53,6 +60,7 @@ export const authStore = {
           supabaseClient.from("bookings").select("*").eq("user_id", userId),
           supabaseClient.from("cars").select("*").eq("user_id", userId),
           supabaseClient.from("reviews").select("*").eq("rated_user", userId),
+          supabaseClient.from("favorites").select("*").eq("user_id", userId),
         ]);
 
         if (profileData?.data && verificationData?.data) {
@@ -71,6 +79,11 @@ export const authStore = {
 
         if (reviewsData?.data) {
           authStore.mutations.setReviews(authStore.state, reviewsData.data);
+        }
+
+        if (favoritesData?.data) {
+          // Set favorites if available
+          authStore.mutations.setFavorites(authStore.state, favoritesData.data);
         }
       } catch (error) {
         console.error(error);
