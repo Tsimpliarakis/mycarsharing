@@ -4,7 +4,9 @@
       <div class="text-h4 text-center tittle">Your Bookings</div>
       <div v-if="loading">Loading...</div>
       <div v-else>
-        <div v-if="bookings.length === 0">No bookings found.</div>
+        <div class="flex flex-center" v-if="bookings.length === 0">
+          No bookings found.
+        </div>
         <div class="flex flex-center" v-else>
           <div class="bookings">
             <q-list bordered padding class="rounded-borders">

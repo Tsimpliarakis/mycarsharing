@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center column q-pa-md">
-    <div v-if="isLoading" class="text-h6">Vroom vroom...</div>
+    <div v-if="isLoading" class="text-h6">Loading...</div>
     <div v-else class="card">
       <q-card flat bordered>
         <q-carousel
