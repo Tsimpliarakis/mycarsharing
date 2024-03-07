@@ -31,7 +31,7 @@
                 {{ car.manufacturer }} {{ car.model }}
               </div>
               <div class="text-caption text-center">
-                {{ car.year }} | {{ car.mileage }} miles
+                {{ car.year }} | {{ car.mileage }} km
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@
         </q-item>
         <q-item>
           <q-item-section>Mileage</q-item-section>
-          <q-item-section side>{{ car.mileage }} miles</q-item-section>
+          <q-item-section side>{{ car.mileage }} km</q-item-section>
         </q-item>
         <q-item>
           <q-item-section>Additional Features</q-item-section>
