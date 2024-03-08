@@ -20,7 +20,7 @@
         today-btn
         color="green-5"
         range
-        :rules="[(val) => !!val || 'Field is required']"
+        :rules="[(val) => (val && val.from && val.to) || 'Field is required']"
       />
     </div>
 
@@ -47,7 +47,7 @@ const formData = reactive({
 });
 
 const searchData = () => {
-  if (!formData.selectedCity || !formData.date) {
+  if (!formData.selectedCity || !formData.date.from || !formData.date.to) {
     $q.notify({
       color: "red-5",
       textColor: "white",

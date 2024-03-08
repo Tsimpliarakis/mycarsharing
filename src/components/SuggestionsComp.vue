@@ -1,7 +1,7 @@
 <template>
   <div class="column suggestions">
     <div v-for="location in locations" :key="location">
-      <div class="text-center text-h6">Cars in {{ location }}</div>
+      <div class="text-center text-h6">Latest in {{ location }}</div>
       <q-scroll-area style="height: 286px">
         <div class="row no-wrap">
           <CarThumbnail
