@@ -28,7 +28,6 @@ export const authStore = {
       state.reviews = reviews;
     },
     setFavorites: (state, favorites) => {
-      // Mutation for setting favorites
       state.favorites = favorites;
     },
     resetStates: (state) => {

@@ -32,7 +32,9 @@ onMounted(async () => {
   isLoading.value = true;
   const { data, error } = await supabase
     .from("cars")
-    .select("*")
+    .select(
+      "car_id, image_url, manufacturer, model, year, mileage, price, transmission_type, fuel_type"
+    )
     .eq("user_id", authStore.state.session.user.id);
   isLoading.value = false;
   if (error) console.log("Error: ", error);

@@ -14,7 +14,9 @@
           <q-avatar size="100px">
             <q-img :src="user.avatar_url" />
           </q-avatar>
-          <div class="text-subtitle2">{{ user.full_name }}</div>
+          <div class="text-subtitle2 full_name">
+            {{ user.first_name }} {{ user.last_name }}
+          </div>
           <div class="text-caption">{{ user.description }}</div>
         </div>
 
@@ -80,7 +82,9 @@ async function fetchData(username) {
 
     const { data: carData, error: carError } = await supabase
       .from("cars")
-      .select("car_id, image_url, manufacturer, model")
+      .select(
+        "car_id, image_url, manufacturer, model, year, mileage, price, transmission_type, fuel_type"
+      )
       .eq("user_id", userId);
 
     if (carError || !carData) {
@@ -164,5 +168,10 @@ watchEffect(() => {
 
 .q-scrollarea:deep(.q-scrollarea__thumb) {
   display: none;
+}
+
+.full_name {
+  margin-top: 10px;
+  margin-bottom: 3px;
 }
 </style>

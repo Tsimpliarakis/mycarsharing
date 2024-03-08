@@ -1,11 +1,11 @@
 <template>
   <div class="column suggestions">
-    <div v-for="(location, index) in ['Polykastro', 'Corfu']" :key="index">
+    <div v-for="location in locations" :key="location">
       <div class="text-center text-h6">Cars in {{ location }}</div>
       <q-scroll-area style="height: 286px">
         <div class="row no-wrap">
           <CarThumbnail
-            v-for="car in cars[location]"
+            v-for="car in carsByLocation[location]"
             :key="car.id"
             :car="car"
           />
@@ -17,10 +17,12 @@
 
 <script setup>
 import CarThumbnail from "./car/CarThumbnail.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 
-const cars = ref({ Polykastro: [], Corfu: [] });
+const locations = ref(["Polykastro", "Corfu", "Thessaloniki", "Athens"]);
+
+const cars = ref({});
 
 const fetchCarsByLocation = async (location) => {
   const { data, error } = await supabase
@@ -31,16 +33,26 @@ const fetchCarsByLocation = async (location) => {
     .ilike("location", location)
     .order("added_date", { ascending: false })
     .limit(10);
-  if (error) console.log(`Error fetching ${location}: `, error);
+  if (error) console.error(`Error fetching ${location}: `, error);
   return data || [];
 };
 
-onMounted(async () => {
-  const locations = ["Polykastro", "Corfu"];
-  const fetchPromises = locations.map(fetchCarsByLocation);
-  const [polykastroData, corfuData] = await Promise.all(fetchPromises);
-  cars.value = { Polykastro: polykastroData, Corfu: corfuData };
+const fetchAllCars = async () => {
+  const fetchPromises = locations.value.map(fetchCarsByLocation);
+  const results = await Promise.all(fetchPromises);
+  locations.value.forEach((location, index) => {
+    cars.value[location] = results[index];
+  });
+};
+
+const carsByLocation = computed(() => {
+  return locations.value.reduce((acc, location) => {
+    acc[location] = cars.value[location] || [];
+    return acc;
+  }, {});
 });
+
+onMounted(fetchAllCars);
 </script>
 
 <style scoped>

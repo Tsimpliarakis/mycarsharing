@@ -36,7 +36,12 @@ onMounted(async () => {
   } else {
     // Get car details for each favorite
     const carPromises = favoritesData.map((favorite) =>
-      supabase.from("cars").select("*").eq("car_id", favorite.car_id)
+      supabase
+        .from("cars")
+        .select(
+          "car_id, image_url, manufacturer, model, year, mileage, price, transmission_type, fuel_type"
+        )
+        .eq("car_id", favorite.car_id)
     );
 
     const carDetails = await Promise.all(carPromises);

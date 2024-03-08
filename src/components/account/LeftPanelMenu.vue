@@ -13,7 +13,8 @@
         />
       </div>
       <div class="text-subtitle1 q-mt-md q-mb-xs">
-        {{ authStore.state.profile.full_Name }}
+        {{ authStore.state.profile.first_name }}
+        {{ authStore.state.profile.last_name }}
       </div>
 
       <!-- Add options for the user -->
