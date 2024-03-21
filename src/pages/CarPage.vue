@@ -53,7 +53,13 @@
             icon="share"
             @click="copyUrlToClipboard"
           />
-          <q-btn flat round color="green" icon="car_rental" />
+          <q-btn
+            flat
+            round
+            color="green"
+            icon="car_rental"
+            @click="$router.push('/booking')"
+          />
         </q-card-actions>
         <q-card-actions align="center">
           <ProfileButton

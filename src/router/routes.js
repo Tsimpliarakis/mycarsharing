@@ -82,6 +82,16 @@ const routes = [
     ],
   },
   {
+    path: "/booking",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/BookingPage.vue"),
+      },
+    ],
+  },
+  {
     path: "/privacy-policy",
     component: () => import("layouts/MainLayout.vue"),
     children: [
