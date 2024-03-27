@@ -53,13 +53,7 @@
             icon="share"
             @click="copyUrlToClipboard"
           />
-          <q-btn
-            flat
-            round
-            color="green"
-            icon="car_rental"
-            @click="$router.push('/booking')"
-          />
+          <q-btn flat round color="green" icon="car_rental" @click="bookCar" />
         </q-card-actions>
         <q-card-actions align="center">
           <ProfileButton
@@ -244,6 +238,15 @@ async function toggleFavorite() {
     }
   }
   await checkIfFavorite();
+}
+
+function bookCar() {
+  if (!authStore.state.session) {
+    // Redirect the user to the login page
+    router.push("/login");
+    return;
+  }
+  router.push(`/book?id=${car.value.car_id}`);
 }
 </script>
 

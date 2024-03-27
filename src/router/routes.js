@@ -82,12 +82,12 @@ const routes = [
     ],
   },
   {
-    path: "/booking",
+    path: "/book",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
         path: "",
-        component: () => import("src/pages/BookingPage.vue"),
+        component: () => import("src/pages/BookPage.vue"),
       },
     ],
   },

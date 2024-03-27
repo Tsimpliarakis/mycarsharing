@@ -58,6 +58,20 @@ const searchData = () => {
     return;
   }
 
+  const date = new Date();
+  const today = date.toISOString().split("T")[0];
+
+  if (formData.date.from < today) {
+    $q.notify({
+      color: "red-5",
+      textColor: "white",
+      icon: "warning",
+      message: "Please select a valid date.",
+      position: "top",
+    });
+    return;
+  }
+
   const searchUrl = `/search?city=${encodeURIComponent(
     formData.selectedCity
   )}&dateFrom=${encodeURIComponent(

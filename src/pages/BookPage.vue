@@ -16,18 +16,26 @@
 
           <!-- Dates Details -->
           <div class="text-subtitle">Dates</div>
-          <q-input
-            outlined
+          <q-date
+            class="date-picker"
             v-model="bookingDates"
-            label="Booking Dates"
-            type="date"
+            mask="YYYY-MM-DD"
+            today-btn
+            color="green-5"
+            range
+            minimal
             @input="calculatePrice"
+            :rules="[
+              (val) => (val && val.from && val.to) || 'Field is required',
+            ]"
           />
 
-          <!-- User Details -->
-          <div class="text-subtitle">User Details</div>
-          <div>Username: {{ user.username }}</div>
-          <!-- Add more user details here -->
+          <!-- Users Details -->
+          <div class="text-subtitle">Owner Details</div>
+
+          <div class="text-subtitle">Renter Details</div>
+          <div>First Name: {{ authStore.state.profile.first_name }}</div>
+          <div>Last Name: {{ authStore.state.profile.last_name }}</div>
 
           <!-- Final Price -->
           <div class="text-subtitle">Final Price</div>
@@ -44,20 +52,34 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-// Import any necessary functions or libraries for payment processing
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { supabase } from "src/lib/supabaseClient.js";
+import { useQuasar } from "quasar";
+import { authStore } from "src/stores/auth-store.js";
 
-const car = ref({
-  manufacturer: "Toyota",
-  model: "Corolla",
-  year: 2022,
-  // Add more car details here
+const route = useRoute();
+const $q = useQuasar();
+
+// get car details from the route
+const car = ref({});
+
+onMounted(async () => {
+  // Fetch car details from the database
+  const { data, error } = await supabase
+    .from("cars")
+    .select("*")
+    .eq("car_id", route.query.id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching car details:", error.message);
+    return;
+  }
+
+  car.value = data;
 });
-const bookingDates = ref(null);
-const user = ref({
-  username: "john_doe",
-  // Add more user details here
-});
+
 const totalPrice = ref(0);
 
 function calculatePrice() {
