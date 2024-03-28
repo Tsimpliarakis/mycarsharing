@@ -6,46 +6,61 @@
           <div class="text-h6">Booking Details</div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
+        <div class="row flex flex-center">
+          <!-- Users Details -->
+          <q-card-section>
+            <div class="text-bold">Owner Details</div>
+
+            <div class="text-bold">Renter Details</div>
+            <div>First Name: {{ authStore.state.profile.first_name }}</div>
+            <div>Last Name: {{ authStore.state.profile.last_name }}</div>
+          </q-card-section>
           <!-- Car Details -->
-          <div class="text-subtitle">Car Details</div>
-          <div>Manufacturer: {{ car.manufacturer }}</div>
-          <div>Model: {{ car.model }}</div>
-          <div>Year: {{ car.year }}</div>
-          <!-- Add more car details here -->
+          <q-card-section>
+            <div class="text-bold">Car Details</div>
+            <div>Manufacturer: {{ car.manufacturer }}</div>
+            <div>Model: {{ car.model }}</div>
+            <div>Year: {{ car.year }}</div>
+          </q-card-section>
 
           <!-- Dates Details -->
-          <div class="text-subtitle">Dates</div>
-          <q-date
-            class="date-picker"
-            v-model="bookingDates"
-            mask="YYYY-MM-DD"
-            today-btn
-            color="green-5"
-            range
-            minimal
-            @input="calculatePrice"
-            :rules="[
-              (val) => (val && val.from && val.to) || 'Field is required',
-            ]"
-          />
+          <q-card-section>
+            <div class="text-bold">Dates</div>
+            <q-date
+              class="date-picker"
+              v-model="bookingDates"
+              mask="YYYY-MM-DD"
+              today-btn
+              color="green-5"
+              range
+              minimal
+              @input="calculatePrice"
+              :rules="[
+                (val) => (val && val.from && val.to) || 'Field is required',
+              ]"
+            />
 
-          <!-- Users Details -->
-          <div class="text-subtitle">Owner Details</div>
+            <!-- Final Price -->
+            <div class="text-bold">Final Price</div>
+            <div>Total Price: {{ totalPrice }}€</div>
 
-          <div class="text-subtitle">Renter Details</div>
-          <div>First Name: {{ authStore.state.profile.first_name }}</div>
-          <div>Last Name: {{ authStore.state.profile.last_name }}</div>
-
-          <!-- Final Price -->
-          <div class="text-subtitle">Final Price</div>
-          <div>Total Price: {{ totalPrice }}€</div>
-        </q-card-section>
-        <q-separator />
-        <q-card-actions align="center">
-          <q-btn color="green" label="Pay with PayPal" @click="payWithPayPal" />
-          <q-btn color="blue" label="Pay with Card" @click="payWithCard" />
-        </q-card-actions>
+            <q-separator />
+            <q-card-section>
+              <q-card-actions align="center">
+                <q-btn
+                  color="green"
+                  label="Pay with PayPal"
+                  @click="payWithPayPal"
+                />
+                <q-btn
+                  color="blue"
+                  label="Pay with Card"
+                  @click="payWithCard"
+                />
+              </q-card-actions>
+            </q-card-section>
+          </q-card-section>
+        </div>
       </q-card>
     </div>
   </q-page>
@@ -102,6 +117,6 @@ function payWithCard() {
 <style scoped>
 .card {
   width: 80%;
-  max-width: 450px;
+  max-width: 1000px;
 }
 </style>
