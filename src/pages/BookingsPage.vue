@@ -1,41 +1,85 @@
 <template>
   <q-page class="q-pa-md">
-    <div>
-      <div class="text-h4 text-center tittle">Your Bookings</div>
-      <div v-if="loading">Loading...</div>
-      <div v-else>
-        <div class="flex flex-center" v-if="bookings.length === 0">
-          No bookings found.
+    <div class="row justify-center">
+      <div class="userbookings">
+        <div class="text-h4 text-center tittle">Your Bookings</div>
+        <div class="flex flex-center" v-if="loading">Loading...</div>
+        <div v-else>
+          <div class="flex flex-center" v-if="userBookings.length === 0">
+            No bookings found.
+          </div>
+          <div class="flex flex-center" v-else>
+            <div class="bookings">
+              <q-list bordered padding class="rounded-borders">
+                <q-item
+                  v-for="booking in userBookings"
+                  :key="booking.id"
+                  class="q-mb-sm"
+                >
+                  <q-item-section avatar>
+                    <q-img
+                      :src="booking.car.image_url[0]"
+                      style="height: 100px; width: 160px"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-bold"
+                      >{{ booking.car.manufacturer }}
+                      {{ booking.car.model }}</q-item-label
+                    >
+                    <q-item-label caption lines="2">
+                      Start Date: {{ booking.start_date }} | End Date:
+                      {{ booking.end_date }}
+                    </q-item-label>
+                    <q-item-label caption lines="1"
+                      >Booking ID: {{ booking.booking_id }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </div>
         </div>
-        <div class="flex flex-center" v-else>
-          <div class="bookings">
-            <q-list bordered padding class="rounded-borders">
-              <q-item
-                v-for="booking in bookings"
-                :key="booking.id"
-                class="q-mb-sm"
-              >
-                <q-item-section avatar>
-                  <q-img
-                    :src="booking.car.image_url[0]"
-                    style="height: 100px; width: 160px"
-                  />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label class="text-bold"
-                    >{{ booking.car.manufacturer }}
-                    {{ booking.car.model }}</q-item-label
-                  >
-                  <q-item-label caption lines="2">
-                    Start Date: {{ booking.start_date }} | End Date:
-                    {{ booking.end_date }}
-                  </q-item-label>
-                  <q-item-label caption lines="1"
-                    >Booking ID: {{ booking.booking_id }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
+      </div>
+
+      <!-- Display bookings received by the user -->
+      <div class="recievedbookings">
+        <div class="text-h4 text-center tittle">Bookings Received</div>
+        <div class="flex flex-center" v-if="loading">Loading...</div>
+        <div v-else>
+          <div class="flex flex-center" v-if="receivedBookings.length === 0">
+            No bookings found.
+          </div>
+          <div class="flex flex-center" v-else>
+            <div class="bookings">
+              <q-list bordered padding class="rounded-borders">
+                <q-item
+                  v-for="booking in receivedBookings"
+                  :key="booking.id"
+                  class="q-mb-sm"
+                >
+                  <q-item-section avatar>
+                    <q-img
+                      :src="booking.car.image_url[0]"
+                      style="height: 100px; width: 160px"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-bold"
+                      >{{ booking.car.manufacturer }}
+                      {{ booking.car.model }}</q-item-label
+                    >
+                    <q-item-label caption lines="2">
+                      Start Date: {{ booking.start_date }} | End Date:
+                      {{ booking.end_date }}
+                    </q-item-label>
+                    <q-item-label caption lines="1"
+                      >Booking ID: {{ booking.booking_id }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
           </div>
         </div>
       </div>
@@ -48,24 +92,25 @@ import { onMounted, ref } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
 
-const bookings = ref([]);
+const userBookings = ref([]);
+const receivedBookings = ref([]);
 const loading = ref(true);
 
 onMounted(async () => {
-  // Fetch bookings when the component is created
+  // Fetch bookings made by the user
   try {
-    const { data, error } = await supabase
+    const { data: userBookingData, error: userBookingError } = await supabase
       .from("bookings")
       .select("*")
       .eq("user_id", authStore.state.session.user.id);
 
-    if (error) {
-      console.error("Error fetching bookings:", error);
+    if (userBookingError) {
+      console.error("Error fetching user bookings:", userBookingError);
     } else {
-      bookings.value = data;
+      userBookings.value = userBookingData;
 
-      // Fetch car details for each booking
-      for (let booking of bookings.value) {
+      // Fetch car details for each user booking
+      for (let booking of userBookings.value) {
         const { data: carData, error: carError } = await supabase
           .from("cars")
           .select("image_url, user_id, manufacturer, model")
@@ -73,7 +118,7 @@ onMounted(async () => {
           .single();
 
         if (carError) {
-          console.error(`Error fetching car / Car was deleted:`, carError);
+          console.error(`Error fetching car for user booking:`, carError);
           booking.car = {
             image_url: [
               "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
@@ -83,12 +128,52 @@ onMounted(async () => {
           };
         } else {
           // Add car details to booking object
-          booking.car = carData[0];
+          booking.car = carData;
         }
       }
     }
   } catch (error) {
-    console.error("Error fetching bookings:", error.message);
+    console.error("Error fetching user bookings:", error.message);
+  }
+
+  // Fetch bookings received by the user
+  try {
+    const { data: receivedBookingData, error: receivedBookingError } =
+      await supabase
+        .from("bookings")
+        .select("*")
+        .eq("owner_id", authStore.state.session.user.id);
+
+    if (receivedBookingError) {
+      console.error("Error fetching received bookings:", receivedBookingError);
+    } else {
+      receivedBookings.value = receivedBookingData;
+
+      // Fetch car details for each received booking
+      for (let booking of receivedBookings.value) {
+        const { data: carData, error: carError } = await supabase
+          .from("cars")
+          .select("image_url, user_id, manufacturer, model")
+          .eq("car_id", booking.car_id)
+          .single();
+
+        if (carError) {
+          console.error(`Error fetching car for received booking:`, carError);
+          booking.car = {
+            image_url: [
+              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
+            ],
+            manufacturer: "Unknown",
+            model: "Unknown",
+          };
+        } else {
+          // Add car details to booking object
+          booking.car = carData;
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching received bookings:", error.message);
   } finally {
     loading.value = false;
   }
@@ -108,11 +193,11 @@ onMounted(async () => {
   margin-bottom: 30px;
 }
 
-/* @media screen and (max-width: 500px) {
-  .bookings {
-    max-width: 300px;
-    margin-left: 5%;
-    margin-right: 5%;
-  }
-} */
+.userbookings {
+  margin: 10px;
+}
+
+.recievedbookings {
+  margin: 10px;
+}
 </style>

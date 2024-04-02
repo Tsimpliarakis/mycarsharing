@@ -2,10 +2,13 @@
   <q-page class="flex flex-center column">
     <div class="text-center">
       <div v-if="isLoading">Loading...</div>
-      <div v-else-if="cars && cars.length > 0" class="text-h5 havecars">
-        You have favorited {{ cars.length }} car(s)
+      <div
+        v-else-if="cars && cars.length > 0"
+        class="text-h4 text-center tittle"
+      >
+        Favorites
       </div>
-      <div v-else class="text-h6">You haven't favorited any cars yet :(</div>
+      <div v-else class="text-h6">You have no Favorites yet</div>
     </div>
     <div class="flex flex-center row mycars">
       <car-thumbnail-horizontal v-for="car in cars" :key="car.id" :car="car" />
@@ -53,9 +56,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.havecars {
-  margin-bottom: 20px;
-  margin-top: 20px;
+.tittle {
+  margin-top: 38px;
+  margin-bottom: 30px;
 }
 
 .mycars {

@@ -2,8 +2,11 @@
   <q-page class="flex flex-center column">
     <div class="text-center">
       <div v-if="isLoading">Loading...</div>
-      <div v-else-if="cars && cars.length > 0" class="text-h5 havecars">
-        You have {{ cars.length }} car(s)
+      <div
+        v-else-if="cars && cars.length > 0"
+        class="text-h4 text-center tittle"
+      >
+        My Cars
       </div>
       <div v-else class="text-h6">You don't have any cars yet :(</div>
     </div>
@@ -49,9 +52,9 @@ onMounted(async () => {
   margin: 20px;
 }
 
-.havecars {
-  margin-bottom: 20px;
-  margin-top: 20px;
+.tittle {
+  margin-top: 38px;
+  margin-bottom: 30px;
 }
 
 .mycars {

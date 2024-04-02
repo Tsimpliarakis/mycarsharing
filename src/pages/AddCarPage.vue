@@ -1,61 +1,108 @@
 <template>
-  <q-page class="flex flex-center q-pa-md">
+  <q-page class="justify center q-pa-md">
     <div class="text-center">
-      <div class="text-h6">Add New Car</div>
+      <div class="text-h4 tittle">Add New Car</div>
       <form @submit.prevent="addCar">
-        <q-input
-          color="green"
-          v-model="manufacturer"
-          placeholder="Manufacturer"
-          required
-        />
-        <q-input color="green" v-model="model" placeholder="Model" required />
-        <q-input
-          @keypress="onlyNumber"
-          color="green"
-          v-model="year"
-          placeholder="Year"
-          required
-        />
-        <q-input color="green" v-model="color" placeholder="Color" required />
-        <q-input
-          color="green"
-          v-model="gasType"
-          placeholder="Gas Type"
-          required
-        />
-        <q-input
-          @keypress="onlyNumber"
-          color="green"
-          v-model="mileage"
-          placeholder="Mileage"
-          required
-        />
-        <q-select
-          v-model="transmission_type"
-          :options="['Automatic', 'Manual']"
-          label="Transmission Type"
-          required
-          color="green"
-        />
-        <q-select
-          v-model="location"
-          :options="['Athens', 'Corfu', 'Polykastro', 'Thessaloniki']"
-          label="Location"
-          required
-          color="green"
-        />
-        <q-input
-          @keypress="onlyNumber"
-          color="green"
-          v-model="price"
-          placeholder="Price"
-          required
-        />
-        <div class="text-left text-grey-8">Photos</div>
-        <input class="photos" type="file" multiple @change="handleFiles" />
-        <br />
-        <q-btn :loading="isLoading" color="green" type="submit">Submit</q-btn>
+        <div class="row justify-center">
+          <div class="carDetails">
+            <div class="text-h6">Car Details</div>
+            <q-input
+              color="green"
+              v-model="manufacturer"
+              placeholder="Manufacturer"
+              required
+              bg-color="white"
+            />
+            <q-input
+              color="green"
+              v-model="model"
+              placeholder="Model"
+              bg-color="white"
+              required
+            />
+            <q-input
+              @keypress="onlyNumber"
+              color="green"
+              v-model="year"
+              placeholder="Year"
+              required
+              bg-color="white"
+            />
+            <q-input
+              color="green"
+              v-model="color"
+              placeholder="Color"
+              required
+              bg-color="white"
+            />
+            <q-input
+              color="green"
+              v-model="gasType"
+              placeholder="Gas Type"
+              required
+              bg-color="white"
+            />
+            <q-input
+              @keypress="onlyNumber"
+              color="green"
+              v-model="mileage"
+              placeholder="Mileage"
+              required
+              bg-color="white"
+            />
+            <q-select
+              v-model="transmission_type"
+              :options="['Automatic', 'Manual']"
+              label="Transmission Type"
+              required
+              color="green"
+              bg-color="white"
+            />
+            <div class="bg-white q-input">
+              <div class="text-left text-grey-8">Photos</div>
+              <input
+                class="photos"
+                type="file"
+                multiple
+                @change="handleFiles"
+              />
+            </div>
+          </div>
+          <div class="locationDates">
+            <div class="text-h6">Location & Dates</div>
+            <q-select
+              v-model="location"
+              :options="['Athens', 'Corfu', 'Polykastro', 'Thessaloniki']"
+              label="Location"
+              required
+              color="green"
+              bg-color="white"
+            />
+            <!-- dates picker -->
+            <q-date
+              class="date-picker"
+              v-model="year"
+              mask="YYYY-MM-DD"
+              today-btn
+              color="green-5"
+              range
+              :rules="[
+                (val) => (val && val.from && val.to) || 'Field is required',
+              ]"
+            />
+            <q-input
+              @keypress="onlyNumber"
+              color="green"
+              bg-color="white"
+              v-model="price"
+              placeholder="Price"
+              required
+            />
+          </div>
+        </div>
+        <q-btn :loading="isLoading" color="green" type="submit" icon="add"
+          >Add</q-btn
+        >
       </form>
     </div>
   </q-page>
@@ -175,5 +222,28 @@ async function addCar() {
 .photos {
   margin-top: 10px;
   margin-bottom: 30px;
+}
+
+.carDetails {
+  width: 300px;
+}
+
+.locationDates {
+  width: 300px;
+}
+
+.tittle {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+@media screen and (min-width: 650px) {
+  .carDetails {
+    margin-right: 4vw;
+  }
+
+  .locationDates {
+    margin-left: 4vw;
+  }
 }
 </style>
