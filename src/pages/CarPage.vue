@@ -33,6 +33,7 @@
               <div class="text-caption text-center">
                 {{ car.year }} | {{ car.mileage }} km
               </div>
+              <div class="text-caption text-center">Views: {{ car.views }}</div>
             </div>
           </div>
         </q-card-section>
@@ -143,6 +144,9 @@ onMounted(async () => {
   user.value = data;
 
   await checkIfFavorite();
+
+  // Increment view count after 10 seconds
+  setTimeout(incrementViewCount, 10000);
 });
 
 async function checkIfFavorite() {
@@ -166,6 +170,19 @@ async function checkIfFavorite() {
         position: "bottom-right",
       });
     }
+  }
+}
+
+async function incrementViewCount() {
+  try {
+    const { data, error } = await supabase
+      .from("cars")
+      .update({ views: car.value.views + 1 })
+      .eq("car_id", route.query.id);
+
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error incrementing view count:", error.message);
   }
 }
 

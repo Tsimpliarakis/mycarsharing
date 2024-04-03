@@ -9,46 +9,44 @@
             <q-input
               color="green"
               v-model="manufacturer"
-              placeholder="Manufacturer"
+              label="Manufacturer"
               required
-              bg-color="white"
             />
+            <q-input color="green" v-model="model" label="Model" required />
             <q-input
+              @keypress="onlyNumber"
               color="green"
-              v-model="model"
-              placeholder="Model"
-              bg-color="white"
+              v-model="year"
+              label="Year"
               required
             />
             <q-input
               @keypress="onlyNumber"
               color="green"
-              v-model="year"
-              placeholder="Year"
+              v-model="engine"
+              label="Engine (cc)"
               required
-              bg-color="white"
             />
             <q-input
+              @keypress="onlyNumber"
               color="green"
-              v-model="color"
-              placeholder="Color"
+              v-model="power"
+              label="Power (hp)"
               required
-              bg-color="white"
             />
+            <q-input color="green" v-model="color" label="Color" required />
             <q-input
               color="green"
               v-model="gasType"
-              placeholder="Gas Type"
+              label="Gas Type"
               required
-              bg-color="white"
             />
             <q-input
               @keypress="onlyNumber"
               color="green"
               v-model="mileage"
-              placeholder="Mileage"
+              label="Mileage"
               required
-              bg-color="white"
             />
             <q-select
               v-model="transmission_type"
@@ -56,9 +54,23 @@
               label="Transmission Type"
               required
               color="green"
-              bg-color="white"
             />
-            <div class="bg-white q-input">
+            <q-select
+              v-model="additional_features"
+              :options="['stuff1', 'stuff2']"
+              label="Additrional Features"
+              required
+              color="green"
+            />
+            <q-input color="green" v-model="description" label="Description" />
+            <q-select
+              v-model="fuel"
+              :options="['1', '2', '3', '4', '5', '6', '7', '8']"
+              label="Fuel level"
+              required
+              color="green"
+            />
+            <div class="q-input">
               <div class="text-left text-grey-8">Photos</div>
               <input
                 class="photos"
@@ -76,12 +88,11 @@
               label="Location"
               required
               color="green"
-              bg-color="white"
             />
             <!-- dates picker -->
             <q-date
               class="date-picker"
-              v-model="year"
+              v-model="dates"
               mask="YYYY-MM-DD"
               today-btn
               color="green-5"
@@ -93,10 +104,23 @@
             <q-input
               @keypress="onlyNumber"
               color="green"
-              bg-color="white"
               v-model="price"
-              placeholder="Price"
+              label="Price (daily)"
               required
+            />
+            <q-input
+              @keypress="onlyNumber"
+              color="green"
+              v-model="cleaning_fee"
+              label="Cleaning Fee"
+              required
+            />
+            <q-select
+              v-model="is_available"
+              :options="['Yes', 'No']"
+              label="Available"
+              required
+              color="green"
             />
           </div>
         </div>
@@ -123,7 +147,16 @@ const price = ref("");
 const location = ref("");
 const mileage = ref("");
 const transmission_type = ref("");
+const engine = ref("");
+const power = ref("");
+const dates = ref("");
+const cleaning_fee = ref("");
+const is_available = ref("");
+const additional_features = ref("");
+const description = ref("");
+const fuel = ref("");
 const files = ref([]);
+
 const isLoading = ref(false);
 const $q = useQuasar();
 
@@ -180,6 +213,15 @@ async function addCar() {
           location: location.value,
           mileage: mileage.value,
           transmission_type: transmission_type.value,
+          engine: engine.value,
+          power: power.value,
+          cleaning_fee: cleaning_fee.value,
+          start_date: dates.value.from,
+          end_date: dates.value.to,
+          is_available: is_available.value,
+          additional_features: additional_features.value,
+          car_description: description.value,
+          fuel_level: fuel.value,
         },
       ])
       .single();

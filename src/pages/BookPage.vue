@@ -6,7 +6,7 @@
           <div class="text-h6">Booking Details</div>
         </q-card-section>
         <q-separator />
-        <div class="row flex flex-center">
+        <div class="row justify-center">
           <!-- Users Details -->
           <q-card-section>
             <div class="text-bold">Owner Details</div>
@@ -26,19 +26,20 @@
           <!-- Dates Details -->
           <q-card-section>
             <div class="text-bold">Dates</div>
-            <q-date
-              class="date-picker"
-              v-model="bookingDates"
-              mask="YYYY-MM-DD"
-              today-btn
-              color="green-5"
-              range
-              minimal
-              @input="calculatePrice"
-              :rules="[
-                (val) => (val && val.from && val.to) || 'Field is required',
-              ]"
-            />
+            <div class="flex flex-center">
+              <q-date
+                v-model="bookingDates"
+                mask="YYYY-MM-DD"
+                today-btn
+                color="green-5"
+                range
+                minimal
+                @input="calculatePrice"
+                :rules="[
+                  (val) => (val && val.from && val.to) || 'Field is required',
+                ]"
+              />
+            </div>
 
             <!-- Final Price -->
             <div class="text-bold">Final Price</div>
@@ -118,5 +119,6 @@ function payWithCard() {
 .card {
   width: 80%;
   max-width: 1000px;
+  min-width: 320px;
 }
 </style>
