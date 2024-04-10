@@ -27,17 +27,19 @@
           <q-card-section>
             <div class="text-bold">Dates</div>
             <div class="flex flex-center">
-              <q-date
-                v-model="bookingDates"
-                mask="YYYY-MM-DD"
-                today-btn
-                color="green-5"
-                range
-                minimal
+              <input
+                type="date"
+                v-model="bookingDates.start"
+                @input="clearEndDate"
+                :min="car.start_date"
+                :max="car.end_date"
+              />
+              <input
+                type="date"
+                v-model="bookingDates.end"
                 @input="calculatePrice"
-                :rules="[
-                  (val) => (val && val.from && val.to) || 'Field is required',
-                ]"
+                :min="bookingDates.start"
+                :max="car.end_date"
               />
             </div>
 
@@ -77,11 +79,13 @@ import { authStore } from "src/stores/auth-store.js";
 const route = useRoute();
 const $q = useQuasar();
 
-// get car details from the route
 const car = ref({});
+const bookingDates = ref({
+  start: "",
+  end: "",
+});
 
 onMounted(async () => {
-  // Fetch car details from the database
   const { data, error } = await supabase
     .from("cars")
     .select("*")
@@ -99,19 +103,33 @@ onMounted(async () => {
 const totalPrice = ref(0);
 
 function calculatePrice() {
-  // Perform price calculation logic here based on booking dates and car details
-  // This is a placeholder, replace it with your actual calculation logic
-  totalPrice.value = 100; // Placeholder price
+  if (!bookingDates.value.start || !bookingDates.value.end) {
+    return;
+  }
+
+  const startDate = new Date(bookingDates.value.start);
+  const endDate = new Date(bookingDates.value.end);
+  const numDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+
+  const dailyPrice = parseFloat(car.value.price);
+  const cleaningFee = parseFloat(car.value.cleaning_fee);
+
+  const totalPriceWithoutCleaningFee = dailyPrice * numDays;
+  const totalPriceWithCleaningFee = totalPriceWithoutCleaningFee + cleaningFee;
+
+  totalPrice.value = totalPriceWithCleaningFee.toFixed(2); // Rounded to two decimal places
 }
 
 function payWithPayPal() {
   // Implement PayPal payment logic here
-  // Redirect the user to PayPal for payment processing
 }
 
 function payWithCard() {
   // Implement card payment logic here
-  // You can use a payment processing library or integrate with a payment gateway
+}
+
+function clearEndDate() {
+  bookingDates.value.end = ""; // Clear the end date input
 }
 </script>
 

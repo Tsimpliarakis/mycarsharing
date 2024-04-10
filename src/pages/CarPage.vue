@@ -2,6 +2,7 @@
   <q-page class="flex flex-center column q-pa-md">
     <div v-if="isLoading" class="text-h6">Loading...</div>
     <div v-else class="card">
+      <!-- Car Images Carousel -->
       <q-card flat bordered>
         <q-carousel
           animated
@@ -46,7 +47,6 @@
             :icon="isFavorite ? 'favorite' : 'favorite_border'"
             @click="toggleFavorite"
           />
-
           <q-btn
             flat
             round
@@ -65,6 +65,8 @@
           />
         </q-card-actions>
       </q-card>
+
+      <!-- Car Details List -->
       <q-list flat bordered class="bg-white">
         <q-item>
           <q-item-section>Location</q-item-section>
@@ -91,8 +93,20 @@
           <q-item-section side>{{ car.mileage }} km</q-item-section>
         </q-item>
         <q-item>
+          <q-item-section>Engine</q-item-section>
+          <q-item-section side>{{ car.engine }} cc</q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section>Power</q-item-section>
+          <q-item-section side>{{ car.power }} hp</q-item-section>
+        </q-item>
+        <q-item>
           <q-item-section>Additional Features</q-item-section>
           <q-item-section side>{{ car.additional_features }}</q-item-section>
+        </q-item>
+        <q-item>
+          <q-item-section>Description</q-item-section>
+          <q-item-section side>{{ car.car_description }}</q-item-section>
         </q-item>
       </q-list>
     </div>

@@ -35,8 +35,9 @@
               required
             />
             <q-input color="green" v-model="color" label="Color" required />
-            <q-input
+            <q-select
               color="green"
+              :options="['Petrol', 'Diesel', 'Electric', 'LPG', 'CNG']"
               v-model="gasType"
               label="Gas Type"
               required
@@ -50,19 +51,41 @@
             />
             <q-select
               v-model="transmission_type"
-              :options="['Automatic', 'Manual']"
+              :options="['Manual', 'Automatic', 'Semi-Automatic']"
               label="Transmission Type"
               required
               color="green"
             />
             <q-select
               v-model="additional_features"
-              :options="['stuff1', 'stuff2']"
-              label="Additrional Features"
-              required
+              :options="[
+                'AC',
+                'Clima',
+                'GPS',
+                'Android Auto',
+                'Apple Carplay',
+                'Bluetooth',
+                'Hybrid',
+                'Snowchains',
+                '4x4',
+                'Roof Rack',
+                'Cargo Box',
+                'Towbar',
+                'Leather Seats',
+                'Heated Seats',
+                'Cruise Control',
+                'Parking Sensors',
+                'Rear Camera',
+                'Sunroof',
+                'Convertible',
+                'Fog Lights',
+              ]"
+              clearable
+              label="Additional Features"
               color="green"
+              multiple
             />
-            <q-input color="green" v-model="description" label="Description" />
+
             <q-select
               v-model="fuel"
               :options="['1', '2', '3', '4', '5', '6', '7', '8']"
@@ -70,6 +93,7 @@
               required
               color="green"
             />
+            <q-input color="green" v-model="description" label="Description" />
             <div class="q-input">
               <div class="text-left text-grey-8">Photos</div>
               <input
@@ -152,7 +176,7 @@ const power = ref("");
 const dates = ref("");
 const cleaning_fee = ref("");
 const is_available = ref("");
-const additional_features = ref("");
+const additional_features = ref([]);
 const description = ref("");
 const fuel = ref("");
 const files = ref([]);
