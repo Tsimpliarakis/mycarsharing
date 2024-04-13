@@ -31,7 +31,7 @@
                 type="date"
                 v-model="bookingDates.start"
                 @input="clearEndDate"
-                :min="car.start_date"
+                :min="currentDate"
                 :max="car.end_date"
               />
               <input
@@ -84,6 +84,8 @@ const bookingDates = ref({
   start: "",
   end: "",
 });
+
+const currentDate = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
 
 onMounted(async () => {
   const { data, error } = await supabase
