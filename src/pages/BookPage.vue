@@ -31,14 +31,14 @@
                 type="date"
                 v-model="bookingDates.start"
                 @input="clearEndDate"
-                :min="currentDate"
+                :min="currentDate || car.start_date"
                 :max="car.end_date"
               />
               <input
                 type="date"
                 v-model="bookingDates.end"
                 @input="calculatePrice"
-                :min="bookingDates.start"
+                :min="bookingDates.start || currentDate || car.start_date"
                 :max="car.end_date"
               />
             </div>
@@ -71,12 +71,13 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 import { authStore } from "src/stores/auth-store.js";
 
 const route = useRoute();
+const router = useRouter();
 const $q = useQuasar();
 
 const car = ref({});
@@ -100,6 +101,33 @@ onMounted(async () => {
   }
 
   car.value = data;
+
+  // Check if dateFrom and dateTo are present in the URL query parameters
+  if (route.query.dateFrom && route.query.dateTo) {
+    // check if the dates from the url are valid
+    if (
+      route.query.dateFrom >= currentDate &&
+      route.query.dateFrom >= car.value.start_date &&
+      route.query.dateTo >= route.query.dateFrom &&
+      route.query.dateTo <= car.value.end_date
+    ) {
+      // Assign dateFrom and dateTo to bookingDates
+      bookingDates.value.start = route.query.dateFrom;
+      bookingDates.value.end = route.query.dateTo;
+      calculatePrice(); // Calculate the price based on the provided dates
+    } else {
+      $q.notify({
+        color: "negative",
+        message: "Invalid dates provided in the URL.",
+        position: "top",
+        icon: "report_problem",
+      });
+      // clear the url from the dates
+      router.replace({
+        query: { ...route.query, dateFrom: null, dateTo: null },
+      });
+    }
+  }
 });
 
 const totalPrice = ref(0);

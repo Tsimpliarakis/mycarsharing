@@ -8,11 +8,12 @@
         <div class="details">
           <q-card-section>
             <router-link
-              :to="`/car?id=${encodeURIComponent(car.car_id)}`"
-              class="tittle"
+              :to="generateRouterLink(car.car_id, dateFrom, dateTo)"
+              class="title"
             >
               <div class="text-h6">{{ car.manufacturer }} {{ car.model }}</div>
             </router-link>
+
             <div><span class="label">Year:</span> {{ car.year }}</div>
             <div><span class="label">Mileage:</span> {{ car.mileage }} km</div>
             <div>
@@ -30,9 +31,23 @@
 </template>
 
 <script setup>
+import { defineProps } from "vue";
+
 const props = defineProps({
   car: Object,
+  dateFrom: String,
+  dateTo: String,
 });
+
+const generateRouterLink = (carId, dateFrom, dateTo) => {
+  if (dateFrom && dateTo) {
+    return `/car?id=${encodeURIComponent(
+      carId
+    )}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
+  } else {
+    return `/car?id=${encodeURIComponent(carId)}`;
+  }
+};
 </script>
 
 <style scoped>
@@ -111,7 +126,7 @@ p {
   }
 }
 
-.tittle {
+.title {
   text-decoration: none;
   color: black;
 }

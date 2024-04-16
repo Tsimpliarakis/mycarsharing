@@ -4,12 +4,14 @@
     <div v-else-if="results && results.length > 0" class="text-h6">
       Found {{ results.length }} result(s)
     </div>
-    <div v-else class="text-h6">No results found :(</div>
+    <div v-else class="text-h6">No results found</div>
     <!-- Display the results here -->
     <car-thumbnail-horizontal
       v-for="result in results"
       :key="result.id"
       :car="result"
+      :dateFrom="route.query.dateFrom"
+      :dateTo="route.query.dateTo"
     />
   </q-page>
 </template>

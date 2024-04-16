@@ -277,7 +277,20 @@ function bookCar() {
     router.push("/login");
     return;
   }
-  router.push(`/book?id=${car.value.car_id}`);
+
+  // Get the dateFrom and dateTo from the URL query parameters
+  const queryParams = new URLSearchParams(window.location.search);
+  const dateFrom = queryParams.get("dateFrom");
+  const dateTo = queryParams.get("dateTo");
+
+  // Construct the URL with car ID and optional dateFrom and dateTo
+  let bookingUrl = `/book?id=${car.value.car_id}`;
+  if (dateFrom && dateTo) {
+    bookingUrl += `&dateFrom=${dateFrom}&dateTo=${dateTo}`;
+  }
+
+  // Navigate to the booking page
+  router.push(bookingUrl);
 }
 </script>
 
