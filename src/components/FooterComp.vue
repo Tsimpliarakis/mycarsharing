@@ -1,5 +1,9 @@
 <template>
-  <q-footer elevated class="bg-green-5 text-white">
+  <q-footer
+    :class="{ 'bg-home': isHomePage, 'bg-green-5': !isHomePage }"
+    :elevated="!isHomePage"
+    class="text-white"
+  >
     <q-toolbar>
       <div class="coloumn" style="width: 100%">
         <div class="coloumn list">
@@ -26,6 +30,16 @@
   </q-footer>
 </template>
 
+<script>
+export default {
+  computed: {
+    isHomePage() {
+      return this.$route.path === "/";
+    },
+  },
+};
+</script>
+
 <style scoped>
 .links {
   color: inherit;
@@ -49,5 +63,9 @@
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 12px;
+}
+
+.bg-home {
+  background-color: #1c4e45 !important;
 }
 </style>

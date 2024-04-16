@@ -20,7 +20,7 @@ import CarThumbnail from "./car/CarThumbnail.vue";
 import { ref, onMounted, computed } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 
-const locations = ref(["Polykastro", "Corfu", "Thessaloniki", "Athens"]);
+const locations = ref(["Athens", "Thessaloniki"]);
 
 const cars = ref({});
 
