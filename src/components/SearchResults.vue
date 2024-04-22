@@ -2,12 +2,31 @@
   <q-page class="flex flex-center column">
     <div v-if="isLoading">Loading...</div>
     <div v-else-if="results && results.length > 0" class="text-h6">
-      Found {{ results.length }} result(s)
+      Found {{ filteredResults.length }} result(s)
     </div>
     <div v-else class="text-h6">No results found</div>
-    <!-- Display the results here -->
+
+    <div>
+      <button @click="sortByPrice">Sort by Price</button>
+      <label for="color">Color:</label>
+      <select v-model="selectedColor">
+        <option value="">All</option>
+        <option value="Red">Red</option>
+        <option value="Blue">Blue</option>
+        <option value="Silver">Silver</option>
+        <!-- Add more color options if needed -->
+      </select>
+      <label for="gearbox">Gearbox:</label>
+      <select v-model="selectedGearbox">
+        <option value="">All</option>
+        <option value="Automatic">Automatic</option>
+        <option value="Manual">Manual</option>
+      </select>
+    </div>
+
+    <!-- Display the filtered results here -->
     <car-thumbnail-horizontal
-      v-for="result in results"
+      v-for="result in filteredResults"
       :key="result.id"
       :car="result"
       :dateFrom="route.query.dateFrom"
@@ -17,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { supabase } from "../lib/supabaseClient";
 import CarThumbnailHorizontal from "./car/CarThumbnailHorizontal.vue";
@@ -25,6 +44,8 @@ import CarThumbnailHorizontal from "./car/CarThumbnailHorizontal.vue";
 const route = useRoute();
 const results = ref([]);
 const isLoading = ref(false);
+const selectedColor = ref("");
+const selectedGearbox = ref("");
 
 const fetchData = async () => {
   isLoading.value = true;
@@ -81,4 +102,26 @@ const getBookedCarIds = async (availableCars, { dateFrom, dateTo }) => {
 };
 
 onMounted(fetchData);
+
+// Function to sort cars by price
+const sortByPrice = () => {
+  results.value.sort((a, b) => a.price - b.price);
+};
+
+// Computed property to filter cars based on selected filters
+const filteredResults = computed(() => {
+  let filtered = results.value;
+
+  if (selectedColor.value) {
+    filtered = filtered.filter((car) => car.color === selectedColor.value);
+  }
+
+  if (selectedGearbox.value) {
+    filtered = filtered.filter(
+      (car) => car.transmission_type === selectedGearbox.value
+    );
+  }
+
+  return filtered;
+});
 </script>
