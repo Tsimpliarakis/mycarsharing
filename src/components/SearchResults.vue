@@ -40,7 +40,9 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { supabase } from "../lib/supabaseClient";
 import CarThumbnailHorizontal from "./car/CarThumbnailHorizontal.vue";
+import { useQuasar } from "quasar";
 
+const $q = useQuasar();
 const route = useRoute();
 const results = ref([]);
 const isLoading = ref(false);
@@ -52,6 +54,17 @@ const fetchData = async () => {
 
   try {
     const { city, dateFrom, dateTo } = route.query;
+
+    // Validate dates
+    if (!validateDates(dateFrom, dateTo)) {
+      $q.notify({
+        type: "negative",
+        message: "Please select a valid date.",
+        position: "top",
+      });
+      return;
+    }
+
     const availableCars = await getAvailableCars({ city, dateFrom, dateTo });
     const bookedCarIds = await getBookedCarIds(availableCars, {
       dateFrom,
@@ -99,6 +112,20 @@ const getBookedCarIds = async (availableCars, { dateFrom, dateTo }) => {
     throw error;
   }
   return data.map((booking) => booking.car_id);
+};
+
+const validateDates = (dateFrom, dateTo) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, and milliseconds
+
+  const fromDate = new Date(dateFrom);
+  const toDate = new Date(dateTo);
+
+  if (fromDate < today || toDate < today) {
+    return false;
+  }
+
+  return true;
 };
 
 onMounted(fetchData);
