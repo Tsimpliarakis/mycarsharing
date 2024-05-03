@@ -47,6 +47,12 @@ const formData = reactive({
 });
 
 const searchData = () => {
+  if (formData.date.length === 10) {
+    formData.date = {
+      from: formData.date,
+      to: formData.date,
+    };
+  }
   if (!formData.selectedCity || !formData.date.from || !formData.date.to) {
     $q.notify({
       color: "red-5",

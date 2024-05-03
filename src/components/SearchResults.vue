@@ -58,9 +58,10 @@ const fetchData = async () => {
     // Validate dates
     if (!validateDates(dateFrom, dateTo)) {
       $q.notify({
-        type: "negative",
-        message: "Please select a valid date.",
+        color: "negative",
+        message: "Invalid dates provided in the URL.",
         position: "top",
+        icon: "report_problem",
       });
       return;
     }
@@ -122,6 +123,9 @@ const validateDates = (dateFrom, dateTo) => {
   const toDate = new Date(dateTo);
 
   if (fromDate < today || toDate < today) {
+    return false;
+  }
+  if (fromDate > toDate) {
     return false;
   }
 
