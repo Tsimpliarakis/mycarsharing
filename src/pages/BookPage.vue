@@ -51,16 +51,18 @@
                 class="details"
                 v-model="bookingDates.start"
                 @input="clearEndDate"
-                :min="currentDate || car.start_date"
+                :min="minStartDate"
                 :max="car.end_date"
+                :disabled="currentDate > car.start_date"
               />
               <input
                 type="date"
                 class="details"
                 v-model="bookingDates.end"
                 @input="calculatePrice"
-                :min="bookingDates.start || currentDate || car.start_date"
+                :min="bookingDates.start"
                 :max="car.end_date"
+                :disabled="!bookingDates.start"
               />
             </div>
 
@@ -74,7 +76,7 @@
             <div class="details">
               Total Price: {{ totalPrice }}€
               <div class="text-caption">
-                ({{ car.price }}€ per day + {{ car.cleaning_fee }}€ cleanning
+                ({{ car.price }}€ per day + {{ car.cleaning_fee }}€ cleaning
                 fee)
               </div>
             </div>
@@ -82,16 +84,7 @@
             <q-separator />
             <q-card-section>
               <q-card-actions align="center">
-                <q-btn
-                  color="green"
-                  label="Pay with PayPal"
-                  @click="payWithPayPal"
-                />
-                <q-btn
-                  color="blue"
-                  label="Pay with Card"
-                  @click="payWithCard"
-                />
+                <q-btn color="green" label="Place order" />
               </q-card-actions>
             </q-card-section>
           </q-card-section>
@@ -115,11 +108,14 @@ const $q = useQuasar();
 const car = ref({});
 const owner = ref({});
 const bookingDates = ref({
-  start: "",
-  end: "",
+  start: null,
+  end: null,
 });
 
 const currentDate = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
+
+const minStartDate = ref(""); // Initialize with an empty string
+const minEndDate = ref(""); // Initialize with an empty string
 
 onMounted(async () => {
   const { data, error } = await supabase
@@ -148,6 +144,10 @@ onMounted(async () => {
   }
 
   owner.value = ownerData;
+
+  // Compare car.start_date and currentDate
+  minStartDate.value =
+    car.value.start_date > currentDate ? car.value.start_date : currentDate;
 
   // Check if dateFrom and dateTo are present in the URL query parameters
   if (route.query.dateFrom && route.query.dateTo) {
@@ -195,14 +195,6 @@ function calculatePrice() {
   const totalPriceWithCleaningFee = totalPriceWithoutCleaningFee + cleaningFee;
 
   totalPrice.value = totalPriceWithCleaningFee.toFixed(2); // Rounded to two decimal places
-}
-
-function payWithPayPal() {
-  // Implement PayPal payment logic here
-}
-
-function payWithCard() {
-  // Implement card payment logic here
 }
 
 function clearEndDate() {
