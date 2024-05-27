@@ -53,7 +53,7 @@
                 @input="clearEndDate"
                 :min="minStartDate"
                 :max="car.end_date"
-                :disabled="currentDate > car.start_date"
+                :disabled="currentDate > car.end_date"
               />
               <input
                 type="date"
@@ -112,10 +112,9 @@ const bookingDates = ref({
   end: null,
 });
 
-const currentDate = new Date().toISOString().split("T")[0]; // Get current date in yyyy-mm-dd format
+const currentDate = new Date().toLocaleDateString("en-CA"); // Get current date in yyyy-mm-dd format
 
 const minStartDate = ref(""); // Initialize with an empty string
-const minEndDate = ref(""); // Initialize with an empty string
 
 onMounted(async () => {
   const { data, error } = await supabase
