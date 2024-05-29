@@ -11,31 +11,11 @@
           <div class="flex flex-center" v-else>
             <div class="bookings">
               <q-list bordered padding class="rounded-borders">
-                <q-item
+                <BookingThumbnail
                   v-for="booking in userBookings"
                   :key="booking.id"
-                  class="q-mb-sm"
-                >
-                  <q-item-section avatar>
-                    <q-img
-                      :src="booking.car.image_url[0]"
-                      style="height: 100px; width: 160px"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-bold"
-                      >{{ booking.car.manufacturer }}
-                      {{ booking.car.model }}</q-item-label
-                    >
-                    <q-item-label caption lines="2">
-                      Start Date: {{ booking.start_date }} | End Date:
-                      {{ booking.end_date }}
-                    </q-item-label>
-                    <q-item-label caption lines="1"
-                      >Booking ID: {{ booking.booking_id }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
+                  :booking="booking"
+                />
               </q-list>
             </div>
           </div>
@@ -53,31 +33,11 @@
           <div class="flex flex-center" v-else>
             <div class="bookings">
               <q-list bordered padding class="rounded-borders">
-                <q-item
+                <BookingThumbnail
                   v-for="booking in receivedBookings"
                   :key="booking.id"
-                  class="q-mb-sm"
-                >
-                  <q-item-section avatar>
-                    <q-img
-                      :src="booking.car.image_url[0]"
-                      style="height: 100px; width: 160px"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label class="text-bold"
-                      >{{ booking.car.manufacturer }}
-                      {{ booking.car.model }}</q-item-label
-                    >
-                    <q-item-label caption lines="2">
-                      Start Date: {{ booking.start_date }} | End Date:
-                      {{ booking.end_date }}
-                    </q-item-label>
-                    <q-item-label caption lines="1"
-                      >Booking ID: {{ booking.booking_id }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
+                  :booking="booking"
+                />
               </q-list>
             </div>
           </div>
@@ -91,6 +51,7 @@
 import { onMounted, ref } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
+import BookingThumbnail from "src/components/BookingThumb.vue";
 
 const userBookings = ref([]);
 const receivedBookings = ref([]);

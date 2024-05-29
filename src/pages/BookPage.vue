@@ -86,7 +86,12 @@
         </div>
         <q-card-section>
           <q-card-actions align="center">
-            <q-btn color="green" label="Place order" @click="placeOrder" />
+            <q-btn
+              color="green"
+              label="Place order"
+              @click="placeOrder"
+              :disabled="isUserOwner"
+            />
           </q-card-actions>
         </q-card-section>
       </q-card>
@@ -95,7 +100,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
@@ -212,6 +217,10 @@ async function checkUserVerification(userId) {
 
   return data.is_verified;
 }
+
+const isUserOwner = computed(() => {
+  return authStore.state.profile.id === owner.value.id;
+});
 
 async function placeOrder() {
   try {

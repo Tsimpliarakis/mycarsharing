@@ -28,6 +28,15 @@ const props = defineProps({
 </script>
 
 <style scoped>
+.q-card {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Adds subtle shadow for depth */
+  transition: transform 0.2s ease-in-out;
+}
+
+.q-card:hover {
+  transform: scale(1.02); /* Enlarges the item on hover */
+}
+
 .car-thumbnail {
   margin: 10px;
 }
