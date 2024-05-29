@@ -84,7 +84,7 @@
             <q-separator />
             <q-card-section>
               <q-card-actions align="center">
-                <q-btn color="green" label="Place order" />
+                <q-btn color="green" label="Place order" @click="placeOrder" />
               </q-card-actions>
             </q-card-section>
           </q-card-section>
@@ -113,8 +113,8 @@ const bookingDates = ref({
 });
 
 const currentDate = new Date().toLocaleDateString("en-CA"); // Get current date in yyyy-mm-dd format
-
 const minStartDate = ref(""); // Initialize with an empty string
+const totalPrice = ref(0);
 
 onMounted(async () => {
   const { data, error } = await supabase
@@ -176,8 +176,6 @@ onMounted(async () => {
   }
 });
 
-const totalPrice = ref(0);
-
 function calculatePrice() {
   if (!bookingDates.value.start || !bookingDates.value.end) {
     return;
@@ -198,6 +196,77 @@ function calculatePrice() {
 
 function clearEndDate() {
   bookingDates.value.end = ""; // Clear the end date input
+}
+
+async function checkUserVerification(userId) {
+  const { data, error } = await supabase
+    .from("verification")
+    .select("is_verified")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error checking user verification:", error.message);
+    return false;
+  }
+
+  return data.is_verified;
+}
+
+async function placeOrder() {
+  try {
+    const isVerified = await checkUserVerification(authStore.state.profile.id);
+
+    if (!isVerified) {
+      $q.notify({
+        color: "negative",
+        message:
+          "Your account is not verified. Please verify your account to place an order.",
+        position: "top",
+        icon: "report_problem",
+      });
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("bookings")
+      .insert([
+        {
+          car_id: car.value.car_id,
+          user_id: authStore.state.profile.id,
+          start_date: bookingDates.value.start,
+          end_date: bookingDates.value.end,
+          payment_details: {}, // Assuming empty for now; populate as necessary
+          booking_status: "Pending",
+          pickup_location: car.value.location,
+          dropoff_location: car.value.location,
+          total_cost: totalPrice.value,
+          owner_id: owner.value.id,
+        },
+      ])
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    $q.notify({
+      color: "positive",
+      message: "Booking placed successfully!",
+      position: "top",
+      icon: "check_circle",
+    });
+
+    // Redirect to a success page or clear the form, as needed
+  } catch (error) {
+    console.error("Error placing order:", error.message);
+    $q.notify({
+      color: "negative",
+      message: "Failed to place order. Please try again.",
+      position: "top",
+      icon: "report_problem",
+    });
+  }
 }
 </script>
 
