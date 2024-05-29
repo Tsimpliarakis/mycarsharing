@@ -82,13 +82,13 @@
             </div>
 
             <q-separator />
-            <q-card-section>
-              <q-card-actions align="center">
-                <q-btn color="green" label="Place order" @click="placeOrder" />
-              </q-card-actions>
-            </q-card-section>
           </q-card-section>
         </div>
+        <q-card-section>
+          <q-card-actions align="center">
+            <q-btn color="green" label="Place order" @click="placeOrder" />
+          </q-card-actions>
+        </q-card-section>
       </q-card>
     </div>
   </q-page>
