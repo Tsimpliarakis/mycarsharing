@@ -86,12 +86,21 @@
         </div>
         <q-card-section>
           <q-card-actions align="center">
-            <q-btn
-              color="green"
-              label="Place order"
-              @click="placeOrder"
-              :disabled="isUserOwner"
-            />
+            <div class="flex flex-center column">
+              <q-btn
+                color="green"
+                label="Place order"
+                @click="placeOrder"
+                :disabled="isUserOwner"
+              />
+              <div
+                class="text-caption text-red"
+                v-if="isUserOwner"
+                style="margin-top: 10px"
+              >
+                You can't book your own car.
+              </div>
+            </div>
           </q-card-actions>
         </q-card-section>
       </q-card>
@@ -224,6 +233,17 @@ const isUserOwner = computed(() => {
 
 async function placeOrder() {
   try {
+    // Check if both dates are set
+    if (!bookingDates.value.start || !bookingDates.value.end) {
+      $q.notify({
+        color: "negative",
+        message: "Both start and end dates are required to place an order.",
+        position: "top",
+        icon: "report_problem",
+      });
+      return; // Exit the function early if either date is missing
+    }
+
     const isVerified = await checkUserVerification(authStore.state.profile.id);
 
     if (!isVerified) {
