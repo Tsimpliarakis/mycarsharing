@@ -272,12 +272,6 @@ async function toggleFavorite() {
 }
 
 function bookCar() {
-  if (!authStore.state.session) {
-    // Redirect the user to the login page
-    router.push("/login");
-    return;
-  }
-
   // Get the dateFrom and dateTo from the URL query parameters
   const queryParams = new URLSearchParams(window.location.search);
   const dateFrom = queryParams.get("dateFrom");

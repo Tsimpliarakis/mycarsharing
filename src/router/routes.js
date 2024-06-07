@@ -84,6 +84,7 @@ const routes = [
   {
     path: "/book",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: requireAuth,
     children: [
       {
         path: "",

@@ -10,7 +10,7 @@
           </div>
           <div class="flex flex-center" v-else>
             <div class="bookings">
-              <q-list bordered padding class="rounded-borders">
+              <q-list padding>
                 <BookingThumbnail
                   v-for="booking in userBookings"
                   :key="booking.id"
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-
+      <q-separator vertical inset v-show="screenWidth > 1027" />
       <!-- Display bookings received by the user -->
       <div class="recievedbookings">
         <div class="text-h4 text-center tittle">Bookings Received</div>
@@ -32,7 +32,7 @@
           </div>
           <div class="flex flex-center" v-else>
             <div class="bookings">
-              <q-list bordered padding class="rounded-borders">
+              <q-list padding>
                 <BookingThumbnail
                   v-for="booking in receivedBookings"
                   :key="booking.id"
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onBeforeUnmount } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
 import BookingThumbnail from "src/components/BookingThumb.vue";
@@ -56,8 +56,15 @@ import BookingThumbnail from "src/components/BookingThumb.vue";
 const userBookings = ref([]);
 const receivedBookings = ref([]);
 const loading = ref(true);
+const screenWidth = ref(window.innerWidth);
+
+const updateScreenWidth = () => {
+  screenWidth.value = window.innerWidth;
+};
 
 onMounted(async () => {
+  window.addEventListener("resize", updateScreenWidth);
+
   // Fetch bookings made by the user
   try {
     const { data: userBookingData, error: userBookingError } = await supabase
@@ -139,16 +146,13 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateScreenWidth);
+});
 </script>
 
 <style scoped>
-.bookings {
-  width: 100%;
-  max-width: 800px;
-  margin-left: 10%;
-  margin-right: 10%;
-}
-
 .tittle {
   margin-top: 20px;
   margin-bottom: 30px;

@@ -1,5 +1,5 @@
 <template>
-  <q-item class="q-mb-sm bg-green-1" style="border-radius: 8px">
+  <q-item class="q-mb-sm bg-green-1 booking">
     <q-item-section avatar side>
       <q-img
         :src="booking.car.image_url[0]"
@@ -43,5 +43,9 @@ export default {
 
 .q-item-section.avatar {
   min-width: 120px; /* Ensures avatar has enough space */
+}
+
+.booking {
+  border-radius: 8px;
 }
 </style>
