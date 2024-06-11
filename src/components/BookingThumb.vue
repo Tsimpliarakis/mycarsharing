@@ -48,4 +48,10 @@ export default {
 .booking {
   border-radius: 8px;
 }
+
+@media screen and (max-width: 500px) {
+  .booking {
+    width: 350px;
+  }
+}
 </style>
