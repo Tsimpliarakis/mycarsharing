@@ -44,26 +44,52 @@
   </q-page>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      name: "",
-      email: "",
-      message: "",
-    };
-  },
-  methods: {
-    onSubmit() {
-      // handle form submission
-      console.log("Form submitted");
-    },
-    onReset() {
-      this.name = "";
-      this.email = "";
-      this.message = "";
-    },
-  },
+<script setup>
+import { ref } from "vue";
+import { supabase } from "src/lib/supabaseClient";
+import { useQuasar } from "quasar";
+
+const name = ref("");
+const email = ref("");
+const message = ref("");
+const $q = useQuasar();
+
+const onSubmit = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("contact_us")
+      .insert([
+        { name: name.value, email: email.value, message: message.value },
+      ]);
+
+    if (error) {
+      throw error;
+    }
+
+    $q.notify({
+      color: "positive",
+      message:
+        "Thank you for contacting us. We will get back to you as soon as possible.",
+      position: "top",
+      icon: "check_circle",
+    });
+  } catch (error) {
+    $q.notify({
+      color: "negative",
+      message:
+        "An error occurred while submitting your message. Please try again.",
+      position: "top",
+      icon: "report_problem",
+    });
+  }
+
+  onReset();
+};
+
+const onReset = () => {
+  name.value = "";
+  email.value = "";
+  message.value = "";
 };
 </script>
 

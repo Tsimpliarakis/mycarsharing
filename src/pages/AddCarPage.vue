@@ -197,6 +197,19 @@ function handleFiles(event) {
 }
 
 async function addCar() {
+  const isVerified = await checkUserVerification(authStore.state.profile.id);
+
+  if (!isVerified) {
+    $q.notify({
+      color: "negative",
+      message:
+        "Your account is not verified. Please verify your account to add a car.",
+      position: "top",
+      icon: "report_problem",
+    });
+    return;
+  }
+
   isLoading.value = true;
   const imageURLs = [];
   const baseURL =
@@ -261,6 +274,14 @@ async function addCar() {
     location.value = "";
     mileage.value = "";
     transmission_type.value = "";
+    engine.value = "";
+    power.value = "";
+    cleaning_fee.value = "";
+    dates.value = "";
+    is_available.value = "";
+    additional_features.value = [];
+    description.value = "";
+    fuel.value = "";
     files.value = [];
     $q.notify({
       position: "top",
@@ -276,6 +297,21 @@ async function addCar() {
   } finally {
     isLoading.value = false;
   }
+}
+
+async function checkUserVerification(userId) {
+  const { data, error } = await supabase
+    .from("verification")
+    .select("is_verified")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error checking user verification:", error.message);
+    return false;
+  }
+
+  return data.is_verified;
 }
 </script>
 
