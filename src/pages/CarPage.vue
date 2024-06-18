@@ -102,7 +102,13 @@
         </q-item>
         <q-item>
           <q-item-section>Additional Features</q-item-section>
-          <q-item-section side>{{ car.additional_features }}</q-item-section>
+          <q-item-section
+            side
+            v-for="(feature, index) in car.additional_features"
+            :key="index"
+          >
+            <q-item-section>{{ feature }}</q-item-section>
+          </q-item-section>
         </q-item>
         <q-item>
           <q-item-section>Description</q-item-section>
