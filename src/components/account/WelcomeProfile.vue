@@ -13,7 +13,7 @@
     <br />
     <br />
     <div class="text-italic text-caption">
-      <div v-if="!authStore.state.profile.is_erified">
+      <div v-if="!authStore.state.profile.is_verified">
         Your account is not verified.
       </div>
       <div v-if="!authStore.state.profile.is_verified">
@@ -23,7 +23,7 @@
         Your account is verified.
       </div>
       <div v-if="authStore.state.profile.is_verified">
-        Now you can share your car or order someone else's.
+        Now you can share your car or rent someone else's.
       </div>
     </div>
   </div>
