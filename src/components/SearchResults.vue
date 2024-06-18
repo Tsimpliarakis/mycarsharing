@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center column">
     <div v-if="isLoading">Loading...</div>
-    <div v-else-if="results && results.length > 0" class="text-h6">
+    <div v-else-if="filteredResults.length > 0" class="text-h6">
       Found {{ filteredResults.length }} result(s)
     </div>
     <div v-else class="text-h6">No results found</div>
@@ -32,6 +32,26 @@
       :dateFrom="route.query.dateFrom"
       :dateTo="route.query.dateTo"
     />
+
+    <div class="pagination" v-if="totalPages > 1">
+      <q-btn
+        @click="previousPage"
+        :disabled="currentPage === 1"
+        icon="arrow_back"
+        color="green"
+        flat
+        round
+      />
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <q-btn
+        @click="nextPage"
+        :disabled="currentPage * itemsPerPage >= results.length"
+        icon="arrow_forward"
+        color="green"
+        flat
+        round
+      />
+    </div>
   </q-page>
 </template>
 
@@ -48,6 +68,11 @@ const results = ref([]);
 const isLoading = ref(false);
 const selectedColor = ref("");
 const selectedGearbox = ref("");
+const itemsPerPage = ref(10);
+const currentPage = ref(1);
+const totalPages = computed(() =>
+  Math.ceil(results.value.length / itemsPerPage.value)
+);
 
 const fetchData = async () => {
   isLoading.value = true;
@@ -141,18 +166,29 @@ const sortByPrice = () => {
 
 // Computed property to filter cars based on selected filters
 const filteredResults = computed(() => {
-  let filtered = results.value;
-
-  if (selectedColor.value) {
-    filtered = filtered.filter((car) => car.color === selectedColor.value);
-  }
-
-  if (selectedGearbox.value) {
-    filtered = filtered.filter(
-      (car) => car.transmission_type === selectedGearbox.value
-    );
-  }
-
-  return filtered;
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  return results.value.slice(start, start + itemsPerPage.value);
 });
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage.value < results.value.length) {
+    currentPage.value++;
+  }
+};
 </script>
+
+<style scoped>
+.pagination {
+  margin-top: 10px;
+}
+
+.pagination button {
+  margin: 0 5px;
+}
+</style>
