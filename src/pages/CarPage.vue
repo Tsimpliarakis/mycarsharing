@@ -72,44 +72,55 @@
           <q-item-section>Location</q-item-section>
           <q-item-section side>{{ car.location }}</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Price</q-item-section>
           <q-item-section side>{{ car.price }}€ / day</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Color</q-item-section>
           <q-item-section side>{{ car.color }}</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Fuel Type</q-item-section>
           <q-item-section side>{{ car.fuel_type }}</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Transmission Type</q-item-section>
           <q-item-section side>{{ car.transmission_type }}</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Mileage</q-item-section>
           <q-item-section side>{{ car.mileage }} km</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Engine</q-item-section>
           <q-item-section side>{{ car.engine }} cc</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Power</q-item-section>
           <q-item-section side>{{ car.power }} hp</q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Additional Features</q-item-section>
-          <q-item-section
-            side
-            v-for="(feature, index) in car.additional_features"
-            :key="index"
-          >
-            <q-item-section>{{ feature }}</q-item-section>
+          <q-item-section side class="additional-features">
+            <q-item
+              v-for="(feature, index) in car.additional_features"
+              :key="index"
+              class="feature-item"
+            >
+              {{ feature }}
+            </q-item>
           </q-item-section>
         </q-item>
+        <q-separator color="green" inset />
         <q-item>
           <q-item-section>Description</q-item-section>
           <q-item-section side>{{ car.car_description }}</q-item-section>
