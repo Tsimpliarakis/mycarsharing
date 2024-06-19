@@ -1,25 +1,27 @@
 <template>
-  <q-item class="q-mb-sm bg-green-1 booking">
-    <q-item-section avatar side>
-      <q-img
-        :src="booking.car.image_url[0]"
-        style="height: 100px; width: 120px"
-        contain
-      />
-    </q-item-section>
-    <q-item-section>
-      <q-item-label class="text-bold"
-        >{{ booking.car.manufacturer }} {{ booking.car.model }}</q-item-label
-      >
-      <q-item-label caption lines="2"
-        >Start Date: {{ booking.start_date }} | End Date:
-        {{ booking.end_date }}</q-item-label
-      >
-      <q-item-label caption lines="1"
-        >Booking ID: {{ booking.booking_id }}</q-item-label
-      >
-    </q-item-section>
-  </q-item>
+  <router-link :to="'/receipt/' + booking.booking_id" class="tittle">
+    <q-item class="q-mb-sm bg-green-1 booking">
+      <q-item-section avatar side>
+        <q-img
+          :src="booking.car.image_url[0]"
+          style="height: 100px; width: 120px"
+          contain
+        />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label class="text-bold"
+          >{{ booking.car.manufacturer }} {{ booking.car.model }}</q-item-label
+        >
+        <q-item-label caption lines="2"
+          >Start Date: {{ booking.start_date }} | End Date:
+          {{ booking.end_date }}</q-item-label
+        >
+        <q-item-label caption lines="1"
+          >Booking ID: {{ booking.booking_id }}</q-item-label
+        >
+      </q-item-section>
+    </q-item>
+  </router-link>
 </template>
 
 <script>
@@ -53,5 +55,10 @@ export default {
   .booking {
     width: 350px;
   }
+}
+
+.tittle {
+  text-decoration: none;
+  color: black;
 }
 </style>

@@ -11,6 +11,7 @@
       <q-img :src="user.avatar_url" />
     </q-avatar>
     <span>{{ user.username }}</span>
+    <span style="color: green; margin-left: 5px">({{ user.rating }})</span>
   </q-btn>
 </template>
 

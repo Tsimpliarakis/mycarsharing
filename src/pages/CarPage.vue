@@ -55,12 +55,20 @@
             @click="copyUrlToClipboard"
           />
           <q-btn flat round color="green" icon="car_rental" @click="bookCar" />
+          <q-btn
+            v-if="car.user_id === authStore.state.profile.id"
+            flat
+            round
+            color="yellow-8"
+            icon="edit"
+          />
         </q-card-actions>
         <q-card-actions align="center">
           <ProfileButton
             :user="{
               username: user.username,
               avatar_url: user.avatar_url,
+              rating: user.rating,
             }"
           />
         </q-card-actions>
@@ -168,7 +176,7 @@ onMounted(async () => {
   }
   const { data, error } = await supabase
     .from("profiles")
-    .select("username,avatar_url")
+    .select("username,avatar_url,rating")
     .eq("id", car.value.user_id)
     .single();
   if (error) throw error;

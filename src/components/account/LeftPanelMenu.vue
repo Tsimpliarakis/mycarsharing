@@ -9,6 +9,7 @@
           :user="{
             username: authStore.state.profile.username,
             avatar_url: null,
+            rating: authStore.state.profile.rating,
           }"
         />
       </div>

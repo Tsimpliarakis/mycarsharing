@@ -265,7 +265,6 @@ async function placeOrder() {
           user_id: authStore.state.profile.id,
           start_date: bookingDates.value.start,
           end_date: bookingDates.value.end,
-          payment_details: {}, // Assuming empty for now; populate as necessary
           booking_status: "Pending",
           pickup_location: car.value.location,
           dropoff_location: car.value.location,
@@ -286,7 +285,16 @@ async function placeOrder() {
       icon: "check_circle",
     });
 
-    // Redirect to a success page or clear the form, as needed
+    // fetch the newest booking from supabase database
+    const { data: newBooking, error: newBookingError } = await supabase
+      .from("bookings")
+      .select("booking_id")
+      .eq("user_id", authStore.state.profile.id)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    // Redirect to the receipt page
+    router.push("/receipt/" + newBooking[0].booking_id);
   } catch (error) {
     console.error("Error placing order:", error.message);
     $q.notify({
