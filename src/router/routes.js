@@ -119,6 +119,17 @@ const routes = [
       { path: "", component: () => import("src/pages/ProfilePage.vue") },
     ],
   },
+  {
+    path: "/terms-and-conditions",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/TermsAndConditionsPage.vue"),
+      },
+    ],
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

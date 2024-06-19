@@ -246,5 +246,6 @@
   margin-left: 10%;
   margin-right: 10%;
   max-width: 800px;
+  margin-bottom: 50px;
 }
 </style>

@@ -12,7 +12,7 @@
             <router-link to="/contact-us" class="links">Contact Us</router-link>
           </li>
           <li>
-            <router-link to="/terms" class="links"
+            <router-link to="/terms-and-conditions" class="links"
               >Terms & Conditions</router-link
             >
           </li>
