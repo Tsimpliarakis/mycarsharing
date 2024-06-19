@@ -75,6 +75,11 @@ async function fetchData(username) {
       .eq("username", username)
       .single();
 
+    if (usrError || !userData) {
+      loadingProfile.value = false;
+      throw new Error("Failed to fetch user data");
+    }
+
     user.value = userData;
     const userId = userData.id;
 
