@@ -9,7 +9,7 @@
     <div>
       <button @click="sortByPrice">Sort by Price</button>
       <label for="color">Color:</label>
-      <select v-model="selectedColor">
+      <select v-model="selectedColor" @change="handleColorChange">
         <option value="">All</option>
         <option value="Red">Red</option>
         <option value="Blue">Blue</option>
@@ -17,7 +17,7 @@
         <!-- Add more color options if needed -->
       </select>
       <label for="gearbox">Gearbox:</label>
-      <select v-model="selectedGearbox">
+      <select v-model="selectedGearbox" @change="handleGearboxChange">
         <option value="">All</option>
         <option value="Automatic">Automatic</option>
         <option value="Manual">Manual</option>
@@ -26,7 +26,7 @@
 
     <!-- Display the filtered results here -->
     <car-thumbnail-horizontal
-      v-for="result in filteredResults"
+      v-for="result in paginatedResults"
       :key="result.id"
       :car="result"
       :dateFrom="route.query.dateFrom"
@@ -45,7 +45,7 @@
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
       <q-btn
         @click="nextPage"
-        :disabled="currentPage * itemsPerPage >= results.length"
+        :disabled="currentPage >= totalPages"
         icon="arrow_forward"
         color="green"
         flat
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { supabase } from "../lib/supabaseClient";
 import CarThumbnailHorizontal from "./car/CarThumbnailHorizontal.vue";
@@ -70,9 +70,6 @@ const selectedColor = ref("");
 const selectedGearbox = ref("");
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
-const totalPages = computed(() =>
-  Math.ceil(results.value.length / itemsPerPage.value)
-);
 
 const fetchData = async () => {
   isLoading.value = true;
@@ -166,8 +163,32 @@ const sortByPrice = () => {
 
 // Computed property to filter cars based on selected filters
 const filteredResults = computed(() => {
+  let filtered = results.value;
+
+  // Apply color filter
+  if (selectedColor.value) {
+    filtered = filtered.filter((car) => car.color === selectedColor.value);
+  }
+
+  // Apply gearbox filter
+  if (selectedGearbox.value) {
+    filtered = filtered.filter(
+      (car) => car.transmission_type === selectedGearbox.value
+    );
+  }
+
+  return filtered;
+});
+
+// Computed property to paginate filtered results
+const paginatedResults = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
-  return results.value.slice(start, start + itemsPerPage.value);
+  return filteredResults.value.slice(start, start + itemsPerPage.value);
+});
+
+// Computed property to calculate total pages
+const totalPages = computed(() => {
+  return Math.ceil(filteredResults.value.length / itemsPerPage.value);
 });
 
 const previousPage = () => {
@@ -177,9 +198,22 @@ const previousPage = () => {
 };
 
 const nextPage = () => {
-  if (currentPage.value * itemsPerPage.value < results.value.length) {
+  if (currentPage.value < totalPages.value) {
     currentPage.value++;
   }
+};
+
+// Watch for changes in selectedColor or selectedGearbox and reset currentPage to 1
+watchEffect(() => {
+  currentPage.value = 1;
+});
+
+const handleColorChange = () => {
+  currentPage.value = 1; // Reset currentPage when filters change
+};
+
+const handleGearboxChange = () => {
+  currentPage.value = 1; // Reset currentPage when filters change
 };
 </script>
 
