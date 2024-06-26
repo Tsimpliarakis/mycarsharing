@@ -111,7 +111,7 @@ const $q = useQuasar();
 
 const car = ref({});
 const owner = ref({});
-const bookingDates = ref({});
+const bookingDates = ref(null);
 
 const currentDate = new Date().toLocaleDateString("en-CA"); // Get current date in yyyy-mm-dd format
 const minStartDate = ref("");
@@ -178,13 +178,11 @@ onMounted(async () => {
 });
 
 function calculatePrice() {
-  if (bookingDates.value == null) {
+  totalPrice.value = 0;
+  if (bookingDates.value === null) {
     return;
   }
-  if (!bookingDates.value.from || !bookingDates.value.to) {
-    return;
-  }
-
+  console.log("Calculating price");
   const dailyPrice = parseFloat(car.value.price);
   const cleaningFee = parseFloat(car.value.cleaning_fee);
 
