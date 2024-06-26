@@ -46,23 +46,13 @@
           <q-card-section>
             <div class="text-bold">Dates</div>
             <div class="flex flex-center">
-              <input
-                type="date"
+              <q-date
+                range
+                v-model="bookingDates"
+                :options="options"
+                :events="calculatePrice"
+                color="green"
                 class="details"
-                v-model="bookingDates.start"
-                @input="clearEndDate"
-                :min="minStartDate"
-                :max="car.end_date"
-                :disabled="currentDate > car.end_date"
-              />
-              <input
-                type="date"
-                class="details"
-                v-model="bookingDates.end"
-                @input="calculatePrice"
-                :min="bookingDates.start"
-                :max="car.end_date"
-                :disabled="!bookingDates.start"
               />
             </div>
 
@@ -121,13 +111,10 @@ const $q = useQuasar();
 
 const car = ref({});
 const owner = ref({});
-const bookingDates = ref({
-  start: null,
-  end: null,
-});
+const bookingDates = ref({});
 
 const currentDate = new Date().toLocaleDateString("en-CA"); // Get current date in yyyy-mm-dd format
-const minStartDate = ref(""); // Initialize with an empty string
+const minStartDate = ref("");
 const totalPrice = ref(0);
 
 onMounted(async () => {
@@ -172,8 +159,8 @@ onMounted(async () => {
       route.query.dateTo <= car.value.end_date
     ) {
       // Assign dateFrom and dateTo to bookingDates
-      bookingDates.value.start = route.query.dateFrom;
-      bookingDates.value.end = route.query.dateTo;
+      bookingDates.value.from = route.query.dateFrom;
+      bookingDates.value.to = route.query.dateTo;
       calculatePrice(); // Calculate the price based on the provided dates
     } else {
       $q.notify({
@@ -191,25 +178,29 @@ onMounted(async () => {
 });
 
 function calculatePrice() {
-  if (!bookingDates.value.start || !bookingDates.value.end) {
+  if (bookingDates.value == null) {
+    return;
+  }
+  if (!bookingDates.value.from || !bookingDates.value.to) {
     return;
   }
 
-  const startDate = new Date(bookingDates.value.start);
-  const endDate = new Date(bookingDates.value.end);
-  const numDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
-
   const dailyPrice = parseFloat(car.value.price);
   const cleaningFee = parseFloat(car.value.cleaning_fee);
+
+  if (bookingDates.value.length === 10) {
+    totalPrice.value = (dailyPrice + cleaningFee).toFixed(2);
+    return;
+  }
+
+  const startDate = new Date(bookingDates.value.from);
+  const endDate = new Date(bookingDates.value.to);
+  const numDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
   const totalPriceWithoutCleaningFee = dailyPrice * numDays;
   const totalPriceWithCleaningFee = totalPriceWithoutCleaningFee + cleaningFee;
 
   totalPrice.value = totalPriceWithCleaningFee.toFixed(2); // Rounded to two decimal places
-}
-
-function clearEndDate() {
-  bookingDates.value.end = ""; // Clear the end date input
 }
 
 async function checkUserVerification(userId) {
@@ -234,7 +225,7 @@ const isUserOwner = computed(() => {
 async function placeOrder() {
   try {
     // Check if both dates are set
-    if (!bookingDates.value.start || !bookingDates.value.end) {
+    if (!bookingDates.value.from || !bookingDates.value.to) {
       $q.notify({
         color: "negative",
         message: "Both start and end dates are required to place an order.",
@@ -263,8 +254,8 @@ async function placeOrder() {
         {
           car_id: car.value.car_id,
           user_id: authStore.state.profile.id,
-          start_date: bookingDates.value.start,
-          end_date: bookingDates.value.end,
+          start_date: bookingDates.value.from,
+          end_date: bookingDates.value.to,
           booking_status: "Pending",
           pickup_location: car.value.location,
           dropoff_location: car.value.location,
@@ -305,6 +296,22 @@ async function placeOrder() {
     });
   }
 }
+
+const options = (dateString) => {
+  const dateToCheck = new Date(dateString).toLocaleDateString("en-CA");
+
+  const isPastDate = dateToCheck < currentDate;
+
+  const carStartDate = new Date(car.value.start_date).toLocaleDateString(
+    "en-CA"
+  );
+  const carEndDate = new Date(car.value.end_date).toLocaleDateString("en-CA");
+
+  const isWithinCarDates =
+    dateToCheck >= carStartDate && dateToCheck <= carEndDate;
+
+  return !isPastDate && isWithinCarDates;
+};
 </script>
 
 <style scoped>

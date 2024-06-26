@@ -1,4 +1,3 @@
-<!-- Terms and Conditions -->
 <template>
   <q-page class="flex flex-center">
     <div class="page">
@@ -10,77 +9,136 @@
       </div>
       <div>
         <p class="text-weight-thin">Terms and Conditions for MyCarSharing</p>
+
+        <h4>1. Introduction</h4>
         <p>
-          Welcome to MyCarSharing! These terms and conditions outline the rules
-          and regulations for the use of our website.
-        </p>
-        <p>
-          By accessing this website, we assume you accept these terms and
-          conditions in full. Do not continue to use MyCarSharing's website if
-          you do not accept all of the terms and conditions stated on this page.
+          Welcome to MyCarSharing! These Terms and Conditions ("Terms") govern
+          your use of our website, mobile application, and services
+          (collectively, the "Service"). By accessing or using MyCarSharing, you
+          agree to comply with and be bound by these Terms. If you do not agree
+          with these Terms, you may not use the Service.
         </p>
 
-        <h4>1. Intellectual Property Rights</h4>
+        <h4>2. Eligibility</h4>
         <p>
-          <strong>1.1</strong> Other than the content you own, which you may
-          have opted to include on this website, under these terms, MyCarSharing
-          and/or its licensors own all the intellectual property rights and
-          materials contained in this website.
-        </p>
-        <p>
-          <strong>1.2</strong> You are granted limited license only for purposes
-          of viewing the material contained on this website.
+          To use MyCarSharing, you must be at least 21 years old and have a
+          valid driver's license. By using the Service, you represent and
+          warrant that you meet these requirements.
         </p>
 
-        <h4>2. Restrictions</h4>
+        <h4>3. Registration and Account</h4>
         <p>
-          <strong>2.1</strong> You are specifically restricted from all of the
-          following:
+          <b>Account Creation:</b> To access certain features of MyCarSharing,
+          you must create an account. You agree to provide accurate, current,
+          and complete information during the registration process and to update
+          such information as necessary.
+        </p>
+        <p>
+          <b>Account Security:</b> You are responsible for maintaining the
+          confidentiality of your account credentials and for all activities
+          that occur under your account. Notify us immediately of any
+          unauthorized use of your account.
+        </p>
+
+        <h4>4. Vehicle Listings</h4>
+        <p>
+          <b>Listing Your Vehicle:</b> As a vehicle owner ("Owner"), you may
+          create listings to rent out your vehicle. Listings must include
+          accurate and complete information about the vehicle, rental price,
+          availability, and any specific conditions or restrictions.
+        </p>
+        <p>
+          <b>Listing Content:</b> You are responsible for the accuracy of the
+          information in your listing. Misleading or false information may
+          result in the removal of your listing and/or suspension of your
+          account.
+        </p>
+
+        <h4>5. Booking Vehicles</h4>
+        <p>
+          <b>Booking Process:</b> As a renter ("Renter"), you may book vehicles
+          through the Service. Bookings are subject to availability and
+          acceptance by the Owner. Once a booking is confirmed, a binding
+          agreement is formed between the Renter and the Owner.
+        </p>
+        <p>
+          <b>Payment:</b> Renters must provide valid payment information and
+          authorize MyCarSharing to charge the rental fee, security deposit, and
+          any applicable fees at the time of booking.
+        </p>
+
+        <h4>6. Cancellations and Refunds</h4>
+        <p>
+          <b>Owner Cancellations:</b> Owners may cancel bookings under certain
+          circumstances. If an Owner cancels a booking, the Renter will receive
+          a full refund.
+        </p>
+        <p>
+          <b>Renter Cancellations:</b> Renters may cancel bookings according to
+          the cancellation policy specified in the vehicle listing. Refunds will
+          be processed according to the applicable policy.
+        </p>
+        <p>
+          <b>Force Majeure:</b> Neither MyCarSharing nor the parties involved in
+          the rental will be liable for cancellations or changes due to events
+          beyond their control, such as natural disasters, government actions,
+          or other unforeseen circumstances.
+        </p>
+
+        <h4>7. Insurance and Liability</h4>
+        <p>
+          <b>Insurance Coverage:</b> MyCarSharing provides insurance coverage
+          for rentals, subject to the terms and conditions of the insurance
+          policy. Details of the coverage will be provided at the time of
+          booking.
+        </p>
+        <p>
+          <b>Liability:</b> Renters and Owners are responsible for complying
+          with all applicable laws and regulations. Renters are responsible for
+          any damage to the vehicle during the rental period, and Owners must
+          ensure their vehicle is in safe and operable condition.
+        </p>
+
+        <h4>8. Prohibited Activities</h4>
+        <p>
+          You agree not to use MyCarSharing for any unlawful or prohibited
+          activities, including but not limited to:
         </p>
         <ul>
-          <li>a. publishing any website material in any other media;</li>
-          <li>
-            b. selling, sublicensing and/or otherwise commercializing any
-            website material;
-          </li>
-          <li>c. publicly performing and/or showing any website material;</li>
-          <li>
-            d. using this website in any way that is or may be damaging to this
-            website;
-          </li>
-          <li>
-            e. using this website in any way that impacts user access to this
-            website;
-          </li>
-          <li>
-            f. using this website contrary to applicable laws and regulations,
-            or in any way may cause harm to the website, or to any person or
-            business entity;
-          </li>
-          <li>
-            g. engaging in any data mining, data harvesting, data extracting or
-            any other similar activity in relation to this website;
-          </li>
-          <li>
-            h. using this website to engage in any advertising or marketing.
-          </li>
+          <li>Engaging in fraudulent or deceptive practices.</li>
+          <li>Damaging or tampering with any vehicle.</li>
+          <li>Using the vehicle for illegal activities.</li>
+          <li>Allowing unauthorized drivers to use the vehicle.</li>
         </ul>
 
-        <!-- Include other sections similarly -->
-
-        <h4>10. Entire Agreement</h4>
+        <h4>9. Termination</h4>
         <p>
-          <strong>10.1</strong> These terms constitute the entire agreement
-          between MyCarSharing and you in relation to your use of this website
-          and supersede all prior agreements and understandings.
+          MyCarSharing reserves the right to suspend or terminate your account
+          at any time for any reason, including but not limited to a violation
+          of these Terms or any applicable law.
         </p>
 
-        <h4>11. Governing Law & Jurisdiction</h4>
+        <h4>10. Dispute Resolution</h4>
         <p>
-          <strong>11.1</strong> These terms will be governed by and interpreted
-          in accordance with the laws of the jurisdiction of Greece, and you
-          submit to the non-exclusive jurisdiction of the state and federal
-          courts located in Greece for the resolution of any disputes.
+          Any disputes arising from or relating to these Terms or the use of
+          MyCarSharing will be resolved through binding arbitration in
+          accordance with the rules of the American Arbitration Association. By
+          using the Service, you agree to waive your right to a trial by jury or
+          to participate in a class action.
+        </p>
+
+        <h4>11. Modifications to Terms</h4>
+        <p>
+          MyCarSharing reserves the right to modify these Terms at any time. We
+          will notify you of any changes by posting the new Terms on our
+          website. Your continued use of the Service after the changes become
+          effective constitutes your acceptance of the new Terms.
+        </p>
+
+        <h4>12. Contact Us</h4>
+        <p>
+          If you have any questions about these Terms, please contact us at
+          support@mycarsharing.com.
         </p>
       </div>
     </div>
