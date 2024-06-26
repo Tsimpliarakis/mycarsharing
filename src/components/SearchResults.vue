@@ -1,28 +1,17 @@
 <template>
-  <q-page class="flex flex-center column">
+  <q-page class="q-pa-md flex flex-center column">
     <div v-if="isLoading">Loading...</div>
     <div v-else-if="filteredResults.length > 0" class="text-h6">
       Found {{ filteredResults.length }} result(s)
     </div>
     <div v-else class="text-h6">No results found</div>
 
-    <div>
-      <button @click="sortByPrice">Sort by Price</button>
-      <label for="color">Color:</label>
-      <select v-model="selectedColor" @change="handleColorChange">
-        <option value="">All</option>
-        <option value="Red">Red</option>
-        <option value="Blue">Blue</option>
-        <option value="Silver">Silver</option>
-        <!-- Add more color options if needed -->
-      </select>
-      <label for="gearbox">Gearbox:</label>
-      <select v-model="selectedGearbox" @change="handleGearboxChange">
-        <option value="">All</option>
-        <option value="Automatic">Automatic</option>
-        <option value="Manual">Manual</option>
-      </select>
-    </div>
+    <!-- Include the Filters component -->
+    <Filters
+      @sort-by-price="sortByPrice"
+      @apply-filters="handleApplyFilters"
+      @clear-filters="handleClearFilters"
+    />
 
     <!-- Display the filtered results here -->
     <car-thumbnail-horizontal
@@ -60,6 +49,7 @@ import { ref, onMounted, computed, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { supabase } from "../lib/supabaseClient";
 import CarThumbnailHorizontal from "./car/CarThumbnailHorizontal.vue";
+import Filters from "./FiltersComp.vue";
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
@@ -68,6 +58,13 @@ const results = ref([]);
 const isLoading = ref(false);
 const selectedColor = ref("");
 const selectedGearbox = ref("");
+const selectedManufacturer = ref("");
+const selectedYear = ref("");
+const selectedMileage = ref("");
+const selectedViews = ref("");
+const selectedEngine = ref("");
+const selectedPower = ref("");
+const selectedPrice = ref("");
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
 
@@ -177,6 +174,45 @@ const filteredResults = computed(() => {
     );
   }
 
+  // Apply manufacturer filter
+  if (selectedManufacturer.value) {
+    filtered = filtered.filter(
+      (car) => car.manufacturer === selectedManufacturer.value
+    );
+  }
+
+  // Apply year filter
+  if (selectedYear.value) {
+    filtered = filtered.filter((car) => car.year === selectedYear.value);
+  }
+
+  // Apply mileage filter
+  if (selectedMileage.value) {
+    filtered = filtered.filter((car) => car.mileage <= selectedMileage.value);
+  }
+
+  // Apply views filter
+  if (selectedViews.value) {
+    filtered = filtered.filter((car) => car.views >= selectedViews.value);
+  }
+
+  // Apply engine filter
+  if (selectedEngine.value) {
+    filtered = filtered.filter((car) =>
+      car.engine.includes(selectedEngine.value)
+    );
+  }
+
+  // Apply power filter
+  if (selectedPower.value) {
+    filtered = filtered.filter((car) => car.power >= selectedPower.value);
+  }
+
+  // Apply price filter
+  if (selectedPrice.value) {
+    filtered = filtered.filter((car) => car.price <= selectedPrice.value);
+  }
+
   return filtered;
 });
 
@@ -203,17 +239,34 @@ const nextPage = () => {
   }
 };
 
-// Watch for changes in selectedColor or selectedGearbox and reset currentPage to 1
+// Watch for changes in selected filters and reset currentPage to 1
 watchEffect(() => {
   currentPage.value = 1;
 });
 
-const handleColorChange = () => {
-  currentPage.value = 1; // Reset currentPage when filters change
+// Event handlers for Filters component
+const handleApplyFilters = (filters) => {
+  selectedColor.value = filters.color;
+  selectedGearbox.value = filters.gearbox;
+  selectedManufacturer.value = filters.manufacturer;
+  selectedYear.value = filters.year;
+  selectedMileage.value = filters.mileage;
+  selectedViews.value = filters.views;
+  selectedEngine.value = filters.engine;
+  selectedPower.value = filters.power;
+  selectedPrice.value = filters.price;
 };
 
-const handleGearboxChange = () => {
-  currentPage.value = 1; // Reset currentPage when filters change
+const handleClearFilters = () => {
+  selectedColor.value = "";
+  selectedGearbox.value = "";
+  selectedManufacturer.value = "";
+  selectedYear.value = "";
+  selectedMileage.value = "";
+  selectedViews.value = "";
+  selectedEngine.value = "";
+  selectedPower.value = "";
+  selectedPrice.value = "";
 };
 </script>
 
