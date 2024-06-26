@@ -196,12 +196,12 @@ onMounted(async () => {
   }
 });
 
-function calculatePrice() {
+async function calculatePrice() {
   totalPrice.value = 0;
   if (bookingDates.value === null) {
     return;
   }
-  console.log("Calculating price");
+
   const dailyPrice = parseFloat(car.value.price);
   const cleaningFee = parseFloat(car.value.cleaning_fee);
 
@@ -218,6 +218,25 @@ function calculatePrice() {
   const totalPriceWithCleaningFee = totalPriceWithoutCleaningFee + cleaningFee;
 
   totalPrice.value = totalPriceWithCleaningFee.toFixed(2); // Rounded to two decimal places
+}
+
+async function checkBookingOverlap() {
+  const startDate = new Date(bookingDates.value.from);
+  const endDate = new Date(bookingDates.value.to);
+
+  for (const bookedDate of bookedDates.value) {
+    const bookedStartDate = new Date(bookedDate.start);
+    const bookedEndDate = new Date(bookedDate.end);
+
+    if (
+      (startDate >= bookedStartDate && startDate <= bookedEndDate) ||
+      (endDate >= bookedStartDate && endDate <= bookedEndDate) ||
+      (startDate <= bookedStartDate && endDate >= bookedEndDate)
+    ) {
+      return "Selected dates overlap with existing bookings.";
+    }
+  }
+  return null; // No overlap found
 }
 
 async function checkUserVerification(userId) {
@@ -250,6 +269,18 @@ async function placeOrder() {
         icon: "report_problem",
       });
       return; // Exit the function early if either date is missing
+    }
+
+    // Check for overlap with existing bookings
+    const overlapError = await checkBookingOverlap();
+    if (overlapError) {
+      $q.notify({
+        color: "negative",
+        message: overlapError,
+        position: "top",
+        icon: "report_problem",
+      });
+      return;
     }
 
     const isVerified = await checkUserVerification(authStore.state.profile.id);
