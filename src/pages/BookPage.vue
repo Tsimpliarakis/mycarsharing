@@ -159,8 +159,10 @@ onMounted(async () => {
       route.query.dateTo <= car.value.end_date
     ) {
       // Assign dateFrom and dateTo to bookingDates
-      bookingDates.value.from = route.query.dateFrom;
-      bookingDates.value.to = route.query.dateTo;
+      bookingDates.value = {
+        from: route.query.dateFrom,
+        to: route.query.dateTo,
+      };
       calculatePrice(); // Calculate the price based on the provided dates
     } else {
       $q.notify({

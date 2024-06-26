@@ -20,6 +20,7 @@
         today-btn
         color="green-5"
         range
+        :options="options"
         :rules="[(val) => (val && val.from && val.to) || 'Field is required']"
       />
     </div>
@@ -40,11 +41,20 @@ import { useRouter } from "vue-router";
 
 const $q = useQuasar();
 const router = useRouter();
+const currentDate = new Date().toLocaleDateString("en-CA"); // Get current date in yyyy-mm-dd format
 
 const formData = reactive({
   selectedCity: "",
   date: {},
 });
+
+const options = (dateString) => {
+  const dateToCheck = new Date(dateString).toLocaleDateString("en-CA");
+
+  const isPastDate = dateToCheck < currentDate;
+
+  return !isPastDate;
+};
 
 const searchData = () => {
   if (formData.date.length === 10) {
