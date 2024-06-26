@@ -198,9 +198,7 @@ const filteredResults = computed(() => {
 
   // Apply engine filter
   if (selectedEngine.value) {
-    filtered = filtered.filter((car) =>
-      car.engine.includes(selectedEngine.value)
-    );
+    filtered = filtered.filter((car) => car.engine >= selectedEngine.value);
   }
 
   // Apply power filter
