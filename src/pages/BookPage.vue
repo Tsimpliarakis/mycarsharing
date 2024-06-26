@@ -112,6 +112,7 @@ const $q = useQuasar();
 const car = ref({});
 const owner = ref({});
 const bookingDates = ref(null);
+const bookedDates = ref([]); // Store booked dates
 
 const currentDate = new Date().toLocaleDateString("en-CA"); // Get current date in yyyy-mm-dd format
 const minStartDate = ref("");
@@ -148,6 +149,22 @@ onMounted(async () => {
   // Compare car.start_date and currentDate
   minStartDate.value =
     car.value.start_date > currentDate ? car.value.start_date : currentDate;
+
+  // Fetch booked dates
+  const { data: bookingsData, error: bookingsError } = await supabase
+    .from("bookings")
+    .select("start_date, end_date")
+    .eq("car_id", car.value.car_id);
+
+  if (bookingsError) {
+    console.error("Error fetching booked dates:", bookingsError.message);
+    return;
+  }
+
+  bookedDates.value = bookingsData.map((booking) => ({
+    start: new Date(booking.start_date).toLocaleDateString("en-CA"),
+    end: new Date(booking.end_date).toLocaleDateString("en-CA"),
+  }));
 
   // Check if dateFrom and dateTo are present in the URL query parameters
   if (route.query.dateFrom && route.query.dateTo) {
@@ -310,7 +327,11 @@ const options = (dateString) => {
   const isWithinCarDates =
     dateToCheck >= carStartDate && dateToCheck <= carEndDate;
 
-  return !isPastDate && isWithinCarDates;
+  const isBookedDate = bookedDates.value.some(
+    (booking) => dateToCheck >= booking.start && dateToCheck <= booking.end
+  );
+
+  return !isPastDate && isWithinCarDates && !isBookedDate;
 };
 </script>
 
