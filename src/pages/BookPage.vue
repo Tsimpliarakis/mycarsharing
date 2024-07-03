@@ -258,8 +258,19 @@ const isUserOwner = computed(() => {
   return authStore.state.profile.id === owner.value.id;
 });
 
+const checkSingleDay = () => {
+  if (bookingDates.value.length === 10) {
+    bookingDates.value = {
+      from: bookingDates.value,
+      to: bookingDates.value,
+    };
+  }
+  return;
+};
+
 async function placeOrder() {
   try {
+    checkSingleDay();
     // Check if both dates are set
     if (!bookingDates.value.from || !bookingDates.value.to) {
       $q.notify({
