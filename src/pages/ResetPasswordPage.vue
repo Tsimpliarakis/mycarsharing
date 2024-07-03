@@ -48,15 +48,15 @@ const messageIcon = ref("");
 
 const resetPassword = async () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const accessToken = urlParams.get("access_token");
+  const token = urlParams.get("token");
 
-  if (!accessToken) {
-    message.value = "No access token found in the URL";
+  if (!token) {
+    message.value = "No token found in the URL";
     messageIcon.value = "warning";
     return;
   }
 
-  const { error } = await supabase.auth.api.updateUser(accessToken, {
+  const { error } = await supabase.auth.api.updateUser(token, {
     password: newPassword.value,
   });
 

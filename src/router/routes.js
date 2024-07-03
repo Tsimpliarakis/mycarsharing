@@ -151,7 +151,7 @@ const routes = [
     ],
   },
   {
-    path: "/reset_password/:token",
+    path: "/reset_password",
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: requireAuth,
     children: [
