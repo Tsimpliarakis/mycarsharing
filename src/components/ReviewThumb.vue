@@ -34,6 +34,7 @@
           :user="{
             username: username,
             avatar_url: avatarUrl,
+            rating: rating,
           }"
         />
         <div
@@ -76,6 +77,7 @@ const props = defineProps({
   carMod: String,
   username: String,
   avatarUrl: String,
+  rating: Number,
 });
 
 const showReadMore = ref(true); // Set to true for "Read More" as default state

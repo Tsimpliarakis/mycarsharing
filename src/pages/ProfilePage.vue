@@ -42,6 +42,7 @@
                 :carMod="review.model"
                 :username="review.username"
                 :avatarUrl="review.avatar_url"
+                :rating="user.rating"
               />
             </div>
           </q-scroll-area>
