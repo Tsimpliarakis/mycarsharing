@@ -51,12 +51,14 @@ const resetPassword = async () => {
   const token = urlParams.get("token");
 
   if (!token) {
-    message.value = "No token found in the URL";
-    messageIcon.value = "warning";
+    $q.notify({
+      message: "Invalid reset token",
+      color: "negative",
+    });
     return;
   }
 
-  const { error } = await supabase.auth.api.updateUser(token, {
+  const { error } = await supabase.auth.updateUser(token, {
     password: newPassword.value,
   });
 
