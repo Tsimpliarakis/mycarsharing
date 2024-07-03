@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md flex flex-center column">
+  <q-page class="flex flex-center column">
     <div v-if="isLoading">Loading...</div>
     <div v-else-if="filteredResults.length > 0" class="text-h6">
       Found {{ filteredResults.length }} result(s)

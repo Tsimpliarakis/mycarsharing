@@ -119,17 +119,17 @@
         <q-item>
           <q-item-section>Additional Features</q-item-section>
           <q-item-section side class="additional-features">
-            <q-item
+            <div
               v-for="(feature, index) in car.additional_features"
               :key="index"
               class="feature-item"
             >
               {{ feature }}
-            </q-item>
+            </div>
           </q-item-section>
         </q-item>
         <q-separator color="green" inset />
-        <q-item>
+        <q-item class="flex flex-center column">
           <q-item-section>Description</q-item-section>
           <q-item-section side>{{ car.car_description }}</q-item-section>
         </q-item>

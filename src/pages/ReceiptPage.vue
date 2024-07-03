@@ -43,7 +43,14 @@
               <div>Fuel Type: {{ car.fuel_type }}</div>
               <div>Transmission Type: {{ car.transmission_type }}</div>
               <div>Color: {{ car.color }}</div>
-              <div>Additional Features: {{ car.additional_features }}</div>
+              <div>Additional features:</div>
+              <div
+                v-for="(feature, index) in car.additional_features"
+                :key="index"
+                class="feature-item"
+              >
+                {{ feature }}
+              </div>
             </div>
           </q-card-section>
           <!-- Pickup Instructions -->
