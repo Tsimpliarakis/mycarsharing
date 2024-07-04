@@ -27,7 +27,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/usrimg.jpeg" />
+          <q-img src="../assets/usrimg.jpeg" />
         </q-avatar>
         1. Create Your Account
       </div>
@@ -38,7 +38,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/setuppf.jpeg" />
+          <q-img src="../assets/setuppf.jpeg" />
         </q-avatar>
         2. Set Up Your Profile
       </div>
@@ -50,7 +50,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/uploadcar.jpeg" />
+          <q-img src="../assets/uploadcar.jpeg" />
         </q-avatar>
         3. List Your Car (for Owners)
       </div>
@@ -63,7 +63,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/searching.jpeg" />
+          <q-img src="../assets/searching.jpeg" />
         </q-avatar>
         4. Search for Cars (for Renters)
       </div>
@@ -75,7 +75,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/book.jpeg" />
+          <q-img src="../assets/book.jpeg" />
         </q-avatar>
         5. Book a Car
       </div>
@@ -87,7 +87,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/communicate.jpeg" />
+          <q-img src="../assets/communicate.jpeg" />
         </q-avatar>
         6. Communicate with the Owner
       </div>
@@ -103,7 +103,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/carkey.jpeg" />
+          <q-img src="../assets/carkey.jpeg" />
         </q-avatar>
         7. Pick Up the Car
       </div>
@@ -115,7 +115,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/happy.jpeg" />
+          <q-img src="../assets/happy.jpeg" />
         </q-avatar>
         8. Enjoy Your Rental
       </div>
@@ -127,7 +127,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/return.jpeg" />
+          <q-img src="../assets/return.jpeg" />
         </q-avatar>
         9. Return the Car
       </div>
@@ -139,7 +139,7 @@
       </div>
       <div class="text-subtitle2">
         <q-avatar size="40px">
-          <q-img src="/src/assets/review.jpeg" />
+          <q-img src="../assets/review.jpeg" />
         </q-avatar>
         10. Leave a Review
       </div>
