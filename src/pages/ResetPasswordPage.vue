@@ -23,15 +23,6 @@
           />
         </q-form>
       </q-card-section>
-
-      <q-card-section v-if="message" class="text-center">
-        <q-banner dense inline-actions v-ripple>
-          <template v-slot:avatar>
-            <q-icon :name="messageIcon" color="white" />
-          </template>
-          {{ message }}
-        </q-banner>
-      </q-card-section>
     </q-card>
   </q-page>
 </template>
@@ -43,8 +34,6 @@ import { supabase } from "src/lib/supabaseClient";
 
 const $q = useQuasar();
 const newPassword = ref("");
-const message = ref("");
-const messageIcon = ref("");
 
 const resetPassword = async () => {
   const urlParams = new URLSearchParams(window.location.hash.substring(1));
@@ -58,19 +47,20 @@ const resetPassword = async () => {
     return;
   }
 
-  const { error } = await supabase.auth.updateUser(
-    { access_token: token },
-    {
-      password: newPassword.value,
-    }
-  );
+  const { error } = await supabase.auth.api.updateUser(token, {
+    password: newPassword.value,
+  });
 
   if (error) {
-    message.value = `Error: ${error.message}`;
-    messageIcon.value = "error";
+    $q.notify({
+      message: error.message,
+      color: "negative",
+    });
   } else {
-    message.value = "Password reset successful!";
-    messageIcon.value = "check_circle";
+    $q.notify({
+      message: "Password reset successful!",
+      color: "positive",
+    });
   }
 };
 </script>
