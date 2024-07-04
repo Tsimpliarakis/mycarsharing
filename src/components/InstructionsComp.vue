@@ -89,7 +89,7 @@
         <q-avatar size="40px">
           <q-img src="/src/assets/communicate.jpeg" />
         </q-avatar>
-        . Communicate with the Owner
+        6. Communicate with the Owner
       </div>
       <div class="text-caption">
         Stay in touch with the car owner to coordinate details about the rental,
