@@ -25,7 +25,7 @@
         type="submit"
         class="btn"
       />
-      <div>
+      <div class="text-center">
         <div>Don't have an account?</div>
         <span class="clickable-text" @click="toggleForm('RegisterForm')"
           >Register here.</span

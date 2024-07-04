@@ -21,7 +21,7 @@
         :loading="loading"
       />
       <div class="divide">------------ OR ------------</div>
-      <div>
+      <div class="text-center">
         Back to
         <span class="clickable-text" @click="toggleForm('LoginForm')"
           >Login</span

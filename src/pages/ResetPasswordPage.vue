@@ -47,8 +47,8 @@ const message = ref("");
 const messageIcon = ref("");
 
 const resetPassword = async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
+  const urlParams = new URLSearchParams(window.location.hash.substring(1));
+  const token = urlParams.get("access_token");
 
   if (!token) {
     $q.notify({
@@ -58,9 +58,12 @@ const resetPassword = async () => {
     return;
   }
 
-  const { error } = await supabase.auth.updateUser(token, {
-    password: newPassword.value,
-  });
+  const { error } = await supabase.auth.updateUser(
+    { access_token: token },
+    {
+      password: newPassword.value,
+    }
+  );
 
   if (error) {
     message.value = `Error: ${error.message}`;

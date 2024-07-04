@@ -32,7 +32,7 @@
         type="submit"
         class="btn"
       />
-      <div>
+      <div class="text-center">
         <div>Already have an account?</div>
         <span class="clickable-text" @click="toggleForm('LoginForm')"
           >Login here.</span

@@ -19,7 +19,7 @@
         type="submit"
         class="btn"
       />
-      <div>
+      <div class="text-center">
         Login with
         <span class="clickable-text" @click="toggleForm('LoginForm')"
           >email & password.</span
