@@ -171,7 +171,7 @@
           your vehicle.
         </div>
         <div class="flex flex-center">
-          <q-img src="/src/assets/happysharing.png" class="happysharing" />
+          <q-img src="../assets/happysharing.png" class="happysharing" />
         </div>
       </div>
     </div>
