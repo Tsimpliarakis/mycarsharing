@@ -57,6 +57,7 @@
           <q-btn flat round color="green" icon="car_rental" @click="bookCar" />
           <q-btn
             v-if="car.user_id === authStore.state.profile.id"
+            @click="editCar"
             flat
             round
             color="yellow-8"
@@ -213,16 +214,10 @@ async function checkIfFavorite() {
 }
 
 async function incrementViewCount() {
-  try {
-    const { data, error } = await supabase
-      .from("cars")
-      .update({ views: car.value.views + 1 })
-      .eq("car_id", route.query.id);
-
-    if (error) throw error;
-  } catch (error) {
-    console.error("Error incrementing view count:", error.message);
-  }
+  await supabase
+    .from("cars")
+    .update({ views: car.value.views + 1 })
+    .eq("car_id", route.query.id);
 }
 
 function copyUrlToClipboard() {
@@ -310,6 +305,10 @@ function bookCar() {
 
   // Navigate to the booking page
   router.push(bookingUrl);
+}
+
+function editCar() {
+  router.push(`/editcar?id=${car.value.car_id}`);
 }
 </script>
 
