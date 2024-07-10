@@ -175,10 +175,39 @@
                 />
               </div>
             </div>
-            <q-btn :loading="isLoading" color="green" type="submit" icon="save"
+            <q-btn
+              :loading="isLoading"
+              color="green"
+              type="submit"
+              icon="save"
+              style="margin-top: 10px"
               >Save Changes</q-btn
             >
           </form>
+
+          <!-- Delete Button -->
+          <q-btn
+            color="red"
+            icon="delete"
+            @click="showDialog = true"
+            style="margin-top: 10px"
+            >Delete Listing</q-btn
+          >
+
+          <!-- Confirmation Dialog -->
+          <QDialog v-model="showDialog" @hide="confirmDeleteDialog.hide()">
+            <q-card>
+              <q-card-section>{{ dialogMessage }}</q-card-section>
+              <q-card-actions align="right">
+                <q-btn
+                  flat
+                  label="Cancel"
+                  @click="confirmDeleteDialog.hide()"
+                />
+                <q-btn color="red" label="Delete" @click="performDeletion" />
+              </q-card-actions>
+            </q-card>
+          </QDialog>
         </div>
       </div>
     </div>
@@ -189,12 +218,16 @@
 import { ref, onMounted } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
-import { useQuasar } from "quasar";
+import { useQuasar, QDialog } from "quasar";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 const carId = route.query.id;
+
+const confirmDeleteDialog = ref(null);
+const showDialog = ref(false);
+const dialogMessage = ref("Are you sure you want to delete this car listing?");
 
 const car = ref({
   manufacturer: "",
@@ -291,29 +324,35 @@ async function updateCar() {
       imageURLs.push(car.value.image_url);
     }
 
+    const updatePayload = {
+      manufacturer: car.value.manufacturer,
+      model: car.value.model,
+      year: car.value.year,
+      color: car.value.color,
+      fuel_type: car.value.fuel_type,
+      price: car.value.price,
+      location: car.value.location,
+      mileage: car.value.mileage,
+      transmission_type: car.value.transmission_type,
+      engine: car.value.engine,
+      power: car.value.power,
+      cleaning_fee: car.value.cleaning_fee,
+      start_date: car.value.dates.from,
+      end_date: car.value.dates.to,
+      is_available: car.value.is_available,
+      additional_features: car.value.additional_features,
+      car_description: car.value.car_description,
+      fuel_level: car.value.fuel,
+    };
+
+    // Only include image_url in the update payload if imageURLs is not empty
+    if (imageURLs.length > 0) {
+      updatePayload.image_url = imageURLs;
+    }
+
     const { data, error } = await supabase
       .from("cars")
-      .update({
-        manufacturer: car.value.manufacturer,
-        model: car.value.model,
-        year: car.value.year,
-        color: car.value.color,
-        fuel_type: car.value.fuel_type,
-        image_url: imageURLs,
-        price: car.value.price,
-        location: car.value.location,
-        mileage: car.value.mileage,
-        transmission_type: car.value.transmission_type,
-        engine: car.value.engine,
-        power: car.value.power,
-        cleaning_fee: car.value.cleaning_fee,
-        start_date: car.value.dates.from,
-        end_date: car.value.dates.to,
-        is_available: car.value.is_available,
-        additional_features: car.value.additional_features,
-        car_description: car.value.car_description,
-        fuel_level: car.value.fuel,
-      })
+      .update(updatePayload)
       .eq("car_id", carId);
 
     if (error) throw error;
@@ -330,6 +369,40 @@ async function updateCar() {
       position: "top",
       color: "negative",
       message: "Error updating car",
+    });
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function deleteCar() {
+  showDialog.value = true; // Show the confirmation dialog
+
+  confirmDeleteDialog.value.onHide(() => {
+    showDialog.value = false; // Reset the dialog visibility state
+  });
+}
+
+async function performDeletion() {
+  isLoading.value = true;
+
+  try {
+    const { error } = await supabase.from("cars").delete().eq("car_id", carId);
+
+    if (error) throw error;
+
+    $q.notify({
+      position: "top",
+      color: "positive",
+      message: "Car listing deleted successfully",
+    });
+
+    router.push("/"); // Redirect to home page or another appropriate page after deletion
+  } catch (error) {
+    $q.notify({
+      position: "top",
+      color: "negative",
+      message: "Error deleting car listing",
     });
   } finally {
     isLoading.value = false;

@@ -1,4 +1,18 @@
 <template>
+  <div
+    v-if="showReviewButton"
+    class="flex flex-center column"
+    style="margin-top: 40px"
+  >
+    <q-btn
+      color="yellow"
+      label="Go to Review"
+      @click="goToReview"
+      icon="star"
+      style="margin-bottom: 20px"
+    />
+  </div>
+
   <q-page class="flex flex-center column q-pa-md">
     <div class="card">
       <q-card flat bordered>
@@ -92,21 +106,24 @@
       label="Receipt"
       @click="downloadReceipt"
       icon="download"
-      style="margin-bottom: 50px; margin-top: 20px"
+      style="margin-bottom: 40px; margin-top: 20px"
     />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { supabase } from "src/lib/supabaseClient.js";
 import { useQuasar } from "quasar";
 import { authStore } from "src/stores/auth-store.js";
 import html2pdf from "html2pdf.js";
 
 const route = useRoute();
+const router = useRouter();
 const $q = useQuasar();
+const showReviewButton = ref(false);
+const currentDate = new Date();
 
 const car = ref({});
 const owner = ref({});
@@ -159,7 +176,15 @@ onMounted(async () => {
   }
 
   owner.value = ownerData;
+
+  if (new Date(bookingDates.value.end) < currentDate) {
+    showReviewButton.value = true;
+  }
 });
+
+function goToReview() {
+  router.push("/review?id=" + booking.value.booking_id);
+}
 
 function downloadReceipt() {
   const element = document.querySelector(".card");
