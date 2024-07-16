@@ -151,6 +151,9 @@ onMounted(async () => {
   bookingDates.value.end = bookingData.end_date;
   totalPrice.value = bookingData.total_cost;
 
+  if (new Date(bookingDates.value.end) < currentDate) {
+    showReviewButton.value = true;
+  }
   const { data: carData, error: carError } = await supabase
     .from("cars")
     .select("*")
@@ -176,10 +179,6 @@ onMounted(async () => {
   }
 
   owner.value = ownerData;
-
-  if (new Date(bookingDates.value.end) < currentDate) {
-    showReviewButton.value = true;
-  }
 });
 
 function goToReview() {
