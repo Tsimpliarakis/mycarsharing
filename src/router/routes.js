@@ -163,10 +163,22 @@ const routes = [
   {
     path: "/editcar",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: requireAuth,
     children: [
       {
         path: "",
         component: () => import("src/pages/EditCarPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/review/:booking_id",
+    component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: requireAuth,
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/ReviewPage.vue"),
       },
     ],
   },

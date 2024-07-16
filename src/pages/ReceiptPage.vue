@@ -183,7 +183,7 @@ onMounted(async () => {
 });
 
 function goToReview() {
-  router.push("/review?id=" + booking.value.booking_id);
+  router.push("/review/" + booking.value.booking_id);
 }
 
 function downloadReceipt() {
