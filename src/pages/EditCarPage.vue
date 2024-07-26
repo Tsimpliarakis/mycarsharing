@@ -31,10 +31,11 @@
                   label="Model"
                   required
                 />
-                <q-input
+                <q-select
                   @keypress="onlyNumber"
                   color="green"
                   v-model="car.year"
+                  :options="years"
                   label="Year"
                   required
                 />
@@ -215,7 +216,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
 import { useQuasar, QDialog } from "quasar";
@@ -252,10 +253,14 @@ const car = ref({
 
 const files = ref([]);
 const isLoading = ref(false);
-const isFetching = ref(true); // Add this line
+const isFetching = ref(true);
 const carExists = ref(true);
 const isOwner = ref(false);
 const $q = useQuasar();
+const currentYear = new Date().getFullYear();
+const years = computed(() =>
+  Array.from({ length: currentYear - 1990 }, (_, i) => currentYear - i)
+);
 
 function onlyNumber($event) {
   let keyCode = $event.keyCode ? $event.keyCode : $event.which;

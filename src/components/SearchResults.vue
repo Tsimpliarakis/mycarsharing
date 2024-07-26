@@ -9,6 +9,7 @@
     <!-- Include the Filters component -->
     <Filters
       @sort-by-price="sortByPrice"
+      @sort-by-views="sortByViews"
       @apply-filters="handleApplyFilters"
       @clear-filters="handleClearFilters"
     />
@@ -64,7 +65,8 @@ const selectedMileage = ref("");
 const selectedViews = ref("");
 const selectedEngine = ref("");
 const selectedPower = ref("");
-const selectedPrice = ref("");
+const maxPrice = ref("");
+const minPrice = ref("");
 const itemsPerPage = ref(10);
 const currentPage = ref(1);
 
@@ -158,6 +160,11 @@ const sortByPrice = () => {
   results.value.sort((a, b) => a.price - b.price);
 };
 
+// Function to sort cars by views
+const sortByViews = () => {
+  results.value.sort((a, b) => b.views - a.views);
+};
+
 // Computed property to filter cars based on selected filters
 const filteredResults = computed(() => {
   let filtered = results.value;
@@ -183,7 +190,7 @@ const filteredResults = computed(() => {
 
   // Apply year filter
   if (selectedYear.value) {
-    filtered = filtered.filter((car) => car.year === selectedYear.value);
+    filtered = filtered.filter((car) => car.year >= selectedYear.value);
   }
 
   // Apply mileage filter
@@ -207,8 +214,12 @@ const filteredResults = computed(() => {
   }
 
   // Apply price filter
-  if (selectedPrice.value) {
-    filtered = filtered.filter((car) => car.price <= selectedPrice.value);
+  if (maxPrice.value) {
+    filtered = filtered.filter((car) => car.price <= maxPrice.value);
+  }
+
+  if (minPrice.value) {
+    filtered = filtered.filter((car) => car.price >= minPrice.value);
   }
 
   return filtered;
@@ -252,7 +263,8 @@ const handleApplyFilters = (filters) => {
   selectedViews.value = filters.views;
   selectedEngine.value = filters.engine;
   selectedPower.value = filters.power;
-  selectedPrice.value = filters.price;
+  maxPrice.value = filters.maxPrice;
+  minPrice.value = filters.minPrice;
 };
 
 const handleClearFilters = () => {
@@ -264,7 +276,8 @@ const handleClearFilters = () => {
   selectedViews.value = "";
   selectedEngine.value = "";
   selectedPower.value = "";
-  selectedPrice.value = "";
+  maxPrice.value = "";
+  minPrice.value = "";
 };
 </script>
 

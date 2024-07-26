@@ -13,10 +13,11 @@
               required
             />
             <q-input color="green" v-model="model" label="Model" required />
-            <q-input
+            <q-select
               @keypress="onlyNumber"
               color="green"
               v-model="year"
+              :options="years"
               label="Year"
               required
             />
@@ -157,7 +158,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 import { authStore } from "src/stores/auth-store";
 import { useQuasar } from "quasar";
@@ -180,6 +181,10 @@ const additional_features = ref([]);
 const description = ref("");
 const fuel = ref("");
 const files = ref([]);
+const currentYear = new Date().getFullYear();
+const years = computed(() =>
+  Array.from({ length: currentYear - 1989 }, (_, i) => currentYear - i)
+);
 
 const isLoading = ref(false);
 const $q = useQuasar();

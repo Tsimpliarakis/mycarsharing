@@ -7,12 +7,19 @@
     style="margin-top: 10px; margin-bottom: 10px"
   />
   <q-card v-if="showFilters" class="q-pa-md" style="margin-top: 10px">
-    <div class="flex flex-center">
+    <div class="flex flex-center column">
       <q-btn
         @click="sortByPrice"
         label="Ascending Price"
         color="orange"
         icon="arrow_upward"
+        class="q-mb-md"
+      />
+      <q-btn
+        @click="sortByViews"
+        label="Ascending Views"
+        color="cyan"
+        icon="arrow_downward"
         class="q-mb-md"
       />
     </div>
@@ -69,8 +76,14 @@
       color="green"
     />
     <q-input
-      v-model="selectedPrice"
-      label="Price"
+      v-model="minPrice"
+      label="Min Price"
+      class="q-mb-md"
+      color="green"
+    />
+    <q-input
+      v-model="maxPrice"
+      label="Max Price"
       class="q-mb-md"
       color="green"
     />
@@ -94,7 +107,12 @@
 <script setup>
 import { ref } from "vue";
 
-const emit = defineEmits(["sort-by-price", "apply-filters", "clear-filters"]);
+const emit = defineEmits([
+  "sort-by-price",
+  "apply-filters",
+  "clear-filters",
+  "sort-by-views",
+]);
 
 const showFilters = ref(false);
 const selectedColor = ref("");
@@ -105,7 +123,8 @@ const selectedMileage = ref("");
 const selectedViews = ref("");
 const selectedEngine = ref("");
 const selectedPower = ref("");
-const selectedPrice = ref("");
+const maxPrice = ref("");
+const minPrice = ref("");
 const yearOptions = ref([]);
 
 const currentYear = new Date().getFullYear();
@@ -121,6 +140,10 @@ const sortByPrice = () => {
   emit("sort-by-price");
 };
 
+const sortByViews = () => {
+  emit("sort-by-views");
+};
+
 const applyFilters = () => {
   emit("apply-filters", {
     color: selectedColor.value,
@@ -131,7 +154,8 @@ const applyFilters = () => {
     views: selectedViews.value,
     engine: selectedEngine.value,
     power: selectedPower.value,
-    price: selectedPrice.value,
+    maxPrice: maxPrice.value,
+    minPrice: minPrice.value,
   });
 };
 
@@ -144,11 +168,62 @@ const clearFilters = () => {
   selectedViews.value = "";
   selectedEngine.value = "";
   selectedPower.value = "";
-  selectedPrice.value = "";
+  maxPrice.value = "";
+  minPrice.value = "";
   emit("clear-filters");
 };
 
-const colorOptions = ["All", "Red", "Blue", "Silver"];
-const gearboxOptions = ["All", "Automatic", "Manual"];
-const manufacturerOptions = ["All", "Toyota", "Honda", "Ford"];
+const colorOptions = [
+  "All",
+  "Red",
+  "Blue",
+  "Silver",
+  "Black",
+  "White",
+  "Green",
+  "Yellow",
+  "Grey",
+];
+const gearboxOptions = ["All", "Automatic", "Manual", "Semi-Automatic"];
+const manufacturerOptions = [
+  "All",
+  "Toyota",
+  "Honda",
+  "Ford",
+  "BMW",
+  "Audi",
+  "Mercedes",
+  "Volkswagen",
+  "Nissan",
+  "Hyundai",
+  "Kia",
+  "Chevrolet",
+  "Mazda",
+  "Subaru",
+  "Mitsubishi",
+  "Suzuki",
+  "Peugeot",
+  "Renault",
+  "Citroen",
+  "Fiat",
+  "Opel",
+  "Skoda",
+  "Seat",
+  "Volvo",
+  "Porsche",
+  "Jaguar",
+  "Land Rover",
+  "Jeep",
+  "Lexus",
+  "Cadillac",
+  "Tesla",
+  "Mini",
+  "Smart",
+  "Alfa Romeo",
+  "Ferrari",
+  "Lamborghini",
+  "Lancia",
+  "Dacia",
+  "Skoda",
+];
 </script>
