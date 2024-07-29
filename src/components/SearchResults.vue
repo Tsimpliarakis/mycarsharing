@@ -23,7 +23,7 @@
       :dateTo="route.query.dateTo"
     />
 
-    <div class="pagination" v-if="totalPages > 1">
+    <div class="pagination" v-if="totalPages > 1" style="margin-bottom: 10px">
       <q-btn
         @click="previousPage"
         :disabled="currentPage === 1"
