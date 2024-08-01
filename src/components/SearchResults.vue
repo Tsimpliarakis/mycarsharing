@@ -1,7 +1,11 @@
 <template>
   <q-page class="flex flex-center column">
     <div v-if="isLoading">Loading...</div>
-    <div v-else-if="filteredResults.length > 0" class="text-h6">
+    <div
+      v-else-if="filteredResults.length > 0"
+      class="text-h6"
+      style="margin-top: 20px"
+    >
       Found {{ filteredResults.length }} result(s)
     </div>
     <div v-else class="text-h6">No results found</div>
@@ -12,6 +16,7 @@
       @sort-by-views="sortByViews"
       @apply-filters="handleApplyFilters"
       @clear-filters="handleClearFilters"
+      v-if="filteredResults.length > 0"
     />
 
     <!-- Display the filtered results here -->

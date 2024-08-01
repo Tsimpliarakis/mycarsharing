@@ -17,6 +17,7 @@ import LeftPanelMenu from "src/components/account/LeftPanelMenu.vue";
 import ChangeAvatar from "src/components/account/ChangeAvatar.vue";
 import UploadDocuments from "src/components/account/UploadDocuments.vue";
 import WelcomeProfile from "src/components/account/WelcomeProfile.vue";
+import ProfileInfo from "src/components/account/ProfileInfo.vue";
 
 export default {
   components: {
@@ -24,6 +25,7 @@ export default {
     WelcomeProfile,
     ChangeAvatar,
     UploadDocuments,
+    ProfileInfo,
   },
   data() {
     return {

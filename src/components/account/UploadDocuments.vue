@@ -1,9 +1,10 @@
 <template>
   <div class="documentsform">
     <br />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator
+      color="green"
+      style="width: 120%; height: 3px; margin-left: -10%"
+    />
     <br />
     <div class="input_field">
       <p style="text-align: left; font-weight: bold">
@@ -12,8 +13,10 @@
       <q-file v-model="selectedFrontFile" color="green-7" />
       <p style="font-size: 12px">Browse files</p>
     </div>
-    <q-separator color="green-3" style="width: 110%; margin-left: -5%" />
-    <q-separator color="green-3" style="width: 110%; margin-left: -5%" />
+    <q-separator
+      color="green-3"
+      style="width: 110%; height: 2px; margin-left: -5%"
+    />
     <br />
     <div class="input_field">
       <p style="text-align: left; font-weight: bold">
@@ -22,8 +25,10 @@
       <q-file v-model="selectedBackFile" color="green-7" />
       <p style="font-size: 12px">Browse files</p>
     </div>
-    <q-separator color="green-3" style="width: 110%; margin-left: -5%" />
-    <q-separator color="green-3" style="width: 110%; margin-left: -5%" />
+    <q-separator
+      color="green-3"
+      style="width: 110%; height: 2px; margin-left: -5%"
+    />
     <br />
     <div class="input_field">
       <p style="text-align: left; font-weight: bold">
@@ -37,8 +42,10 @@
       />
     </div>
     <br />
-    <q-separator color="green-3" style="width: 110%; margin-left: -5%" />
-    <q-separator color="green-3" style="width: 110%; margin-left: -5%" />
+    <q-separator
+      color="green-3"
+      style="width: 110%; height: 2px; margin-left: -5%"
+    />
     <br />
     <div class="input_field">
       <p style="text-align: left; font-weight: bold">
@@ -48,9 +55,10 @@
     </div>
     <br />
     <br />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator
+      color="green"
+      style="width: 120%; height: 3px; margin-left: -10%"
+    />
     <br />
     <q-btn
       @click="uploadData"

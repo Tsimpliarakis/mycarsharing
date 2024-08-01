@@ -1,15 +1,17 @@
 <template>
   <div class="avatarform">
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator
+      color="green"
+      style="width: 120%; height: 3px; margin-left: -10%"
+    />
     <br />
     <p style="text-align: left; font-weight: bold">Upload your Avatar:</p>
     <q-file v-model="selectedFile" color="green-7" />
     <p style="font-size: 12px">Browse files</p>
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
-    <q-separator color="green" style="width: 120%; margin-left: -10%" />
+    <q-separator
+      color="green"
+      style="width: 120%; height: 3px; margin-left: -10%"
+    />
     <br />
     <q-btn
       @click="uploadAvatar"
