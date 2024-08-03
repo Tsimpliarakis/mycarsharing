@@ -1,68 +1,74 @@
 <template>
-  <div class="personal-info-form">
-    <br />
-    <q-separator color="green" style="width: 100%; height: 3px" />
-    <br />
-    <div class="input_field">
-      <p style="text-align: left; font-weight: bold">Description:</p>
-      <q-input
-        v-model="description"
+  <q-page style="width: 50%">
+    <div class="personal-info-form">
+      <br />
+      <q-separator color="green" style="width: 100%; height: 3px" />
+      <br />
+      <div class="input_field">
+        <p style="text-align: left; font-weight: bold">First Name:</p>
+        <q-input
+          v-model="firstName"
+          color="green-7"
+          type="text"
+          placeholder="Your First Name"
+        />
+      </div>
+      <br />
+      <q-separator
+        color="green-3"
+        style="width: 90%; height: 2px; margin-left: 5%"
+      />
+      <br />
+      <div class="input_field">
+        <p style="text-align: left; font-weight: bold">Last Name:</p>
+        <q-input
+          v-model="lastName"
+          color="green-7"
+          type="text"
+          placeholder="Your Last Name"
+        />
+      </div>
+      <br />
+      <q-separator
+        color="green-3"
+        style="width: 90%; height: 2px; margin-left: 5%"
+      />
+      <br />
+      <div class="input_field">
+        <p style="text-align: left; font-weight: bold">Phone Number:</p>
+        <q-input
+          v-model="phoneNumber"
+          color="green-7"
+          type="tel"
+          placeholder="e.g., +30 6912345678"
+        />
+      </div>
+      <br />
+      <q-separator
+        color="green-3"
+        style="width: 90%; height: 2px; margin-left: 5%"
+      />
+      <br />
+      <div class="input_field">
+        <p style="text-align: left; font-weight: bold">Description:</p>
+        <q-input
+          v-model="description"
+          color="green-7"
+          type="textarea"
+          placeholder="Tell us about yourself..."
+        />
+      </div>
+      <br />
+      <q-separator color="green" style="width: 100%; height: 3px" />
+      <br />
+      <q-btn
+        @click="submitInfo"
         color="green-7"
-        type="textarea"
-        placeholder="Tell us about yourself..."
+        label="Submit"
+        :loading="submitting"
       />
     </div>
-    <q-separator
-      color="green-3"
-      style="width: 90%; height: 2px; margin-left: 5%"
-    />
-    <br />
-    <div class="input_field">
-      <p style="text-align: left; font-weight: bold">Phone Number:</p>
-      <q-input
-        v-model="phoneNumber"
-        color="green-7"
-        type="tel"
-        placeholder="e.g., +30 6912345678"
-      />
-    </div>
-    <q-separator
-      color="green-3"
-      style="width: 90%; height: 2px; margin-left: 5%"
-    />
-    <br />
-    <div class="input_field">
-      <p style="text-align: left; font-weight: bold">First Name:</p>
-      <q-input
-        v-model="firstName"
-        color="green-7"
-        type="text"
-        placeholder="Your First Name"
-      />
-    </div>
-    <q-separator
-      color="green-3"
-      style="width: 90%; height: 2px; margin-left: 5%"
-    />
-    <br />
-    <div class="input_field">
-      <p style="text-align: left; font-weight: bold">Last Name:</p>
-      <q-input
-        v-model="lastName"
-        color="green-7"
-        type="text"
-        placeholder="Your Last Name"
-      />
-    </div>
-    <q-separator color="green" style="width: 100%; height: 3px" />
-    <br />
-    <q-btn
-      @click="submitInfo"
-      color="green-7"
-      label="Submit"
-      :loading="submitting"
-    />
-  </div>
+  </q-page>
 </template>
 
 <script setup>
@@ -113,5 +119,9 @@ async function submitInfo() {
 }
 .input_field p {
   margin-bottom: 5px;
+}
+
+.q-page {
+  max-width: 350px;
 }
 </style>

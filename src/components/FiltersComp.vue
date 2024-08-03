@@ -17,7 +17,7 @@
       />
       <q-btn
         @click="sortByViews"
-        label="Ascending Views"
+        label="Descending Views"
         color="cyan"
         icon="arrow_downward"
         class="q-mb-md"
