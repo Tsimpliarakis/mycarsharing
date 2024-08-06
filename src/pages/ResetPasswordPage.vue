@@ -12,56 +12,66 @@
             type="password"
             label="New Password"
             required
-            :rules="[(val) => !!val || 'Password is required']"
           />
-
           <q-btn
             type="submit"
             label="Reset Password"
             color="primary"
             class="q-mt-md"
+            :loading="loading"
           />
         </q-form>
+        <q-banner v-if="error" type="negative" class="q-mt-md">
+          {{ error }}
+        </q-banner>
       </q-card-section>
     </q-card>
   </q-page>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { useQuasar } from "quasar";
-import { supabase } from "src/lib/supabaseClient";
+<script>
+import { supabase } from "../lib/supabaseClient";
 
-const $q = useQuasar();
-const newPassword = ref("");
+export default {
+  data() {
+    return {
+      newPassword: "",
+      loading: false,
+      error: null,
+    };
+  },
+  methods: {
+    async resetPassword() {
+      this.error = null;
+      this.loading = true;
+      try {
+        const token = this.$route.query.token;
+        if (!token) {
+          throw new Error("Invalid token");
+        }
 
-const resetPassword = async () => {
-  const urlParams = new URLSearchParams(window.location.hash.substring(1));
-  const token = urlParams.get("access_token");
+        const { error } = await supabase.auth.updateUser(token, {
+          password: this.newPassword,
+        });
 
-  if (!token) {
-    $q.notify({
-      message: "Invalid reset token",
-      color: "negative",
-    });
-    return;
-  }
+        if (error) {
+          throw error;
+        }
 
-  const { error } = await supabase.auth.api.updateUser(token, {
-    password: newPassword.value,
-  });
+        this.$q.notify({
+          type: "positive",
+          message: "Password has been successfully reset!",
+        });
 
-  if (error) {
-    $q.notify({
-      message: error.message,
-      color: "negative",
-    });
-  } else {
-    $q.notify({
-      message: "Password reset successful!",
-      color: "positive",
-    });
-  }
+        this.$router.push("/login");
+      } catch (err) {
+        this.error =
+          err.message || "Failed to reset password. Please try again.";
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>
 

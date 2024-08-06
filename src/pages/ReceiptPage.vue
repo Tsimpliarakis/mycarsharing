@@ -67,11 +67,6 @@
               </div>
             </div>
           </q-card-section>
-          <!-- Pickup Instructions -->
-          <q-card-section>
-            <div class="text-bold">Pickup Instructions</div>
-            <div class="details">{{ booking.pickup_instructions }}</div>
-          </q-card-section>
           <!-- Booking Dates -->
           <q-card-section>
             <div class="text-bold">Booking Dates</div>
