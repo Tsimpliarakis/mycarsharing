@@ -56,6 +56,7 @@
               <q-date
                 range
                 v-model="bookingDates"
+                mask="YYYY-MM-DD"
                 :options="options"
                 :events="calculatePrice"
                 color="green"

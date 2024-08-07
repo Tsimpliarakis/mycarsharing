@@ -2,8 +2,10 @@
   <div>
     <h4>Welcome,</h4>
     <p>In this section you can:</p>
+    <li>Change your avatar</li>
     <li>Update your profile's information</li>
     <li>Upload documents (e.g. driver's license)</li>
+    <li>Change your password</li>
     <li>Or even delete your account</li>
     <br />
     <br />

@@ -42,6 +42,13 @@
             ></q-item-section
           >
         </q-item>
+        <q-item>
+          <q-item-section
+            ><q-btn flat rounded @click="togglePanel('ChangePassword')"
+              >Change Password</q-btn
+            ></q-item-section
+          >
+        </q-item>
         <q-separator />
         <q-item>
           <q-item-section
@@ -90,7 +97,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { authStore } from "../../stores/auth-store";
+import { authStore } from "src/stores/auth-store";
 import ProfileButton from "./ProfileButton.vue";
 import { supabase } from "src/lib/supabaseClient";
 import { useRouter } from "vue-router";

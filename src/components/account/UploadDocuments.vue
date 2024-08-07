@@ -90,12 +90,14 @@ async function uploadData() {
 
   uploading.value = true; // Set loading state to true
 
+  const userId = authStore.state.session.user.id;
+
   try {
     // Upload front and back files to Supabase Storage
-    const frontFileName = `${generateRandomString()}_front.${getFileExtension(
+    const frontFileName = `${userId}_${generateRandomString()}_front.${getFileExtension(
       selectedFrontFile.value.name
     )}`;
-    const backFileName = `${generateRandomString()}_back.${getFileExtension(
+    const backFileName = `${userId}_${generateRandomString()}_back.${getFileExtension(
       selectedBackFile.value.name
     )}`;
 
@@ -105,7 +107,7 @@ async function uploadData() {
     // Update the user's verification in Supabase data
     const { data, error } = await supabase.from("verification").upsert(
       {
-        id: authStore.state.session.user.id,
+        id: userId,
         driver_license_front: frontFileName,
         driver_license_back: backFileName,
         driver_license_number: licenseNumber.value,

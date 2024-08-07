@@ -18,6 +18,7 @@ import ChangeAvatar from "src/components/account/ChangeAvatar.vue";
 import UploadDocuments from "src/components/account/UploadDocuments.vue";
 import WelcomeProfile from "src/components/account/WelcomeProfile.vue";
 import ProfileInfo from "src/components/account/ProfileInfo.vue";
+import ChangePassword from "src/components/account/ChangePassword.vue";
 
 export default {
   components: {
@@ -26,6 +27,7 @@ export default {
     ChangeAvatar,
     UploadDocuments,
     ProfileInfo,
+    ChangePassword,
   },
   data() {
     return {

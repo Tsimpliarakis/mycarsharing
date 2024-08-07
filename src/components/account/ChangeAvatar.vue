@@ -40,9 +40,10 @@ async function uploadAvatar() {
 
   uploading.value = true; // Set loading state to true
 
+  const userId = authStore.state.session.user.id;
   const randomString = Math.random().toString(36).substring(2, 15);
   const fileExtension = selectedFile.value.name.split(".").pop();
-  const fileName = `${randomString}.${fileExtension}`;
+  const fileName = `${userId}_${randomString}.${fileExtension}`;
   const avatar_url = `https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/${fileName}`;
 
   try {
@@ -62,19 +63,19 @@ async function uploadAvatar() {
         .update({
           avatar_url: avatar_url,
         })
-        .eq("id", authStore.state.session.user.id)
+        .eq("id", userId)
         .single();
       if (error) {
         console.error("Error updating profile:", error.message);
       } else {
         // Update the user's avatar in the auth store
         authStore.state.profile.avatar_url = avatar_url;
+        $q.notify({
+          position: "top",
+          color: "positive",
+          message: "Avatar uploaded successfully",
+        });
       }
-      $q.notify({
-        position: "top",
-        color: "positive",
-        message: "Avatar uploaded successfully",
-      });
     }
   } catch (error) {
     console.error("Unexpected error:", error.message);

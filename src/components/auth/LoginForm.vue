@@ -37,11 +37,6 @@
             >magic link.</span
           >
         </div>
-        <div style="text-align: center; margin-top: 50px; margin-bottom: -50px">
-          <span class="clickable-text" @click="goToForgotPassword"
-            >Forgot your password?</span
-          >
-        </div>
       </div>
     </div>
   </q-form>
@@ -90,10 +85,6 @@ const handleLogin = async () => {
   } finally {
     loading.value = false;
   }
-};
-
-const goToForgotPassword = () => {
-  parentToggleForm("ForgotPassword"); // Assuming 'ForgotPassword' is the form name to toggle to
 };
 </script>
 

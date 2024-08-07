@@ -151,36 +151,6 @@ const routes = [
     ],
   },
   {
-    path: "/reset_password",
-    component: () => import("layouts/MainLayout.vue"),
-    beforeEnter: async (to, from, next) => {
-      const token = to.query.token;
-
-      if (!token) {
-        // Redirect to home if the token is not present
-        return next("/");
-      }
-
-      // Validate the token with Supabase
-      const { data, error } = await supabase.auth.getUser(token);
-
-      if (error) {
-        // Token is invalid or expired, redirect to home
-        console.error(error.message);
-        return next("/");
-      }
-
-      // Token is valid, proceed to the route
-      next();
-    },
-    children: [
-      {
-        path: "",
-        component: () => import("src/pages/ResetPasswordPage.vue"),
-      },
-    ],
-  },
-  {
     path: "/editcar",
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: requireAuth,

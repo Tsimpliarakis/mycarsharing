@@ -219,12 +219,13 @@ async function addCar() {
   const imageURLs = [];
   const baseURL =
     "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/";
+  const userId = authStore.state.session.user.id;
 
   try {
     for (const file of files.value) {
       const randomId = Math.random().toString(36).substring(2, 15);
       const fileExtension = file.name.split(".").pop();
-      const newName = `${randomId}.${fileExtension}`;
+      const newName = `${userId}_${randomId}.${fileExtension}`;
       const { data, error } = await supabase.storage
         .from("cars")
         .upload(newName, file);
