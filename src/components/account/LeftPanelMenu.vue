@@ -153,7 +153,7 @@ async function deleteUserAccount() {
       color: "green-8",
       textColor: "white",
       icon: "check_circle",
-      message: "User account and files deleted successfully.",
+      message: "User account deleted successfully.",
       position: "top",
     });
   } catch (error) {
