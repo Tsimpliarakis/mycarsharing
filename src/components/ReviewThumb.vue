@@ -9,7 +9,9 @@
             name="info"
             color="green-1"
           >
-            <q-tooltip> {{ carMan }} {{ carMod }} </q-tooltip>
+            <q-tooltip>
+              {{ review.owner ? "Owner" : "Renter" }}
+            </q-tooltip>
           </q-icon>
         </q-img>
         <div class="col-7 q-ml-md">

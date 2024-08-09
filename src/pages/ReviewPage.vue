@@ -46,6 +46,7 @@
               outlined
               maxlength="500"
               counter
+              color="green"
             />
           </q-card-section>
           <q-card-section class="flex flex-center">
@@ -80,6 +81,7 @@ const review = ref({
   booking_id: route.params.booking_id,
   rated_user: "",
   owner: false,
+  rating_user: authStore.state.session.user.id,
 });
 
 onMounted(async () => {

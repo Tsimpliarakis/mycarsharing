@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showReviewButton"
+    v-if="showReviewButton && !hasReview"
     class="flex flex-center column"
     style="margin-top: 40px"
   >
@@ -119,6 +119,7 @@ const router = useRouter();
 const $q = useQuasar();
 const showReviewButton = ref(false);
 const currentDate = new Date();
+const hasReview = ref(false);
 
 const car = ref({});
 const owner = ref({});
@@ -149,6 +150,9 @@ onMounted(async () => {
   if (new Date(bookingDates.value.end) < currentDate) {
     showReviewButton.value = true;
   }
+
+  checkIfReviewExists();
+
   const { data: carData, error: carError } = await supabase
     .from("cars")
     .select("*")
@@ -178,6 +182,23 @@ onMounted(async () => {
 
 function goToReview() {
   router.push("/review/" + booking.value.booking_id);
+}
+
+async function checkIfReviewExists() {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("*")
+    .eq("booking_id", booking.value.booking_id)
+    .eq("rating_user", authStore.state.session.user.id);
+
+  if (error) {
+    console.error("Error fetching review:", error.message);
+    return;
+  }
+
+  if (data.length > 0) {
+    hasReview.value = true;
+  }
 }
 
 function downloadReceipt() {

@@ -3,9 +3,7 @@
     <div v-if="loadingProfile" class="text-h4 text-center">Loading...</div>
     <div v-else class="profilepage">
       <div class="text-h4 text-center" v-if="userError">
-        <div>
-          {{ userError }}
-        </div>
+        <div>{{ userError }}</div>
         <div>¯\_(ツ)_/¯</div>
       </div>
       <div v-else>
@@ -42,7 +40,7 @@
                 :carMod="review.model"
                 :username="review.username"
                 :avatarUrl="review.avatar_url"
-                :rating="user.rating"
+                :rating="review.rating"
               />
             </div>
           </q-scroll-area>
@@ -59,6 +57,7 @@ import CarThumbnail from "src/components/car/CarThumbnail.vue";
 import { ref, watchEffect } from "vue";
 import { supabase } from "src/lib/supabaseClient";
 
+// References for data and loading states
 const route = useRoute();
 const userError = ref("");
 const loadingProfile = ref(false);
@@ -66,103 +65,145 @@ const reviews = ref([]);
 const cars = ref([]);
 const user = ref(null);
 
-async function fetchData(username) {
+// Utility function to handle errors
+function handleError(errorMessage) {
+  userError.value = errorMessage;
+  loadingProfile.value = false;
+}
+
+// Fetch user data
+async function fetchUser(username) {
+  const { data: userData, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("username", username)
+    .single();
+
+  if (error || !userData) {
+    throw new Error("Failed to fetch user data");
+  }
+
+  return userData;
+}
+
+// Fetch cars data
+async function fetchCars(userId) {
+  const { data: carData, error } = await supabase
+    .from("cars")
+    .select(
+      "car_id, image_url, manufacturer, model, year, mileage, price, transmission_type, fuel_type"
+    )
+    .eq("user_id", userId);
+
+  if (error || !carData) {
+    throw new Error("Failed to fetch car data");
+  }
+
+  return carData;
+}
+
+// Fetch reviews data
+async function fetchReviews(userId) {
+  const { data: reviewData, error } = await supabase
+    .from("reviews")
+    .select("*")
+    .eq("rated_user", userId);
+
+  if (error || !reviewData) {
+    throw new Error("Failed to fetch review data");
+  }
+
+  return reviewData;
+}
+
+// Fetch booking data
+async function fetchBooking(bookingId) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("car_id, user_id")
+    .eq("booking_id", bookingId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Failed to fetch booking data");
+  }
+
+  return data;
+}
+
+// Fetch user profile
+async function fetchUserProfile(username) {
   try {
     loadingProfile.value = true;
     userError.value = "";
-    const { data: userData, error: usrError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("username", username)
-      .single();
 
-    if (usrError || !userData) {
-      loadingProfile.value = false;
-      throw new Error("Failed to fetch user data");
-    }
-
+    // Fetch user data
+    const userData = await fetchUser(username);
     user.value = userData;
     const userId = userData.id;
 
-    loadingProfile.value = false;
-
-    const { data: carData, error: carError } = await supabase
-      .from("cars")
-      .select(
-        "car_id, image_url, manufacturer, model, year, mileage, price, transmission_type, fuel_type"
-      )
-      .eq("user_id", userId);
-
-    if (carError || !carData) {
-      throw new Error("Failed to fetch car data");
-    }
+    // Fetch cars and reviews data concurrently
+    const [carData, reviewData] = await Promise.all([
+      fetchCars(userId),
+      fetchReviews(userId),
+    ]);
 
     cars.value = carData;
 
-    const { data: reviewData, error: reviewError } = await supabase
-      .from("reviews")
-      .select("*")
-      .eq("rated_user", userId);
+    // Process reviews data
+    const processedReviews = await Promise.all(
+      reviewData.map(async (review) => {
+        try {
+          const bookingData = await fetchBooking(review.booking_id);
+          const [profileData, carData] = await Promise.all([
+            supabase
+              .from("profiles")
+              .select("username, avatar_url, rating")
+              .eq("id", review.rating_user)
+              .single(),
+            supabase
+              .from("cars")
+              .select("image_url, manufacturer, model")
+              .eq("car_id", bookingData.car_id)
+              .single(),
+          ]);
 
-    if (reviewError || !reviewData) {
-      throw new Error("Failed to fetch review data");
-    }
+          const defaultProfile = {
+            username: "Deleted User",
+            avatar_url:
+              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/favicon.png",
+            rating: 0,
+          };
 
-    const processedReviews = [];
+          return {
+            ...review,
+            username: profileData?.data?.username || defaultProfile.username,
+            avatar_url:
+              profileData?.data?.avatar_url || defaultProfile.avatar_url,
+            rating: profileData?.data?.rating || defaultProfile.rating,
+            image_url: carData?.data?.image_url || [
+              "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
+            ],
+            manufacturer: carData?.data?.manufacturer || "Unknown",
+            model: carData?.data?.model || "Unknown",
+          };
+        } catch (err) {
+          console.error("Failed to process review:", err);
+          return null; // Return null if there's an error processing a review
+        }
+      })
+    );
 
-    for (const review of reviewData) {
-      const { data: bookingData, error: bookingError } = await supabase
-        .from("bookings")
-        .select("car_id, user_id")
-        .eq("booking_id", review.booking_id)
-        .single();
-
-      if (bookingError || !bookingData) {
-        console.error("Failed to fetch booking:", bookingError);
-        continue;
-      }
-
-      const [profileData, carData] = await Promise.all([
-        supabase
-          .from("profiles")
-          .select("username, avatar_url")
-          .eq("id", bookingData.user_id)
-          .single(),
-        supabase
-          .from("cars")
-          .select("image_url, manufacturer, model")
-          .eq("car_id", bookingData.car_id)
-          .single(),
-      ]);
-
-      const defaultProfile = {
-        username: "Deleted User",
-        avatar_url:
-          "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/avatars/favicon.png",
-      };
-
-      const reviewObj = {
-        ...review,
-        username: profileData?.data?.username || defaultProfile.username,
-        avatar_url: profileData?.data?.avatar_url || defaultProfile.avatar_url,
-        image_url: carData?.data?.image_url || [
-          "https://igohglatbbhgyelsipze.supabase.co/storage/v1/object/public/cars/generic.jpeg",
-        ],
-        manufacturer: carData?.data?.manufacturer || "Unknown",
-        model: carData?.data?.model || "Unknown",
-      };
-
-      processedReviews.push(reviewObj);
-    }
-
-    reviews.value = processedReviews;
+    reviews.value = processedReviews.filter((review) => review !== null); // Filter out any null reviews
+    loadingProfile.value = false;
   } catch (error) {
-    userError.value = "User does not exist";
+    handleError("User does not exist");
   }
 }
 
+// Watch route changes to fetch data
 watchEffect(() => {
-  fetchData(route.params.username);
+  fetchUserProfile(route.params.username);
 });
 </script>
 

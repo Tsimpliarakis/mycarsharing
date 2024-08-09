@@ -54,7 +54,14 @@
             icon="share"
             @click="copyUrlToClipboard"
           />
-          <q-btn flat round color="green" icon="car_rental" @click="bookCar" />
+          <q-btn
+            v-if="car.user_id !== authStore.state.profile.id"
+            flat
+            round
+            color="green"
+            icon="car_rental"
+            @click="bookCar"
+          />
           <q-btn
             v-if="car.user_id === authStore.state.profile.id"
             @click="editCar"
